@@ -1,0 +1,34 @@
+@startuml Playback Media
+actor User
+participant CLIView
+participant PlaybackController
+participant MediaFile
+participant DeviceView
+
+' Người dùng yêu cầu phát/pause media
+User -> CLIView : Play/Pause Media
+CLIView -> PlaybackController : play(file)
+PlaybackController -> MediaFile : start playing
+CLIView -> User : display playback status
+
+' Hiển thị thông tin bài hát đang phát
+PlaybackController -> DeviceView : getCurrentSongInfo()
+DeviceView -> User : display song name, duration, and status
+
+' Người dùng yêu cầu dừng phát media
+User -> CLIView : Stop Playback
+CLIView -> PlaybackController : stop()
+PlaybackController -> MediaFile : stop playing
+CLIView -> User : display stop status
+
+' Người dùng yêu cầu chuyển bài nhạc tiếp theo hoặc trước đó
+User -> CLIView : Next/Previous
+CLIView -> PlaybackController : next() / previous()
+PlaybackController -> MediaFile : change track
+CLIView -> User : display next/previous media file
+
+' Tự động chuyển sang bài nhạc tiếp theo khi bài hiện tại kết thúc
+PlaybackController -> MediaFile : automatic transition to next song
+PlaybackController -> DeviceView : update song info
+DeviceView -> User : display next song's name, duration, and status
+@enduml

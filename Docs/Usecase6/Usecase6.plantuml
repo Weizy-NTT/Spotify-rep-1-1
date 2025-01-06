@@ -1,0 +1,16 @@
+@startuml Display on S32K144
+actor User
+participant DeviceView
+participant DeviceController
+participant PlaybackController
+
+User -> DeviceView : Display Song Information
+DeviceController -> PlaybackController : getCurrentSongInfo()
+PlaybackController -> DeviceView : send song info
+DeviceView -> User : display song name, duration, and status
+
+User -> DeviceView : Control Playback (Play/Pause, Stop, Next, Previous)
+DeviceView -> DeviceController : controlPlayback(action)
+DeviceController -> PlaybackController : perform action
+DeviceView -> User : update display with current playback status
+@enduml

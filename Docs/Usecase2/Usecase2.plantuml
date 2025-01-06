@@ -1,0 +1,31 @@
+@startuml Manage Playlists
+actor User
+participant CLIView
+participant PlaylistController
+participant Playlist
+participant MediaFile
+
+User -> CLIView : requestCreatePlaylist(name, files)
+CLIView -> PlaylistController : createPlaylist(name, files)
+PlaylistController -> Playlist : create(name, files)
+Playlist -> MediaFile : addFiles(files)
+PlaylistController -> CLIView : displayPlaylist(playlist)
+
+User -> CLIView : requestAddFileToPlaylist(playlist, file)
+CLIView -> PlaylistController : updatePlaylist(playlist, file)
+PlaylistController -> Playlist : addFile(file)
+Playlist -> MediaFile : addFile(file)
+PlaylistController -> CLIView : displayPlaylist(playlist)
+
+User -> CLIView : requestRemoveFileFromPlaylist(playlist, file)
+CLIView -> PlaylistController : updatePlaylist(playlist, file)
+PlaylistController -> Playlist : removeFile(file)
+Playlist -> MediaFile : removeFile(file)
+PlaylistController -> CLIView : displayPlaylist(playlist)
+
+User -> CLIView : requestDeletePlaylist(playlist)
+CLIView -> PlaylistController : deletePlaylist(playlist)
+PlaylistController -> Playlist : delete()
+PlaylistController -> CLIView : displayPlaylists(playlists)
+
+@enduml

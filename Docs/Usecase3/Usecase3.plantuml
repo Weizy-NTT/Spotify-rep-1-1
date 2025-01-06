@@ -1,0 +1,16 @@
+@startuml Metadata
+actor User
+participant CLIView
+participant MetadataController
+participant MediaFile
+
+User -> CLIView : Select Media File
+CLIView -> MetadataController : getMetadata(file)
+MetadataController -> MediaFile : fetch metadata
+CLIView -> User : display metadata
+
+User -> CLIView : Edit Metadata
+CLIView -> MetadataController : updateMetadata(file, metadata)
+MetadataController -> MediaFile : modify metadata
+CLIView -> User : display updated metadata
+@enduml

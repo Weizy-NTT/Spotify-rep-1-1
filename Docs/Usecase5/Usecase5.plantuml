@@ -1,0 +1,19 @@
+@startuml Volume Control
+actor User
+participant DeviceController
+participant PlaybackController
+
+User -> DeviceController : Increase Volume
+DeviceController -> PlaybackController : setVolume(level)
+PlaybackController -> DeviceController : adjust volume
+DeviceController -> User : display updated volume
+
+User -> DeviceController : Decrease Volume
+DeviceController -> PlaybackController : setVolume(level)
+PlaybackController -> DeviceController : adjust volume
+DeviceController -> User : display updated volume
+
+User -> DeviceController : Hardware Volume Control
+DeviceController -> PlaybackController : adjust volume through hardware
+DeviceController -> User : display updated volume
+@enduml
