@@ -2,9 +2,12 @@
 
 package View {
     class BaseView {
-        + show()
-        + hide()
-        + handleInput(input: string)
+        - statusView: bool
+        
+        + show(): virtual void
+        + hide(): virtual void
+        + isShown(): bool
+        + handleInput(input: string): virtual void
     }
 
     class ScanfOptionView {
@@ -43,11 +46,9 @@ package View {
     }
 
     class ViewManager {
-        - views: vector<ViewBase*>
-        + ShowMenu(): void
+        - currentView: BaseView*
+        + showCurrentMenu(): void
         + switchView(view: ViewBase): void
-        + addView(view: ViewBase): void
-        + removeView(view: ViewBase): void
     }
     ViewManager o--> BaseView
     BaseView <|-- ScanfOptionView
