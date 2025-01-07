@@ -1,0 +1,65 @@
+@startuml Controller
+package Controller {
+    class ScanfOptionController {
+        + scanDirectory(path: string): vector<MediaFile>
+        + scanUSBDevice(): vector<MediaFile>
+        
+    }
+
+    class PlaylistController {
+        + getAllPlaylists(): vector<Playlist>
+        + createPlaylist(name: string): void
+        + deletePlaylist(name: string): void
+    }
+
+    class MediaFileController {
+        + getAllMediaFiles(): vector<MediaFile>
+        + getMediaFileDetails(name: string): MediaFile
+    }
+
+    class PlayingMediaController {
+        + playMediaFile(file: MediaFile)
+        + play(): voida
+        + pause(): void
+        + stop(): void
+        + skipToNext(): void
+        + skipToPrevious(): void
+        + adjustVolume(level: int): void
+    }
+
+    class DetailedPlaylistController {
+        + getPlaylistDetails(playlistName: string): Playlist
+        + addSongToPlaylist(playlistName: string, song: MediaFile): void
+        + removeSongFromPlaylist(playlistName: string, song: MediaFile): void
+    }
+
+    class MetadataController {
+        + getMediaFileMetadata(file: MediaFile): map<string, string>
+        + updateMediaFileMetadata(file: MediaFile, metadata: map<string, string>): void
+    }
+
+    class ControllerManager {
+        - fileController: FileController
+        - playlistController: PlaylistController
+        - mediaFileController: MediaFileController
+        - playingMediaController: PlayingMediaController
+        - detailedPlaylistController: DetailedPlaylistController
+        - metadataController: MetadataController
+
+        + getFileController(): FileController
+        + getPlaylistController(): PlaylistController
+        + getMediaFileController(): MediaFileController
+        + getPlayingMediaController(): PlayingMediaController
+        + getDetailedPlaylistController(): DetailedPlaylistController
+        + getMetadataController(): MetadataController
+    }
+
+    ' Liên kết giữa các Controller
+    ControllerManager --> ScanfOptionController
+    ControllerManager --> PlaylistController
+    ControllerManager --> MediaFileController
+    ControllerManager --> PlayingMediaController
+    ControllerManager --> DetailedPlaylistController
+    ControllerManager --> MetadataController
+}
+@enduml
