@@ -1,0 +1,61 @@
+@startuml view
+
+package View {
+    class ViewBase {
+        + show()
+        + hide()
+        + handleInput(input: string)
+    }
+
+    class ViewScanfOption {
+        + showScanMenu()
+        + getDirectoryInput(): string
+    }
+
+    class ViewMediaFile {
+        - calculateTotalPages(totalFiles: int): int
+        - currentPage: int
+        + showMediaFilesPage(files: vector<MediaFile>, page: int)
+        + nextPage()
+        + previousPage()
+    }
+
+    class ViewPlaylist {
+        + showPlaylistMenu()
+        + showPlaylistList(playlists: vector<Playlist>)
+        + selectPlaylist(playlist: Playlist)
+    }
+
+    class ViewDetailedPlaylist {
+        + showPlaylistDetails(playlist: Playlist)
+        + addMediaFileToPlaylist(file: MediaFile)
+        + removeMediaFileFromPlaylist(file: MediaFile)
+    }
+
+    class ViewPlay {
+        + showPlayerControls()
+        + showSongInfo(file: MediaFile)
+    }
+
+    class ViewMetadata {
+        + showFileMetadata(file: MediaFile)
+        + editFileMetadata(file: MediaFile)
+    }
+
+    class ViewManager {
+        - views: vector<ViewBase*>
+        + ShowMenu(): void
+        + switchView(view: ViewBase): void
+        + addView(view: ViewBase): void
+        + removeView(view: ViewBase): void
+    }
+    ViewManager o--> ViewBase
+    ViewBase <|-- ViewScanfOption
+    ViewBase <|-- ViewMediaFile
+    ViewBase <|-- ViewPlaylist
+    ViewBase <|-- ViewDetailedPlaylist
+    ViewBase <|-- ViewPlay
+    ViewBase <|-- ViewMetadata
+}
+
+@enduml
