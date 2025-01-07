@@ -19,7 +19,7 @@ package Controller {
 
     class PlayingMediaController {
         + playMediaFile(file: MediaFile)
-        + play(): void
+        + play(): voida
         + pause(): void
         + stop(): void
         + skipToNext(): void

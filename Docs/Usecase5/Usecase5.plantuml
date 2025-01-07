@@ -1,19 +1,12 @@
-@startuml Volume Control
+@startuml SwitchView
 actor User
-participant DeviceController
-participant PlaybackController
+entity ViewManager
+entity ViewMenu
+entity ViewScanfOption
 
-User -> DeviceController : Increase Volume
-DeviceController -> PlaybackController : setVolume(level)
-PlaybackController -> DeviceController : adjust volume
-DeviceController -> User : display updated volume
-
-User -> DeviceController : Decrease Volume
-DeviceController -> PlaybackController : setVolume(level)
-PlaybackController -> DeviceController : adjust volume
-DeviceController -> User : display updated volume
-
-User -> DeviceController : Hardware Volume Control
-DeviceController -> PlaybackController : adjust volume through hardware
-DeviceController -> User : display updated volume
+User -> ViewManager: Request to switch to scan view
+ViewManager -> ViewMenu: hide()
+ViewManager -> ViewScanfOption: show()
+ViewScanfOption -> ViewManager: Display scan view
+ViewManager -> User: Show scan view
 @enduml

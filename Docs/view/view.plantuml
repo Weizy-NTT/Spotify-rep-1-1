@@ -49,14 +49,13 @@ package View {
         + addView(view: ViewBase): void
         + removeView(view: ViewBase): void
     }
+    ViewManager o--> ViewBase
+    ViewBase <|-- ViewScanfOption
+    ViewBase <|-- ViewMediaFile
+    ViewBase <|-- ViewPlaylist
+    ViewBase <|-- ViewDetailedPlaylist
+    ViewBase <|-- ViewPlay
+    ViewBase <|-- ViewMetadata
 }
-
-ViewManager o--> ViewBase
-ViewBase <|-- ViewScanfOption
-ViewBase <|-- ViewMediaFile
-ViewBase <|-- ViewPlaylist
-ViewBase <|-- ViewDetailedPlaylist
-ViewBase <|-- ViewPlay
-ViewBase <|-- ViewMetadata
 
 @enduml

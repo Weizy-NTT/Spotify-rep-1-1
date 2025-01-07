@@ -3,7 +3,7 @@ package Model {
     class MediaFile {
         - name: string
         - path: string
-        - type: string
+        - type: MediaType
         - metadata: Metadata
 
         + getName(): string
@@ -48,10 +48,12 @@ package Model {
         - mediaLibrary: MediaLibrary
         - playlistLibrary: PlaylistLibrary
         - playingMedia: PlayingMedia
+        - device: Device
 
         + getMediaLibrary(): MediaLibrary
         + getPlaylistLibrary(): PlaylistLibrary
         + getPlayingMedia(): PlayingMedia
+        + getDevice(): Device
     }
 
     class PlayingMedia {
@@ -77,19 +79,57 @@ package Model {
     class Metadata {
         - data: map<string, string>
 
-        + getData(): map<string, string>
-        + setData(data: map<string, string>): void
+        + getMetadata(): map<string, string>
+        + setMetadata(data: map<string, string>): void
         + getValue(key: string): string
         + setValue(key: string, value: string): void
     }
 
-    ' Liên kết giữa các lớp
+    class Device {
+        - volume: int
+        - KL46ZConnection: KL46ZInterface*
+        + setVolume(level: int)
+        + getVolume(): int
+        + updateDisplay(info: string)
+        + handleButtonPress(button: ButtonType)
+    }
+
+    enum ButtonType {
+        PLAY_PAUSE
+        NEXT
+        PREVIOUS
+        STOP
+    }
+
+    Device --> ButtonType : handles >
+
+    enum MediaType {
+        AUDIO
+        VIDEO
+    }
+
+    MediaFile --> "1" MediaType : has type >
+
+    ModelManager --> PlayingMedia
     ModelManager --> MediaLibrary
     ModelManager --> PlaylistLibrary
-    ModelManager --> PlayingMedia
+    ModelManager --> Device
     MediaLibrary o--> MediaFile
     PlaylistLibrary o--> Playlist
     Playlist o--> MediaFile
     MediaFile o--> Metadata
 }
+
+package Hardware {
+    class KL46ZInterface {
+        - serialConnection: SerialPort*
+        + connect(): void
+        + disconnect(): void
+        + readADC(): int
+        + readButton(): ButtonState
+        + updateDisplay(text: string): void
+    }
+    Device "1" --> "1" KL46ZInterface : interfaces with >
+}
+
 @enduml
