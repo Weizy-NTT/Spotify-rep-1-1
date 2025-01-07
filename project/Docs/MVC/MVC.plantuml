@@ -1,7 +1,7 @@
 @startuml MVC
 package Controller {
 
-    ControllerManager --> FileController
+    ControllerManager --> ScanfOptionController
     ControllerManager --> PlaylistController
     ControllerManager --> MediaFileController
     ControllerManager --> PlayingMediaController
@@ -23,13 +23,13 @@ package Model {
 
 package View {
 
-    ViewScanfOption --|> ViewBase
-    ViewMediaFile --|> ViewBase
-    ViewPlaylist --|> ViewBase
-    ViewDetailedPlaylist --|> ViewBase
-    ViewPlay --|> ViewBase
-    ViewMetadata --|> ViewBase
-    ViewBase <--o ViewManager
+    ScanfOptionView --|> BaseView
+    MediaFileView --|> BaseView
+    PlaylistView --|> BaseView
+    DetailedPlaylistView --|> BaseView
+    PlayingMediaView --|> BaseView
+    MetadataView --|> BaseView
+    BaseView <--o ViewManager
 }
 
 package Hardware {

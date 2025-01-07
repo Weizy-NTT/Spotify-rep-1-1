@@ -1,18 +1,18 @@
 @startuml view
 
 package View {
-    class ViewBase {
+    class BaseView {
         + show()
         + hide()
         + handleInput(input: string)
     }
 
-    class ViewScanfOption {
+    class ScanfOptionView {
         + showScanMenu()
         + getDirectoryInput(): string
     }
 
-    class ViewMediaFile {
+    class MediaFileView {
         - calculateTotalPages(totalFiles: int): int
         - currentPage: int
         + showMediaFilesPage(files: vector<MediaFile>, page: int)
@@ -20,24 +20,24 @@ package View {
         + previousPage()
     }
 
-    class ViewPlaylist {
+    class PlaylistView {
         + showPlaylistMenu()
         + showPlaylistList(playlists: vector<Playlist>)
         + selectPlaylist(playlist: Playlist)
     }
 
-    class ViewDetailedPlaylist {
+    class DetailedPlaylistView {
         + showPlaylistDetails(playlist: Playlist)
         + addMediaFileToPlaylist(file: MediaFile)
         + removeMediaFileFromPlaylist(file: MediaFile)
     }
 
-    class ViewPlay {
+    class PlayingMediaView {
         + showPlayerControls()
         + showSongInfo(file: MediaFile)
     }
 
-    class ViewMetadata {
+    class MetadataView {
         + showFileMetadata(file: MediaFile)
         + editFileMetadata(file: MediaFile)
     }
@@ -49,13 +49,13 @@ package View {
         + addView(view: ViewBase): void
         + removeView(view: ViewBase): void
     }
-    ViewManager o--> ViewBase
-    ViewBase <|-- ViewScanfOption
-    ViewBase <|-- ViewMediaFile
-    ViewBase <|-- ViewPlaylist
-    ViewBase <|-- ViewDetailedPlaylist
-    ViewBase <|-- ViewPlay
-    ViewBase <|-- ViewMetadata
+    ViewManager o--> BaseView
+    BaseView <|-- ScanfOptionView
+    BaseView <|-- MediaFileView
+    BaseView <|-- PlaylistView
+    BaseView <|-- DetailedPlaylistView
+    BaseView <|-- PlayingMediaView
+    BaseView <|-- MetadataView
 }
 
 @enduml

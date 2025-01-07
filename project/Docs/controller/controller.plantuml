@@ -1,6 +1,6 @@
 @startuml Controller
 package Controller {
-    class FileController {
+    class ScanfOptionController {
         + scanDirectory(path: string): vector<MediaFile>
         + scanUSBDevice(): vector<MediaFile>
         
@@ -55,7 +55,7 @@ package Controller {
     }
 
     ' Liên kết giữa các Controller
-    ControllerManager --> FileController
+    ControllerManager --> ScanfOptionController
     ControllerManager --> PlaylistController
     ControllerManager --> MediaFileController
     ControllerManager --> PlayingMediaController
