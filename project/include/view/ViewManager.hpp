@@ -13,16 +13,10 @@
 class ViewManager {
 private:
     std::unique_ptr<BaseView> currentView;
-    static std::unique_ptr<ViewManager> instance;
-
-    ViewManager();
 
 public:
-    static ViewManager& ViewManager::getInstance();
-
+    ViewManager();
     void showCurrentView();
-
     void switchView(std::unique_ptr<BaseView> newView);
 };
-
 #endif

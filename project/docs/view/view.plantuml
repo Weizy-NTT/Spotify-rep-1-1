@@ -1,48 +1,41 @@
 @startuml view
 
 package View {
-    class BaseView {
+    class BaseView { 
         - statusView: bool
-        
-        + show(): virtual void
-        + hide(): virtual void
+        + showMenu(): virtual void
+        + showMenu(): virtual void
         + isShown(): bool
-        + handleInput(input: string): virtual void
     }
 
     class ScanfOptionView {
-        + showScanMenu()
-        + getDirectoryInput(): string
+        + showMenu(): void
     }
 
     class MediaFileView {
-        - calculateTotalPages(totalFiles: int): int
-        - currentPage: int
-        + showMediaFilesPage(files: vector<MediaFile>, page: int)
-        + nextPage()
-        + previousPage()
+        + showMenu(): void
+        + showMediaFilesPage(files: vector<MediaFile>, page: int): void
     }
 
     class PlaylistView {
-        + showPlaylistMenu()
+        + showMenu()
         + showPlaylistList(playlists: vector<Playlist>)
-        + selectPlaylist(playlist: Playlist)
     }
 
     class DetailedPlaylistView {
-        + showPlaylistDetails(playlist: Playlist)
-        + addMediaFileToPlaylist(file: MediaFile)
-        + removeMediaFileFromPlaylist(file: MediaFile)
+        + showMenu(): void
+        + showPlaylistDetails(playlist: Playlist): void
+        + showListofSongs(playlist: Playlist): void
     }
 
     class PlayingMediaView {
-        + showPlayerControls()
+        + showMenu(): void
         + showSongInfo(file: MediaFile)
     }
 
     class MetadataView {
-        + showFileMetadata(file: MediaFile)
-        + editFileMetadata(file: MediaFile)
+        + showMenu():
+        + showFileMetadata(file: MediaFile): void
     }
 
     class ViewManager {

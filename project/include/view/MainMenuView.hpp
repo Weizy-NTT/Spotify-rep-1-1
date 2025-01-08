@@ -3,16 +3,17 @@
 
 #include "BaseView.hpp"
 
-#define SCAN_OPTIONS    "1"
-#define ALL_SONGS       "2"
-#define PLAYLIST        "3"
-#define EXIT            "0"
+namespace MainMenu {
+    const std::string SCAN_OPTIONS = "1";
+    const std::string ALL_SONGS = "2";
+    const std::string PLAYLIST = "3";
+    const std::string EXIT = "0";
+}
 
 class MainMenuView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void handleInput(const std::string& input) override;
     ~MainMenuView() override = default;
 };
 #endif // MAIN_MENU_VIEW_H

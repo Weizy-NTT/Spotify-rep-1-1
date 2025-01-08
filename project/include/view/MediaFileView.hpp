@@ -5,26 +5,19 @@
 #include "MediaFile.hpp"
 #include <vector>
 
+namespace MediaFileMenu {
+    const std::string PLAY = "1";
+    const std::string SHOW_DETAIL = "2";
+    const std::string NEXT_PAGE = "3";
+    const std::string PREV_PAGE = "4";
+    const std::string BACK = "0";
+}
+
 class MediaFileView : public BaseView {
-private:
-    int currentPage;
-    const int filesPerPage = 25;
-    
-    int calculateTotalPages(int totalFiles);
 public:
-    MediaFileView();
-
     void showMediaFilesPage(const std::vector<MediaFile>& files, int page);
-
-    void nextPage();
-
-    void previousPage();
-
     void showMenu() override;
-
     void hideMenu() override;
-
-    void handleInput(const std::string& input) override;
+    ~MediaFileView() override = default;
 };
-
 #endif // MEDIA_FILE_VIEW_H

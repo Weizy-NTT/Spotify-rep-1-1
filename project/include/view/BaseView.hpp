@@ -11,7 +11,6 @@ public:
     virtual void showMenu();
     virtual void hideMenu();
     bool isShown() const;
-    virtual void handleInput(const std::string& input) = 0;
     virtual ~BaseView();
 };
 #endif // BASE_VIEW_H

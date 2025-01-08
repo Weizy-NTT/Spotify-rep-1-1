@@ -67,13 +67,6 @@ package Model {
         + setCurrentTime(time: int): void
         + getIsPlaying(): bool
         + setIsPlaying(playing: bool): void
-        + play(): void
-        + pause(): void
-        + stop(): void
-        + skiptoNext(): void
-        + skiptoPrevious(): void
-        + skipForward(seconds: int): void
-        + skipBackward(seconds: int): void
     }
 
     class Metadata {
