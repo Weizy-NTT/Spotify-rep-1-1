@@ -16,12 +16,16 @@ CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 # Find all .cpp files in Src (do not include main.cpp multiple times)
 SRCS = $(shell find $(SRCDIR) -name "*.cpp")
 
+# TagLib settings (adjust these if TagLib is in a custom location)
+LDFLAGS = -L/usr/local/lib  # Đường dẫn tới thư viện TagLib (nếu cần thiết)
+LDLIBS = -ltag  # Liên kết với thư viện TagLib
+
 # Main rule
 all: $(TARGET)
 
 # Create executable file without .o files
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 # Clean rule (no need to clean .o files)
 clean:

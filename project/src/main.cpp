@@ -34,6 +34,7 @@ int main() {
             break;
         }
         case MainMenu::ALL_SONGS:
+            ControllerManager::getInstance()->getViewManager()->getMediaFileView()->showMediaFilesPage(ControllerManager::getInstance()->getModelManager()->getMediaLibrary().getAllMediaFiles(),1,0,1);
             ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<MediaFileView>());
             break;
         case MainMenu::PLAYLIST:

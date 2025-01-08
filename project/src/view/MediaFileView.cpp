@@ -3,8 +3,8 @@
 
 void MediaFileView::showMediaFilesPage(const std::vector<MediaFile>& files, int currentPage, int firstSong, int lastSong) {
     std::cout << "Showing page " << currentPage << std::endl;
-    for (int i = firstSong; i < lastSong; i++) {
-        std::cout << i << ". " << files[i].getName();
+    for (int i = firstSong; i < lastSong + 1; i++) {
+        std::cout << i + 1 << ". " << files[i].getName();
     }
 }
 
