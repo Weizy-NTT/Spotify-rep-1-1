@@ -3,11 +3,11 @@
 
 #include "BaseView.hpp"
 
-namespace ScanfMenu {
-    const std::string SCANF_DIRECTORY = "1";
-    const std::string SCANF_USB = "2";
-    const std::string BACK = "0";
-}
+enum ScanfMenu {
+    BACK_FROM_SCAN,
+    SCANF_DIRECTORY,
+    SCANF_USB
+};
 
 class ScanfOptionView: public BaseView {
 public:

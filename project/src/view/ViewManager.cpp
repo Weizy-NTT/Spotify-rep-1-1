@@ -6,13 +6,15 @@ ViewManager::ViewManager() {
 }
 
 void ViewManager::showCurrentView() {
-    if (currentView) {
+    if (currentView && !currentView->isShown()) {
         currentView->showMenu();
     }
 }
 
 void ViewManager::switchView(std::unique_ptr<BaseView> newView) {
+    currentView->hideMenu();
     currentView = std::move(newView);
     showCurrentView();
 }
+
 

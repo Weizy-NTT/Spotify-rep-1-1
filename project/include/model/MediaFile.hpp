@@ -19,6 +19,8 @@ private:
     Metadata metadata;
 
 public:
+    void setName(const std::string& name);
+    void setPath(const std::string& path);
     std::string getName() const;
     std::string getPath() const;
     MediaType getType() const;
@@ -26,5 +28,4 @@ public:
     void setMetadata(const Metadata& metadata);
     void setType(MediaType type);
 };
-
 #endif // MEDIA_FILE_H

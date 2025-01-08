@@ -3,9 +3,12 @@
 
 #include <vector>
 #include "MediaFile.hpp"
+#include "BaseController.hpp"
 
-class MediaFileController {
+class MediaFileController : public BaseController {
 public:
+    void inputFromKeyboard();
+    void handleInput(const std::string& input);
     std::vector<MediaFile> getAllMediaFiles() const;
     MediaFile getMediaFileDetails(const std::string& name) const;
 };

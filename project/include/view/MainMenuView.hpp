@@ -3,12 +3,12 @@
 
 #include "BaseView.hpp"
 
-namespace MainMenu {
-    const std::string SCAN_OPTIONS = "1";
-    const std::string ALL_SONGS = "2";
-    const std::string PLAYLIST = "3";
-    const std::string EXIT = "0";
-}
+enum MainMenu {
+    EXIT,
+    SCAN_OPTIONS,
+    ALL_SONGS,
+    PLAYLIST
+};
 
 class MainMenuView : public BaseView {
 public:

@@ -5,13 +5,18 @@
 #include "BaseView.hpp"
 #include "MediaFile.hpp"
 
+enum MetadataMenu {
+    BACK_FROM_METADATA,
+    SHOW_METADATA,
+    EDIT_METADATA
+};
+
 class MetadataView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
     void showFileMetadata(const MediaFile& file);
-    void editFileMetadata(MediaFile& file);
-    void handleInput(const std::string& input) override;
+    ~MetadataView() override = default;
 };
 
 #endif // METADATA_VIEW_H

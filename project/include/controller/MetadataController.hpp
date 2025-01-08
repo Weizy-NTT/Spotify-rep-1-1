@@ -3,9 +3,12 @@
 
 #include <map>
 #include "MediaFile.hpp"
+#include "BaseController.hpp"
 
-class MetadataController {
+class MetadataController : public BaseController {
 public:
+    void inputFromKeyboard();
+    void handleInput(const std::string& input);
     std::map<std::string, std::string> getMediaFileMetadata(const MediaFile& file) const;
     void updateMediaFileMetadata(const MediaFile& file, const std::map<std::string, std::string>& metadata);
 };

@@ -1,23 +1,35 @@
 @startuml Controller
 package Controller {
+    class BaseController {
+        + inputFromKeyboard(): virtual void
+        + handleInput(): virtual void
+    }
+
     class ScanfOptionController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + scanDirectory(path: string): vector<MediaFile>
         + scanUSBDevice(): vector<MediaFile>
-        
     }
 
     class PlaylistController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + getAllPlaylists(): vector<Playlist>
         + createPlaylist(name: string): void
         + deletePlaylist(name: string): void
     }
 
     class MediaFileController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + getAllMediaFiles(): vector<MediaFile>
         + getMediaFileDetails(name: string): MediaFile
     }
 
     class PlayingMediaController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + playMediaFile(file: MediaFile)
         + play(): voida
         + pause(): void
@@ -28,38 +40,33 @@ package Controller {
     }
 
     class DetailedPlaylistController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + getPlaylistDetails(playlistName: string): Playlist
         + addSongToPlaylist(playlistName: string, song: MediaFile): void
         + removeSongFromPlaylist(playlistName: string, song: MediaFile): void
     }
 
     class MetadataController {
+        + inputFromKeyboard(): void
+        + handleInput(): void
         + getMediaFileMetadata(file: MediaFile): map<string, string>
         + updateMediaFileMetadata(file: MediaFile, metadata: map<string, string>): void
     }
 
     class ControllerManager {
-        - fileController: FileController
-        - playlistController: PlaylistController
-        - mediaFileController: MediaFileController
-        - playingMediaController: PlayingMediaController
-        - detailedPlaylistController: DetailedPlaylistController
-        - metadataController: MetadataController
+        - controllers: vector<BaseController*>
 
-        + getFileController(): FileController
-        + getPlaylistController(): PlaylistController
-        + getMediaFileController(): MediaFileController
-        + getPlayingMediaController(): PlayingMediaController
-        + getDetailedPlaylistController(): DetailedPlaylistController
-        + getMetadataController(): MetadataController
     }
 
     ' Liên kết giữa các Controller
-    ControllerManager --> ScanfOptionController
-    ControllerManager --> PlaylistController
-    ControllerManager --> MediaFileController
-    ControllerManager --> PlayingMediaController
-    ControllerManager --> DetailedPlaylistController
-    ControllerManager --> MetadataController
+    BaseController <|-- ScanfOptionController
+    BaseController <|-- PlaylistController
+    BaseController <|-- MediaFileController
+    BaseController <|-- PlayingMediaController
+    BaseController <|-- DetailedPlaylistController
+    BaseController <|-- MetadataController
+
+    ControllerManager o--> BaseController
 }
 @enduml

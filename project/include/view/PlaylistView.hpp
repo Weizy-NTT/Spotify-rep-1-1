@@ -6,19 +6,18 @@
 #include "BaseView.hpp"
 #include "Playlist.hpp"
 
-namespace PlaylistMenu {
-    const std::string SELECT_PLAYLIST    = "1";
-    const std::string ADD_PLAYLIST       = "2";
-    const std::string REMOVE_PLAYLIST    = "3";
-    const std::string BACK               = "0";
-}
+enum PlaylistMenu {
+    BACK_FROM_PLAYLIST,
+    SELECT_PLAYLIST,
+    ADD_PLAYLIST,
+    REMOVE_PLAYLIST
+};
 
 class PlaylistView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
     void showPlaylistList(const std::vector<Playlist>& playlists);
-    void selectPlaylist(const Playlist& playlist);
-    void handleInput(const std::string& input) override;
+    ~PlaylistView() override = default;
 };
 #endif // PLAYLIST_VIEW_H

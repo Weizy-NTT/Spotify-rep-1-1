@@ -3,9 +3,12 @@
 
 #include "Playlist.hpp"
 #include "MediaFile.hpp"
+#include "BaseController.hpp"
 
-class DetailedPlaylistController {
+class DetailedPlaylistController : public BaseController {
 public:
+    void inputFromKeyboard();
+    void handleInput(const std::string& input);
     Playlist getPlaylistDetails(const std::string& playlistName) const;
     void addSongToPlaylist(const std::string& playlistName, const MediaFile& song);
     void removeSongFromPlaylist(const std::string& playlistName, const MediaFile& song);

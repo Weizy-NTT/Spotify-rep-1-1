@@ -4,37 +4,43 @@ package View {
     class BaseView { 
         - statusView: bool
         + showMenu(): virtual void
-        + showMenu(): virtual void
+        + hideMenu(): virtual void
         + isShown(): bool
     }
 
     class ScanfOptionView {
         + showMenu(): void
+        + hideMenu(): void
     }
 
     class MediaFileView {
         + showMenu(): void
+        + hideMenu(): void
         + showMediaFilesPage(files: vector<MediaFile>, page: int): void
     }
 
     class PlaylistView {
-        + showMenu()
+        + showMenu(): void
+        + hideMenu(): void
         + showPlaylistList(playlists: vector<Playlist>)
     }
 
     class DetailedPlaylistView {
         + showMenu(): void
+        + hideMenu(): void
         + showPlaylistDetails(playlist: Playlist): void
         + showListofSongs(playlist: Playlist): void
     }
 
     class PlayingMediaView {
         + showMenu(): void
+        + hideMenu(): void
         + showSongInfo(file: MediaFile)
     }
 
     class MetadataView {
-        + showMenu():
+        + showMenu(): void
+        + hideMenu(): void
         + showFileMetadata(file: MediaFile): void
     }
 

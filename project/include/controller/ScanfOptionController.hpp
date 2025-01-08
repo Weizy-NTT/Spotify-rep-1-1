@@ -3,9 +3,12 @@
 
 #include <vector>
 #include "MediaFile.hpp"
+#include "BaseController.hpp"
 
-class ScanfOptionController {
+class ScanfOptionController : public BaseController {
 public:
+    void inputFromKeyboard();
+    void handleInput(const std::string& input);
     std::vector<MediaFile> scanDirectory(const std::string& path);
     std::vector<MediaFile> scanUSBDevice();
 };

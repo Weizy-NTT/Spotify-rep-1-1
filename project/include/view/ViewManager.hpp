@@ -13,10 +13,18 @@
 class ViewManager {
 private:
     std::unique_ptr<BaseView> currentView;
+    std::vector<std::unique_ptr<BaseView>> controllers;
 
 public:
     ViewManager();
     void showCurrentView();
     void switchView(std::unique_ptr<BaseView> newView);
+    
+    ScanfOptionController getScanfOptionController() const;
+    PlaylistController getPlaylistController() const;
+    MediaFileController getMediaFileController() const;
+    PlayingMediaController getPlayingMediaController() const;
+    DetailedPlaylistController getDetailedPlaylistController() const;
+    MetadataController getMetadataController() const;
 };
 #endif
