@@ -19,6 +19,7 @@ private:
     Metadata metadata;
 
 public:
+    MediaFile(const std::string& name = "", const std::string& path = "", MediaType type = AUDIO, const Metadata& metadata = Metadata());
     void setName(const std::string& name);
     void setPath(const std::string& path);
     std::string getName() const;

@@ -6,8 +6,8 @@ CC = g++
 CFLAGS = -Wall -g
 
 # Source folder, header folder
-SRCDIR = Src
-INCDIR = Include
+SRCDIR = src
+INCDIR = include
 
 # Automatically find all subdirectories in Include and Src
 INCLUDES = $(shell find $(INCDIR) -type d)
@@ -17,8 +17,9 @@ CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 SRCS = $(shell find $(SRCDIR) -name "*.cpp")
 
 # TagLib settings (adjust these if TagLib is in a custom location)
-LDFLAGS = -L/usr/local/lib  # Đường dẫn tới thư viện TagLib (nếu cần thiết)
-LDLIBS = -ltag  # Liên kết với thư viện TagLib
+CFLAGS += -I/usr/include/taglib        # Đường dẫn đến thư mục chứa header của TagLib
+LDFLAGS += -L/usr/lib/x86_64-linux-gnu  # Đường dẫn đến thư mục chứa thư viện libtag.so
+LDLIBS += -ltag                        # Liên kết với thư viện TagLib
 
 # Main rule
 all: $(TARGET)

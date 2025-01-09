@@ -13,7 +13,7 @@ void MetadataView::showMenu() {
 void MetadataView::hideMenu() {
     BaseView::hideMenu();
     std::cout << "Hiding Metadata View...\n";
-    std::system("cls");
+    std::system("clear");
 }
 
 void MetadataView::showFileMetadata(const MediaFile& file) {

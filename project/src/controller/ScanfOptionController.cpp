@@ -6,15 +6,27 @@
 std::vector<MediaFile> ScanfOptionController::scanDirectory(const std::string& path) {
     std::vector<MediaFile> files;
     // TODO: Thêm logic quét directory
-    MediaFile newMedia1;
-    newMedia1.setName("Exist Sign");
-    newMedia1.setPath(path);
-    files.push_back(newMedia1);
+    MediaFile media1;
+    media1.setName("Song 1");
+    media1.setPath("/path/to/song");
 
-    MediaFile newMedia2;
-    newMedia2.setName("Ly Cay Bong");
-    newMedia2.setPath(path);
-    files.push_back(newMedia2);
+    // Đảm bảo gọi setType và setMetadata trước khi truy xuất
+    media1.setType(AUDIO);
+    Metadata metadata1;
+    metadata1.setValue("artist", "Artist Name");
+    media1.setMetadata(metadata1);
+    files.push_back(media1);
+
+    MediaFile media;
+    media.setName("Song 12");
+    media.setPath("/path/to/song");
+
+    // Đảm bảo gọi setType và setMetadata trước khi truy xuất
+    media.setType(AUDIO);
+    Metadata metadata;
+    metadata.setValue("artist", "Artist Name");
+    media.setMetadata(metadata);
+    files.push_back(media);
 
     std::cout << "Đang quét thư mục: " << path << "\n";
     return files;

@@ -1,5 +1,8 @@
 #include "MediaFile.hpp"
 
+MediaFile::MediaFile(const std::string& name, const std::string& path, MediaType type, const Metadata& metadata) 
+    : name(name), path(path), type(type), metadata(metadata) {}
+
 void MediaFile::setName(const std::string& name) {
     this->name = name;
 }

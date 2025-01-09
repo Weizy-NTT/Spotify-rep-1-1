@@ -12,7 +12,7 @@ public:
     std::vector<MediaFile> getAllMediaFiles() const;
     void addMediaFile(const MediaFile& file);
     void removeMediaFile(const MediaFile& file);
-    void setAllMediaFiles(const std::vector<MediaFile> files);
+    void setAllMediaFiles(const std::vector<MediaFile>& files);
     MediaFile getMediaFileByName(const std::string& name) const;
 };
 

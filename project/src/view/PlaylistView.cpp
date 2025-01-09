@@ -14,7 +14,7 @@ void PlaylistView::showMenu() {
 void PlaylistView::hideMenu() {
     BaseView::hideMenu();
     std::cout << "Hiding Media File View...\n";
-    std::system("cls");
+    std::system("clear");
 }
 
 void PlaylistView::showPlaylistList(const std::vector<Playlist>& playlists) {

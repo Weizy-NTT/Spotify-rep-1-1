@@ -1,4 +1,5 @@
 #include "MediaFileLibrary.hpp"
+#include <stdexcept>
 
 std::vector<MediaFile> MediaFileLibrary::getAllMediaFiles() const {
     return mediaFiles;
@@ -26,6 +27,6 @@ MediaFile MediaFileLibrary::getMediaFileByName(const std::string& name) const {
     throw std::runtime_error("Media file not found");
 }
 
-void MediaFileLibrary::setAllMediaFiles(const std::vector<MediaFile> files) {
-    mediaFiles = files;
+void MediaFileLibrary::setAllMediaFiles(const std::vector<MediaFile>& files) {
+    mediaFiles = std::move(files);
 }

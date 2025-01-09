@@ -1,5 +1,6 @@
 #include "Playlist.hpp"
 #include <algorithm>
+#include <stdexcept>
 
 std::string Playlist::getName() const {
     return name;

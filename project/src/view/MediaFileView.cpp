@@ -22,6 +22,6 @@ void MediaFileView::showMenu() {
 void MediaFileView::hideMenu() {
     BaseView::hideMenu();
     std::cout << "Hiding Media File View...\n";
-    std::system("cls");
+    std::system("clear");
 }
 

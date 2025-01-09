@@ -13,7 +13,7 @@ void PlayingMediaView::showMenu() {
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
     std::cout << "Hiding Playing Media View...\n";
-    std::system("cls");
+    std::system("clear");
 }
 
 void PlayingMediaView::showSongInfo(const MediaFile& file) {

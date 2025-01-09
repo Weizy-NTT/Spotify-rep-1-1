@@ -1,5 +1,6 @@
 #include "PlaylistLibrary.hpp"
 #include <algorithm>
+#include <stdexcept>
 
 std::vector<Playlist> PlaylistLibrary::getAllPlaylists() const {
     return playlists;

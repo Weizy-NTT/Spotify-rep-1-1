@@ -12,7 +12,7 @@ void DetailedPlaylistView::showMenu() {
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
     std::cout << "Hiding Detailed Playlist View...\n";
-    std::system("cls");
+    std::system("clear");
 }
 
 void DetailedPlaylistView::showPlaylistDetails(const Playlist& playlist) {
