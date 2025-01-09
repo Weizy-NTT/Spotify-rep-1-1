@@ -1,10 +1,10 @@
 #include "PlayingMedia.hpp"
 
-MediaFile* PlayingMedia::getCurrentMediaFile() const {
+std::shared_ptr<MediaFile> PlayingMedia::getCurrentMediaFile() const {
     return currentMediaFile;
 }
 
-void PlayingMedia::setCurrentMediaFile(MediaFile* mediaFile) {
+void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile) {
     currentMediaFile = mediaFile;
 }
 

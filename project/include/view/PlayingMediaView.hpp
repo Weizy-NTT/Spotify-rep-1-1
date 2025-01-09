@@ -4,6 +4,7 @@
 #include "BaseView.hpp"
 #include "MediaFile.hpp"
 #include <iostream>
+#include <memory>
 
 enum PlayingMediaMenu {
     BACK_FROM_PLAYING,
@@ -16,7 +17,7 @@ class PlayingMediaView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showSongInfo(const MediaFile& file);
+    void showSongInfo(const std::shared_ptr<MediaFile>& file);
     ~PlayingMediaView() override = default;
 };
 

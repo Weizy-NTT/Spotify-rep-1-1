@@ -1,33 +1,42 @@
 #include "Playlist.hpp"
 #include <algorithm>
-#include <stdexcept>
 
 std::string Playlist::getName() const {
     return name;
 }
 
-std::vector<MediaFile> Playlist::getSongs() const {
+const std::vector<std::shared_ptr<MediaFile>>& Playlist::getSongs() const {
     return songs;
 }
 
-void Playlist::addSong(const MediaFile& song) {
+void Playlist::addSong(const std::shared_ptr<MediaFile>& song) {
     songs.push_back(song);
 }
 
-void Playlist::removeSong(const MediaFile& song) {
-    for (auto it = songs.begin();it != songs.end();it++) {
-        if (it->getName() == song.getName()) {
-            songs.erase(it);
-            return;
-        }
+void Playlist::removeSong(const std::string& ID) {
+    auto it = std::remove_if(songs.begin(), songs.end(),
+        [&ID](const std::shared_ptr<MediaFile>& song) {
+            return song->getID() == ID;
+        });
+
+    if (it != songs.end()) {
+        songs.erase(it, songs.end());
     }
 }
 
-MediaFile Playlist::getSongByName(const std::string& nameSong) {
+std::shared_ptr<MediaFile> Playlist::getSongByID(const std::string& ID) const {
     for (const auto& song : songs) {
-        if (song.getName() == nameSong) {
+        if (song->getID() == ID) {
             return song;
         }
     }
-    throw std::runtime_error("Playlist not found");
+    return nullptr;
+}
+
+void Playlist::setID(const std::string& ID) {
+    this->ID = ID;
+}
+
+std::string Playlist::getID() const {
+    return ID;
 }

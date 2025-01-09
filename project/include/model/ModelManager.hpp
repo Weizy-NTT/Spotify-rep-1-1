@@ -5,19 +5,19 @@
 #include "PlaylistLibrary.hpp"
 #include "PlayingMedia.hpp"
 #include "Device.hpp"
+#include <memory>
 
 class ModelManager {
 private:
-    MediaFileLibrary mediaLibrary;
-    PlaylistLibrary playlistLibrary;
-    PlayingMedia playingMedia;
-    //Device device;
+    std::unique_ptr<MediaFileLibrary> mediaLibrary;
+    std::unique_ptr<PlaylistLibrary> playlistLibrary;
+    std::unique_ptr<PlayingMedia> playingMedia;
 
 public:
-    MediaFileLibrary getMediaLibrary() const;
-    PlaylistLibrary getPlaylistLibrary() const;
-    PlayingMedia getPlayingMedia() const;
-    //Device getDevice() const;
+    MediaFileLibrary* getMediaLibrary() const;
+    PlaylistLibrary* getPlaylistLibrary() const;
+    PlayingMedia* getPlayingMedia() const;
+    ModelManager();
 };
 
 #endif // MODEL_MANAGER_H

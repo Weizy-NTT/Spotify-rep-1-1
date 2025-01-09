@@ -10,15 +10,25 @@
 #include "ScanfOptionView.hpp"
 #include <memory>
 
+enum SwitchView {
+    SW_MAIN_VIEW,
+    SW_SCANF_VIEW,
+    SW_PLAYLIST_VIEW,
+    SW_MEDIAFILE_VIEW,
+    SW_PLAYING_VIEW,
+    SW_DETAILED_VIEW,
+    SW_METADATA_VIEW
+};
+
 class ViewManager {
 private:
-    std::unique_ptr<BaseView> currentView;
+    BaseView* currentView;
     std::vector<std::unique_ptr<BaseView>> views;
 
 public:
     ViewManager();
     void showCurrentView();
-    void switchView(std::unique_ptr<BaseView> newView);
+    void switchView(SwitchView viewIndex);
     
     ScanfOptionView* getScanfOptionView() const;
     PlaylistView* getPlaylistView() const;
@@ -26,5 +36,6 @@ public:
     PlayingMediaView* getPlayingMediaView() const;
     DetailedPlaylistView* getDetailedPlaylistView() const;
     MetadataView* getMetadataView() const;
+    MainMenuView* getMainMenuView() const;
 };
 #endif

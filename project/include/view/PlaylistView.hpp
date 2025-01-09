@@ -17,7 +17,7 @@ class PlaylistView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showPlaylistList(const std::vector<Playlist>& playlists);
+    void showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists);
     ~PlaylistView() override = default;
 };
 #endif // PLAYLIST_VIEW_H

@@ -1,17 +1,19 @@
 #include "ModelManager.hpp"
 
-MediaFileLibrary ModelManager::getMediaLibrary() const {
-    return mediaLibrary;
+ModelManager::ModelManager() {
+    mediaLibrary = std::make_unique<MediaFileLibrary>();
+    playlistLibrary = std::make_unique<PlaylistLibrary>();
+    playingMedia = std::make_unique<PlayingMedia>();
 }
 
-PlaylistLibrary ModelManager::getPlaylistLibrary() const {
-    return playlistLibrary;
+MediaFileLibrary* ModelManager::getMediaLibrary() const {
+    return mediaLibrary.get();
 }
 
-PlayingMedia ModelManager::getPlayingMedia() const {
-    return playingMedia;
+PlaylistLibrary* ModelManager::getPlaylistLibrary() const {
+    return playlistLibrary.get();
 }
 
-//Device ModelManager::getDevice() const {
-//    return device;
-//}
+PlayingMedia* ModelManager::getPlayingMedia() const {
+    return playingMedia.get();
+}

@@ -1,17 +1,17 @@
 #include "MediaFileView.hpp"
 #include <iostream>
 
-void MediaFileView::showMediaFilesPage(const std::vector<MediaFile>& files, int currentPage, int firstSong, int lastSong) {
+void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, int currentPage, int firstSong, int lastSong) {
     std::cout << "Showing page " << currentPage << std::endl;
     for (int i = firstSong; i < lastSong + 1; i++) {
-        std::cout << i + 1 << ". " << files[i].getName();
+        std::cout << i + 1 << ". " << files[i]->getName();
     }
 }
 
 void MediaFileView::showMenu() {
     BaseView::showMenu();
     std::cout << "==== Media Player Menu ====" << std::endl;
-    std::cout << MediaFileMenu::PLAY_SONG << ". Play\n";
+    std::cout << MediaFileMenu::PLAY_SONG_FROM_FILES << ". Play\n";
     std::cout << MediaFileMenu::SHOW_DETAIL << ". Show Media File Details\n";
     std::cout << MediaFileMenu::NEXT_PAGE << ". Show Next Page\n";
     std::cout << MediaFileMenu::PREV_PAGE << ". Show Previous Page\n";

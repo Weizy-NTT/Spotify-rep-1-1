@@ -4,10 +4,11 @@
 #include "BaseView.hpp"
 #include "MediaFile.hpp"
 #include <vector>
+#include <memory>
 
 enum MediaFileMenu {
     BACK_FROM_MEDIA,
-    PLAY_SONG,
+    PLAY_SONG_FROM_FILES,
     SHOW_DETAIL,
     NEXT_PAGE,
     PREV_PAGE
@@ -15,7 +16,7 @@ enum MediaFileMenu {
 
 class MediaFileView : public BaseView {
 public:
-    void showMediaFilesPage(const std::vector<MediaFile>& files, int currentPage, int firstSong, int lastSong);
+    void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, int currentPage, int firstSong, int lastSong);
     void showMenu() override;
     void hideMenu() override;
     ~MediaFileView() override = default;

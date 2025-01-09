@@ -1,29 +1,30 @@
 #include "PlaylistLibrary.hpp"
 #include <algorithm>
-#include <stdexcept>
 
-std::vector<Playlist> PlaylistLibrary::getAllPlaylists() const {
+const std::vector<std::shared_ptr<Playlist>>& PlaylistLibrary::getAllPlaylists() const {
     return playlists;
 }
 
-void PlaylistLibrary::addPlaylist(const Playlist& playlist) {
+void PlaylistLibrary::addPlaylist(const std::shared_ptr<Playlist>& playlist) {
     playlists.push_back(playlist);
 }
 
-void PlaylistLibrary::removePlaylist(const Playlist& playlist) {
-    for (auto it = playlists.begin();it != playlists.end();it++) {
-        if (it->getName() == playlist.getName()) {
-            playlists.erase(it);
-            return;
-        }
+void PlaylistLibrary::removePlaylist(const std::string& ID) {
+    auto it = std::remove_if(playlists.begin(), playlists.end(),
+        [&ID](const std::shared_ptr<Playlist>& playlist) {
+            return playlist->getName() == ID;
+        });
+
+    if (it != playlists.end()) {
+        playlists.erase(it, playlists.end());
     }
 }
 
-Playlist PlaylistLibrary::getPlaylistByName(const std::string& name) const {
+std::shared_ptr<Playlist> PlaylistLibrary::getPlaylistByID(const std::string& ID) const {
     for (const auto& playlist : playlists) {
-        if (playlist.getName() == name) {
+        if (playlist->getID() == ID) {
             return playlist;
         }
     }
-    throw std::runtime_error("Playlist not found");
+    return nullptr;
 }

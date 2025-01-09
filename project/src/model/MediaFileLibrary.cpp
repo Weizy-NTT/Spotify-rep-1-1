@@ -1,32 +1,32 @@
 #include "MediaFileLibrary.hpp"
-#include <stdexcept>
+#include <algorithm> // std::find_if, std::remove_if
 
-std::vector<MediaFile> MediaFileLibrary::getAllMediaFiles() const {
+const std::vector<std::shared_ptr<MediaFile>>& MediaFileLibrary::getAllMediaFiles() const {
     return mediaFiles;
 }
 
-void MediaFileLibrary::addMediaFile(const MediaFile& file) {
+void MediaFileLibrary::addMediaFile(const std::shared_ptr<MediaFile>& file) {
     mediaFiles.push_back(file);
 }
 
-void MediaFileLibrary::removeMediaFile(const MediaFile& file) {
+void MediaFileLibrary::removeMediaFile(const std::string& ID) {
     for (auto it = mediaFiles.begin();it != mediaFiles.end();it++) {
-        if (it->getName() == file.getName()) {
+        if (it->get()->getID() == ID) {
             mediaFiles.erase(it);
             return;
         }
     }
 }
 
-MediaFile MediaFileLibrary::getMediaFileByName(const std::string& name) const {
-    for (const auto& file : mediaFiles) {
-        if (file.getName() == name) {
-            return file;
-        }
-    }
-    throw std::runtime_error("Media file not found");
+void MediaFileLibrary::setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files) {
+    mediaFiles = files;
 }
 
-void MediaFileLibrary::setAllMediaFiles(const std::vector<MediaFile>& files) {
-    mediaFiles = std::move(files);
+std::shared_ptr<MediaFile> MediaFileLibrary::getMediaFileByID(const std::string& ID) const {
+    for (const auto& mediaFile : mediaFiles) {
+        if (mediaFile->getID() == ID) {
+            return mediaFile;
+        }
+    }
+    return nullptr;
 }

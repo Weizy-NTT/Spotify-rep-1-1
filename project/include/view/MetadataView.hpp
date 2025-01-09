@@ -4,10 +4,10 @@
 #include <string>
 #include "BaseView.hpp"
 #include "MediaFile.hpp"
+#include <memory>
 
 enum MetadataMenu {
     BACK_FROM_METADATA,
-    SHOW_METADATA,
     EDIT_METADATA
 };
 
@@ -15,7 +15,7 @@ class MetadataView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showFileMetadata(const MediaFile& file);
+    void showFileMetadata(const std::shared_ptr<MediaFile>& file);
     ~MetadataView() override = default;
 };
 

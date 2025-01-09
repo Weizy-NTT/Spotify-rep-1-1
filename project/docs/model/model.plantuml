@@ -1,11 +1,16 @@
 @startuml Model
 package Model {
     class MediaFile {
+        - ID : string
         - name: string
         - path: string
         - type: MediaType
         - metadata: Metadata
 
+        + setID(ID: string): void
+        + setName(name: string): void
+        + setPath(path: string): void
+        + getID(): string
         + getName(): string
         + getPath(): string
         + getType(): string
@@ -15,54 +20,57 @@ package Model {
     }
 
     class Playlist {
+        - ID : string
         - name: string
-        - songs: vector<MediaFile>
+        - songs: vector<shared_ptr<MediaFile>>
 
+        + setID(ID: string): void
+        + setName(name: string): void
         + getName(): string
-        + getSongs(): vector<MediaFile>
-        + addSong(song: MediaFile): void
-        + removeSong(song: MediaFile): void
+        + getID(): string
+        + getSongs(): vector<shared_ptr<MediaFile>>
+        + addSong(song: shared_ptr<MediaFile): void
+        + removeSong(ID: string): void
+        + getSongByID(ID: string): shared_ptr<MediaFile>
     }
 
     class MediaLibrary {
-        - mediaFiles: vector<MediaFile>
+        - mediaFiles: vector<share_ptr<MediaFile>>
 
-        + getAllMediaFiles(): vector<MediaFile>
-        + addMediaFile(file: MediaFile): void
-        + removeMediaFile(file: MediaFile): void
-        + getMediaFileByName(name: string): MediaFile
-        + scanDirectory(path: string): void
-        + scanUSBDevice(): void
+        + getAllMediaFiles(): vector<share_ptr<MediaFile>>
+        + addMediaFile(file: share_ptr<MediaFile>): void
+        + removeMediaFile(ID : string): void
+        + getMediaFileByID(ID: string): share_ptr<MediaFile>
     }
 
     class PlaylistLibrary {
-        - playlists: vector<Playlist>
+        - playlists: vector<shared_ptr<Playlist>>
 
-        + getAllPlaylists(): vector<Playlist>
-        + addPlaylist(playlist: Playlist): void
-        + removePlaylist(playlist: Playlist): void
-        + getPlaylistByName(name: string): Playlist
+        + getAllPlaylists(): vector<shared_ptr<Playlist>>
+        + addPlaylist(playlist: shared_ptr<Playlist>): void
+        + removePlaylist(ID: string): void
+        + getPlaylistByID(ID: string): Playlist
     }
 
     class ModelManager {
-        - mediaLibrary: MediaLibrary
-        - playlistLibrary: PlaylistLibrary
-        - playingMedia: PlayingMedia
-        - device: Device
+        - mediaLibrary: unique_ptr<MediaFileLibrary>
+        - playlistLibrary: unique_ptr<PlaylistLibrary>
+        - playingMedia: unique_ptr<PlayingMedia>
+        - device: unique_ptr<Device>
 
-        + getMediaLibrary(): MediaLibrary
-        + getPlaylistLibrary(): PlaylistLibrary
-        + getPlayingMedia(): PlayingMedia
-        + getDevice(): Device
+        + getMediaLibrary(): MediaLibrary*
+        + getPlaylistLibrary(): PlaylistLibrary*
+        + getPlayingMedia(): PlayingMedia*
+        + getDevice(): Device*
     }
 
     class PlayingMedia {
-        - currentMediaFile: MediaFile*
+        - currentMediaFile: shared_ptr<MediaFile>
         - currentTime: int
         - isPlaying: bool
 
-        + getCurrentMediaFile(): MediaFile*
-        + setCurrentMediaFile(mediaFile: MediaFile*): void
+        + getCurrentMediaFile(): shared_ptr<MediaFile>
+        + setCurrentMediaFile(mediaFile: shared_ptr<MediaFile>): void
         + getCurrentTime(): int
         + setCurrentTime(time: int): void
         + getIsPlaying(): bool

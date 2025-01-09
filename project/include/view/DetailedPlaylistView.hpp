@@ -5,19 +5,22 @@
 #include "Playlist.hpp"
 #include <iostream>
 #include <vector>
+#include <memory>
 
 enum DetailedPlaylistMenu {
     BACK_FROM_DETAIL,
-    SHOW_DETAILS,
-    SHOW_SONGS
+    PLAY_SONG_FROM_PLAYLIST,
+    ADD_SONG,
+    DELETE_SONG,
+    SHOW_DETAIL_SONG
 };
 
 class DetailedPlaylistView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showPlaylistDetails(const Playlist& playlist);
-    void showListOfSongs(const Playlist& playlist);
+    void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist);
+    void showListOfSongs(const std::shared_ptr<Playlist>& playlist);
 };
 
 #endif // DETAILED_PLAYLIST_VIEW_H

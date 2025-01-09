@@ -16,7 +16,7 @@ void PlayingMediaView::hideMenu() {
     std::system("clear");
 }
 
-void PlayingMediaView::showSongInfo(const MediaFile& file) {
-    auto metadata = file.getMetadata();
-    std::cout << "Now Playing: " << file.getName() << " - " << metadata.getMetadata()["Artist"] << std::endl;
+void PlayingMediaView::showSongInfo(const std::shared_ptr<MediaFile>& file) {
+    auto metadata = file->getMetadata();
+    std::cout << "Now Playing: " << file->getName() << " - " << metadata.getMetadata()["Artist"] << std::endl;
 }

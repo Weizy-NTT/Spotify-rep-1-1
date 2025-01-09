@@ -13,23 +13,28 @@ package View {
         + hideMenu(): void
     }
 
+    class MainMenuView {
+        + showMenu(): void
+        + hideMenu(): void
+    }
+
     class MediaFileView {
         + showMenu(): void
         + hideMenu(): void
-        + showMediaFilesPage(files: vector<MediaFile>, page: int): void
+        + showMediaFilesPage(files: vector<shared_ptr<MediaFile>>, page: int): void
     }
 
     class PlaylistView {
         + showMenu(): void
         + hideMenu(): void
-        + showPlaylistList(playlists: vector<Playlist>)
+        + showPlaylistList(playlists: vector<shared_ptr<Playlist>>)
     }
 
     class DetailedPlaylistView {
         + showMenu(): void
         + hideMenu(): void
-        + showPlaylistDetails(playlist: Playlist): void
-        + showListofSongs(playlist: Playlist): void
+        + showPlaylistDetails(playlist: shared_ptr<Playlist>): void
+        + showListofSongs(playlist: shared_ptr<Playlist>): void
     }
 
     class PlayingMediaView {
@@ -46,9 +51,18 @@ package View {
 
     class ViewManager {
         - currentView: BaseView*
+        - views : vector<BaseView*>
         + showCurrentMenu(): void
-        + switchView(view: ViewBase): void
+        + switchView(indexView: switch_type): void
+        + getDetailedPlaylistView(): DetailedPlaylistView*
+        + getMainMenuView(): MainMenuView*
+        + getMediaFileView(): MediaFileView*
+        + getMetadataView(): MetadataView*
+        + getPlayingMediaView(): PlayingMediaView*
+        + getPlaylistView(): PlaylistView*
+        + getScanfOptionView(): ScanfOptionView*
     }
+
     ViewManager o--> BaseView
     BaseView <|-- ScanfOptionView
     BaseView <|-- MediaFileView
@@ -56,6 +70,7 @@ package View {
     BaseView <|-- DetailedPlaylistView
     BaseView <|-- PlayingMediaView
     BaseView <|-- MetadataView
+    BaseView <|-- MainMenuView
 }
 
 @enduml
