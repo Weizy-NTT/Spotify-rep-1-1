@@ -59,6 +59,7 @@ public:
     }
 };
 
+void validateScanfMenu(const size_t& value);
 void validateIDNumber(const std::string& ID);
 void validateFullName(const std::string& fullName);
 void validateDoB(const std::string& dob);
