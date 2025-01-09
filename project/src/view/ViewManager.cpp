@@ -27,30 +27,66 @@ void ViewManager::switchView(SwitchView viewIndex) {
 }
 
 MainMenuView* ViewManager::getMainMenuView() const {
-    return dynamic_cast<MainMenuView*>(views[SwitchView::SW_MAIN_VIEW].get());
+    if (views[SwitchView::SW_MAIN_VIEW]) {
+        return dynamic_cast<MainMenuView*>(views[SwitchView::SW_MAIN_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 ScanfOptionView* ViewManager::getScanfOptionView() const {
-    return dynamic_cast<ScanfOptionView*>(views[SwitchView::SW_SCANF_VIEW].get());
+    if (views[SwitchView::SW_SCANF_VIEW]) {
+        return dynamic_cast<ScanfOptionView*>(views[SwitchView::SW_SCANF_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 PlaylistView* ViewManager::getPlaylistView() const {
-    return dynamic_cast<PlaylistView*>(views[SwitchView::SW_PLAYLIST_VIEW].get());
+    if (views[SwitchView::SW_PLAYLIST_VIEW]) {
+        return dynamic_cast<PlaylistView*>(views[SwitchView::SW_PLAYLIST_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
+
 MediaFileView* ViewManager::getMediaFileView() const {
-    return dynamic_cast<MediaFileView*>(views[SwitchView::SW_MEDIAFILE_VIEW].get());
+    if (views[SwitchView::SW_MEDIAFILE_VIEW]) {
+        return dynamic_cast<MediaFileView*>(views[SwitchView::SW_MEDIAFILE_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 PlayingMediaView* ViewManager::getPlayingMediaView() const {
-    return dynamic_cast<PlayingMediaView*>(views[SwitchView::SW_PLAYING_VIEW].get());
+    if (views[SwitchView::SW_PLAYING_VIEW]) {
+        return dynamic_cast<PlayingMediaView*>(views[SwitchView::SW_PLAYING_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 DetailedPlaylistView* ViewManager::getDetailedPlaylistView() const {
-    return dynamic_cast<DetailedPlaylistView*>(views[SwitchView::SW_DETAILED_VIEW].get());
+    if (views[SwitchView::SW_DETAILED_VIEW]) {
+        return dynamic_cast<DetailedPlaylistView*>(views[SwitchView::SW_DETAILED_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 MetadataView* ViewManager::getMetadataView() const {
-    return dynamic_cast<MetadataView*>(views[SwitchView::SW_METADATA_VIEW].get());
+    if (views[SwitchView::SW_METADATA_VIEW]) {
+        return dynamic_cast<MetadataView*>(views[SwitchView::SW_METADATA_VIEW].get());
+    }
+    else {
+        return nullptr;
+    }
 }
 
 

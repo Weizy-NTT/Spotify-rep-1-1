@@ -7,13 +7,28 @@ ModelManager::ModelManager() {
 }
 
 MediaFileLibrary* ModelManager::getMediaLibrary() const {
-    return mediaLibrary.get();
+    if (mediaLibrary) {
+        return mediaLibrary.get();
+    }
+    else {
+        return nullptr;
+    }
 }
 
 PlaylistLibrary* ModelManager::getPlaylistLibrary() const {
-    return playlistLibrary.get();
+    if (mediaLibrary) {
+        return playlistLibrary.get();
+    }
+    else {
+        return nullptr;
+    }
 }
 
 PlayingMedia* ModelManager::getPlayingMedia() const {
-    return playingMedia.get();
+    if (mediaLibrary) {
+        return playingMedia.get();
+    }
+    else {
+        return nullptr;
+    }
 }

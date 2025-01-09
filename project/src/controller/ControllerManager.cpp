@@ -26,32 +26,64 @@ ControllerManager* ControllerManager::getInstance(ViewManager* viewManager, Mode
         }
         instance = new ControllerManager(viewManager, modelManager);
     }
-    return instance;
+    else{
+        return instance;
+    }
 }
 
 // Các phương thức truy xuất controller
-ScanfOptionController ControllerManager::getScanfOptionController() const {
-    return *(dynamic_cast<ScanfOptionController*>(controllers[0].get()));
+ScanfOptionController* ControllerManager::getScanfOptionController() const {
+    if (controllers[modeController::CT_SCANF]) {
+        return (dynamic_cast<ScanfOptionController*>(controllers[modeController::CT_SCANF].get()));
+    }
+    else {
+        return nullptr;
+    } 
 }
 
-PlaylistController ControllerManager::getPlaylistController() const {
-    return *(dynamic_cast<PlaylistController*>(controllers[1].get()));
+PlaylistController* ControllerManager::getPlaylistController() const {
+    if (controllers[modeController::CT_PLAYLIST]) {
+        return (dynamic_cast<PlaylistController*>(controllers[modeController::CT_PLAYLIST].get()));
+    }
+    else {
+        return nullptr;
+    } 
 }
 
-MediaFileController ControllerManager::getMediaFileController() const {
-    return *(dynamic_cast<MediaFileController*>(controllers[2].get()));
+MediaFileController* ControllerManager::getMediaFileController() const {
+    if (controllers[modeController::CT_MEDIA_FILES]) {
+        return (dynamic_cast<MediaFileController*>(controllers[modeController::CT_MEDIA_FILES].get()));
+    }
+    else {
+        return nullptr;
+    }
 }
 
-PlayingMediaController ControllerManager::getPlayingMediaController() const {
-    return *(dynamic_cast<PlayingMediaController*>(controllers[3].get()));
+PlayingMediaController* ControllerManager::getPlayingMediaController() const {
+    if (controllers[modeController::CT_PLAYING_MEDIA]) {
+        return (dynamic_cast<PlayingMediaController*>(controllers[modeController::CT_PLAYING_MEDIA].get()));
+    }
+    else {
+        return nullptr;
+    }
 }
 
-DetailedPlaylistController ControllerManager::getDetailedPlaylistController() const {
-    return *(dynamic_cast<DetailedPlaylistController*>(controllers[4].get()));
+DetailedPlaylistController* ControllerManager::getDetailedPlaylistController() const {
+    if (controllers[modeController::CT_DETAILED_PLAYLIST]) {
+        return (dynamic_cast<DetailedPlaylistController*>(controllers[modeController::CT_DETAILED_PLAYLIST].get()));
+    }
+    else {
+        return nullptr;
+    }
 }
 
-MetadataController ControllerManager::getMetadataController() const {
-    return *(dynamic_cast<MetadataController*>(controllers[5].get()));
+MetadataController* ControllerManager::getMetadataController() const {
+    if (controllers[modeController::CT_METADATA]) {
+        return (dynamic_cast<MetadataController*>(controllers[modeController::CT_METADATA].get()));
+    }
+    else {
+        return nullptr;
+    }
 }
 
 ViewManager* ControllerManager::getViewManager() const {

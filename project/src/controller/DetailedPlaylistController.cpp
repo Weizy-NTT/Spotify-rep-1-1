@@ -1,7 +1,7 @@
 #include "DetailedPlaylistController.hpp"
 
 void DetailedPlaylistController::inputFromKeyboard(){
-    ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<DetailedPlaylistView>());
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_DETAILED_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     handleInput(mainChoice);
@@ -33,7 +33,7 @@ void DetailedPlaylistController::handleInput(const size_t & input){
                 back();
                 break;
             }
-            case DetailedPlaylistMenu::PLAY_SONG:{
+            case DetailedPlaylistMenu::PLAY_SONG_FROM_PLAYLIST:{
                 std::string songID;
                 std::cout <<"Enter play song ID for playing: ";
                 std::getline(std::cin, songID);

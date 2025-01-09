@@ -4,7 +4,7 @@
 #include "ControllerManager.hpp"
 
 void ScanfOptionController::inputFromKeyboard(){
-    ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<ScanfOptionView>());
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_SCANF_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     handleInput(mainChoice);

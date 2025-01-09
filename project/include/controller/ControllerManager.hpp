@@ -15,6 +15,15 @@
 #include "ModelManager.hpp"
 #include "ExceptionLib.hpp"
 
+enum modeController {
+    CT_SCANF,
+    CT_PLAYLIST,
+    CT_MEDIA_FILES,
+    CT_PLAYING_MEDIA,
+    CT_DETAILED_PLAYLIST,
+    CT_METADATA
+};
+
 class ControllerManager {
 private:
     static ControllerManager* instance; // Instance duy nhất của lớp
@@ -34,12 +43,12 @@ public:
     // Phương thức truy cập instance
     static ControllerManager* getInstance(ViewManager* viewManager = nullptr, ModelManager* modelManager = nullptr);
 
-    ScanfOptionController getScanfOptionController() const;
-    PlaylistController getPlaylistController() const;
-    MediaFileController getMediaFileController() const;
-    PlayingMediaController getPlayingMediaController() const;
-    DetailedPlaylistController getDetailedPlaylistController() const;
-    MetadataController getMetadataController() const;
+    ScanfOptionController* getScanfOptionController() const;
+    PlaylistController* getPlaylistController() const;
+    MediaFileController* getMediaFileController() const;
+    PlayingMediaController* getPlayingMediaController() const;
+    DetailedPlaylistController* getDetailedPlaylistController() const;
+    MetadataController* getMetadataController() const;
     ViewManager* getViewManager() const;
     ModelManager* getModelManager() const;
 };

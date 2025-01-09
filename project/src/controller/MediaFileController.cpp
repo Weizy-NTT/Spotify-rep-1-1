@@ -1,7 +1,7 @@
 #include "MediaFileController.hpp"
 
 void MediaFileController::inputFromKeyboard(){
-    ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<MediaFileView>());
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     handleInput(mainChoice);
@@ -15,7 +15,7 @@ void MediaFileController::handleInput(const size_t& input){
             back();
             break;
         }
-        case MediaFileMenu::PLAY_SONG:{
+        case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             break;
         }
            

@@ -1,7 +1,7 @@
 #include"PlaylistController.hpp"
 
 void PlaylistController::inputFromKeyboard(){
-    ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<PlaylistView>());
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     handleInput(mainChoice);

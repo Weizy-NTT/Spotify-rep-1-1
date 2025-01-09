@@ -1,7 +1,7 @@
 #include "PlayingMediaController.hpp"
 
 void PlayingMediaController::inputFromKeyboard(){
-    ControllerManager::getInstance()->getViewManager()->switchView(std::make_unique<MetadataView>());
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     handleInput(mainChoice);
