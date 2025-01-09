@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_MANAGER_H
 #define CONTROLLER_MANAGER_H
 
+#include <iostream>
 #include <vector>
 #include <memory>
 #include "ScanfOptionController.hpp"
@@ -12,6 +13,7 @@
 #include "BaseController.hpp"
 #include "ViewManager.hpp"
 #include "ModelManager.hpp"
+#include "ExceptionLib.hpp"
 
 class ControllerManager {
 private:
