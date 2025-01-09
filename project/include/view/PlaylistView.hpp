@@ -10,7 +10,7 @@ enum PlaylistMenu {
     BACK_FROM_PLAYLIST,
     SELECT_PLAYLIST,
     ADD_PLAYLIST,
-    REMOVE_PLAYLIST
+    REMOVE_PLAYLIST,
 };
 
 class PlaylistView : public BaseView {

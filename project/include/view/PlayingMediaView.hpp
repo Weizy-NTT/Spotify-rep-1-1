@@ -10,6 +10,7 @@ enum PlayingMediaMenu {
     PLAY_PAUSE,
     NEXT,
     PREV,
+    
 };
 
 class PlayingMediaView : public BaseView {

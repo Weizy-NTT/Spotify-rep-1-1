@@ -5,9 +5,9 @@
 #include "BaseView.hpp"
 #include "MediaFile.hpp"
 
+
 enum MetadataMenu {
     BACK_FROM_METADATA,
-    SHOW_METADATA,
     EDIT_METADATA
 };
 

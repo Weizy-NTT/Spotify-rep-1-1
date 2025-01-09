@@ -8,8 +8,10 @@
 
 enum DetailedPlaylistMenu {
     BACK_FROM_DETAIL,
-    SHOW_DETAILS,
-    SHOW_SONGS
+    PLAY_SONG,
+    ADD_SONG,
+    DELETE_SONG,
+    SHOW_DETAIL_SONG
 };
 
 class DetailedPlaylistView : public BaseView {

@@ -12,6 +12,7 @@
 #include "BaseController.hpp"
 #include "ViewManager.hpp"
 #include "ModelManager.hpp"
+#include "ExceptionLib.hpp"
 
 class ControllerManager {
 private:

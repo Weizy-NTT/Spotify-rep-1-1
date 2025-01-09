@@ -7,7 +7,7 @@ enum MainMenu {
     EXIT,
     SCAN_OPTIONS,
     ALL_SONGS,
-    PLAYLIST
+    PLAYLIST,
 };
 
 class MainMenuView : public BaseView {
