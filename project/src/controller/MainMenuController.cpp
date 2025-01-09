@@ -20,9 +20,7 @@ void MainMenuController::handleInput(){
             break;
         }
         case MainMenu::ALL_SONGS: {
-            std::string path;
-            std::cout<<"Enter your path you want to scan: ";
-            std::getline(std::cin, path);
+            ControllerManager::getInstance()->getMediaFileController()->inputFromKeyboard();
             break;
         }
            
