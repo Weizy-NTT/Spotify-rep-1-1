@@ -28,7 +28,7 @@ public:
     std::string getID() const;
     std::string getPath() const;
     MediaType getType() const;
-    Metadata getMetadata() const;
+    Metadata& getMetadata();
     void setMetadata(const Metadata& metadata);
     void setType(MediaType type);
 };

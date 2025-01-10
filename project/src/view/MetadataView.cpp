@@ -18,7 +18,7 @@ void MetadataView::hideMenu() {
 void MetadataView::showFileMetadata(const std::shared_ptr<MediaFile>& file) {
     auto metadata = file->getMetadata();
 
-    std::cout << "File Metadata:\n";
+    std::cout << "Metadata of " << file->getName() << std::endl;
     for (const auto& entry : metadata.getMetadata()) {
         std::cout << entry.first << ": " << entry.second << "\n";
     }

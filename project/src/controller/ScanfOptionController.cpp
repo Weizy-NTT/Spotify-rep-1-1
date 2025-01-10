@@ -14,9 +14,14 @@
 namespace fs = std::filesystem;
 
 void ScanfOptionController::handleInput(){
+    bool status = false;
     size_t mainChoice;
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+    if (status) {
+        std::cout << "Scan successfuly\n";
+        status = false;
+    }
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_SCANF_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validateScanfMenu);
 
@@ -31,6 +36,7 @@ void ScanfOptionController::handleInput(){
             std::cout<<"Enter your path you want to scan: ";
             std::getline(std::cin, path);
             ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->setAllMediaFiles(scanDirectory(path));
+            status = true;
             break;
         }
            
@@ -39,6 +45,7 @@ void ScanfOptionController::handleInput(){
             std::cout<<"Enter your path you want to scan from usb: ";
             std::getline(std::cin, path);
             scanDirectory(path);
+            status = true;
             break;
         }
         }

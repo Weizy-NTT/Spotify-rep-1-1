@@ -14,7 +14,7 @@ private:
     std::vector<std::shared_ptr<MediaFile>> songs;
 
 public:
-    Playlist(std::string id, std::string name);
+    Playlist(const std::string& id, const std::string& name);
     void setID(const std::string& ID);
     std::string getID() const;
     std::string getName() const;

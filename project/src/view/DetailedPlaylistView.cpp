@@ -1,4 +1,5 @@
 #include "DetailedPlaylistView.hpp"
+#include <iomanip>
 
 void DetailedPlaylistView::showMenu() {
     BaseView::showMenu();
@@ -24,9 +25,26 @@ void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& 
 }
 
 void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& playlist) {
-    std::cout << "Songs in Playlist:\n";
+    constexpr int ID_WIDTH = 5;       // Width for ID column
+    constexpr int NAME_WIDTH = 30;   // Width for Name column
+
+    // Display header with playlist name
+    std::cout << "----------------------------------------\n";
+    std::cout << "    Songs in Playlist: " << playlist->getName() << "\n";
+    std::cout << "----------------------------------------\n";
+
+    // Display table header
+    std::cout << std::left << std::setw(ID_WIDTH) << "ID"
+              << std::left << std::setw(NAME_WIDTH) << "Name" << "\n";
+    std::cout << "----------------------------------------\n";
+
+    // Fetch and display songs in the playlist
     std::vector<std::shared_ptr<MediaFile>> songs = playlist->getSongs();
-    for (const auto& song : songs) {
-        std::cout << song->getName() << "\n";
+    for (size_t i = 0; i < songs.size(); ++i) {
+        std::cout << std::left << std::setw(ID_WIDTH) << songs[i]->getID()
+                  << std::left << std::setw(NAME_WIDTH) << songs[i]->getName() << "\n";
     }
+
+    // Footer
+    std::cout << "----------------------------------------\n";
 }

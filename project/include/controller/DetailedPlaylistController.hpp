@@ -4,7 +4,7 @@
 #include "Playlist.hpp"
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
-#include "ControllerManager.hpp"
+#include <memory>
 
 class DetailedPlaylistController : public BaseController {
 public:

@@ -2,11 +2,9 @@
 #include "ControllerManager.hpp"
 
 void MediaFileController::handleInput(){
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
-
     size_t mainChoice;
     size_t totalPage = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles().size();
-    totalPage = (totalPage/25) + 1;
+    totalPage = (size_t)(totalPage/25) + 1;
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
@@ -23,6 +21,10 @@ void MediaFileController::handleInput(){
         }
            
         case MediaFileMenu::SHOW_DETAIL:{
+            std::string songID;
+            std::cout <<"Enter play song ID for looking details: ";
+            std::getline(std::cin, songID);
+            ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
             break;
         }
         case MediaFileMenu::NEXT_PAGE:{
@@ -53,18 +55,15 @@ void MediaFileController::handleInput(){
 // std::vector<MediaFile> MediaFileController::getAllMediaFiles() const{
 
 // }
-// MediaFile MediaFileController::getMediaFileDetails(const std::string& name) const{
-
-// }
 
 void MediaFileController::back(){}
 
-void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, int pageSize) {
-    int totalSongs = files.size();
+void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {
+    size_t totalSongs = files.size();
     //int totalPages = (totalSongs + pageSize - 1) / pageSize;  // Tính số trang cần thiết
 
-    int firstSong = (currentPage - 1) * pageSize;
-    int lastSong = std::min(currentPage * pageSize - 1, totalSongs - 1);
+    size_t firstSong = (currentPage - 1) * pageSize;
+    size_t lastSong = std::min(currentPage * pageSize - 1, totalSongs - 1);
 
     ControllerManager::getInstance()->getViewManager()->getMediaFileView()->showMediaFilesPage(files, currentPage, firstSong, lastSong);
 

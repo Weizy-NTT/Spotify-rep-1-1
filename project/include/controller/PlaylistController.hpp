@@ -5,18 +5,17 @@
 #include "Playlist.hpp"
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
-#include "ControllerManager.hpp"
 #include "ModelManager.hpp"
 #include "ViewManager.hpp"
+#include <memory>
 
 class PlaylistController : public BaseController {
 public:
     void handleInput();
-    void createPlaylist(const std::string& name, const std::string Id);
+    void createPlaylist(const std::string& id, const std::string& name);
     void back();
     void deletePlaylist(const std::string& Id);
     void showMediafileInList(const std::string& listId);
+    void showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists);
 };
-
-
 #endif // PLAYLIST_CONTROLLER

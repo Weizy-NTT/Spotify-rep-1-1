@@ -22,8 +22,8 @@ void MainMenuController::handleInput(){
             ControllerManager::getInstance()->getMediaFileController()->handleInput();
             break;
         }
-           
         case MainMenu::PLAYLIST:{
+            ControllerManager::getInstance()->getPlaylistController()->handleInput();
             break;
         }
         default:

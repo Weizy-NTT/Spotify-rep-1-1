@@ -32,7 +32,7 @@ MediaType MediaFile::getType() const {
     return type;
 }
 
-Metadata MediaFile::getMetadata() const {
+Metadata& MediaFile::getMetadata(){
     return metadata;
 }
 

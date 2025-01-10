@@ -19,12 +19,6 @@ void ViewManager::showCurrentView() {
         currentView->showMenu();
     }
 }
-void ViewManager::hideCurrentView(){
-    if (currentView && currentView->isShown()) {
-        currentView->hideMenu();
-    }
-}
-
 
 void ViewManager::hideCurrentView() {
     if (currentView && currentView->isShown()) {

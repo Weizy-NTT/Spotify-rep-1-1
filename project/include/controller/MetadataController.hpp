@@ -4,15 +4,13 @@
 #include <map>
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
-#include "ControllerManager.hpp"
+#include <memory>
 
 class MetadataController : public BaseController {
 public:
     void handleInput(const std::string& ID);
-    std::map<std::string, std::string> getMediaFileMetadata(const MediaFile& file) const;
-    void updateMediaFileMetadata(const MediaFile& file, const std::map<std::string, std::string>& metadata);
+    void getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const;
+    void updateMediaFileMetadata(const std::string& key, const std::string& value,const std::string& ID);
     void back();
-
 };
-
 #endif // METADATA_CONTROLLER_H

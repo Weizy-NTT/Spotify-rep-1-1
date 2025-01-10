@@ -3,7 +3,7 @@
 
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
-#include "ControllerManager.hpp"
+#include <memory>
 
 class PlayingMediaController : public BaseController {
 public:

@@ -30,7 +30,6 @@ public:
     void showCurrentView();
     void hideCurrentView();
     void switchView(SwitchView viewIndex);
-    void hideCurrentView();
     
     ScanfOptionView* getScanfOptionView() const;
     PlaylistView* getPlaylistView() const;

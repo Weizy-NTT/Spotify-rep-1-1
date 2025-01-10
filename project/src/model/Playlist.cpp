@@ -41,7 +41,7 @@ std::string Playlist::getID() const {
     return ID;
 }
 
-Playlist::Playlist(std::string id, std::string name){
-    ID = id;
-    name = name;
+Playlist::Playlist(const std::string& id, const std::string& name){
+    this->ID = id;
+    this->name = name;
 }

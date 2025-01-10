@@ -1,4 +1,5 @@
- #include "DetailedPlaylistController.hpp"
+#include "DetailedPlaylistController.hpp"
+#include "ControllerManager.hpp"
 
 void DetailedPlaylistController::handleInput(std::string listId){
     size_t mainChoice;
@@ -6,8 +7,6 @@ void DetailedPlaylistController::handleInput(std::string listId){
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getPlaylistController()->showMediafileInList(listId);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_DETAILED_VIEW);
-
-    break;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     switch (mainChoice)
         {
@@ -52,7 +51,7 @@ void DetailedPlaylistController::showDetailSong(const std::string& PlaylistId, c
 }
 
 void DetailedPlaylistController::addSongToPlaylist(const std::string& PlaylistId, const std::string& songID){
-    ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(PlaylistId)->addSong((ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(PlaylistId)->getSongByID(songID)));
+    ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(PlaylistId)->addSong((ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(songID)));
 }
 
 
