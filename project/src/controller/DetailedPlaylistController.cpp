@@ -1,4 +1,4 @@
-#include "DetailedPlaylistController.hpp"
+ #include "DetailedPlaylistController.hpp"
 
 void DetailedPlaylistController::handleInput(std::string listId){
     size_t mainChoice;
@@ -43,11 +43,6 @@ void DetailedPlaylistController::handleInput(std::string listId){
                 playSong(songID);
                 break;
             }
-
-            default:
-                std::cout << "Your choice is not valid\n";
-                break;
-
     }
     }while(mainChoice != DetailedPlaylistMenu::BACK_FROM_DETAIL);
 }
@@ -70,6 +65,5 @@ void DetailedPlaylistController::back(){
 }
 
 void DetailedPlaylistController::playSong(const std::string songID){
-
 }
 

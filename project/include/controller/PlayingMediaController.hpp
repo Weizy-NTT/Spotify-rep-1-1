@@ -7,7 +7,7 @@
 
 class PlayingMediaController : public BaseController {
 public:
-    void handleInput();
+    void handleInput(const std::string& ID);
     void playMediaFile(MediaFile file);
     void play();
     void pause();

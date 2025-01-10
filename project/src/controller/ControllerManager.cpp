@@ -7,6 +7,7 @@ ControllerManager* ControllerManager::instance = nullptr;
 ControllerManager::ControllerManager(ViewManager* viewManager, ModelManager* modelManager)
     : views(viewManager), model(modelManager) {
     // Khởi tạo các controller
+    controllers.push_back(std::make_unique<MainMenuController>());
     controllers.push_back(std::make_unique<ScanfOptionController>());
     controllers.push_back(std::make_unique<PlaylistController>());
     controllers.push_back(std::make_unique<MediaFileController>());
@@ -26,12 +27,20 @@ ControllerManager* ControllerManager::getInstance(ViewManager* viewManager, Mode
         }
         instance = new ControllerManager(viewManager, modelManager);
     }
-    else{
-        return instance;
-    }
+    return instance;
 }
 
 // Các phương thức truy xuất controller
+
+MainMenuController* ControllerManager::getMainMenuController() const {
+    if (controllers[modeController::CT_MAIN]) {
+        return (dynamic_cast<MainMenuController*>(controllers[modeController::CT_MAIN].get()));
+    }
+    else {
+        return nullptr;
+    } 
+}
+
 ScanfOptionController* ControllerManager::getScanfOptionController() const {
     if (controllers[modeController::CT_SCANF]) {
         return (dynamic_cast<ScanfOptionController*>(controllers[modeController::CT_SCANF].get()));

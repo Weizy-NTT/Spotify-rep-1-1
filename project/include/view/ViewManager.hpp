@@ -28,6 +28,7 @@ private:
 public:
     ViewManager();
     void showCurrentView();
+    void hideCurrentView();
     void switchView(SwitchView viewIndex);
     void hideCurrentView();
     

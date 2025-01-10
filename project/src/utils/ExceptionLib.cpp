@@ -82,6 +82,13 @@ void validatePosInteger(const size_t& value) {
     }
 }
 
+
+void validateScanfMenu(const size_t& value) {
+    if (value < 0 || value > 2) {
+        throw InvalidInputIntegerException();
+    }
+}
+
 void Exception_Handler(const std::string& str,std::string& variable, void(*func)(const std::string&)) {
     while(1) {
         try {

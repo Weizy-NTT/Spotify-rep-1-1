@@ -14,8 +14,10 @@
 #include "ViewManager.hpp"
 #include "ModelManager.hpp"
 #include "ExceptionLib.hpp"
+#include "MainMenuController.hpp"
 
 enum modeController {
+    CT_MAIN,
     CT_SCANF,
     CT_PLAYLIST,
     CT_MEDIA_FILES,
@@ -43,6 +45,7 @@ public:
     // Phương thức truy cập instance
     static ControllerManager* getInstance(ViewManager* viewManager = nullptr, ModelManager* modelManager = nullptr);
 
+    MainMenuController* getMainMenuController() const;
     ScanfOptionController* getScanfOptionController() const;
     PlaylistController* getPlaylistController() const;
     MediaFileController* getMediaFileController() const;

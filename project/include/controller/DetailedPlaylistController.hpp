@@ -8,6 +8,7 @@
 
 class DetailedPlaylistController : public BaseController {
 public:
+
     void handleInput(std::string listId);
     void showDetailSong(const std::string& PlaylistId, const std::string& songID);
     void addSongToPlaylist(const std::string& PlaylistId, const std::string& songID);
