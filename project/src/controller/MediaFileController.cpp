@@ -1,13 +1,12 @@
 #include "MediaFileController.hpp"
-
-void MediaFileController::inputFromKeyboard(){
-    handleInput();
-}
-
+#include "ControllerManager.hpp"
 
 void MediaFileController::handleInput(){
     size_t mainChoice;
+    size_t totalPage = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles().size();
+    totalPage = (totalPage/25) + 1;
     do {
+    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
@@ -25,12 +24,20 @@ void MediaFileController::handleInput(){
             break;
         }
         case MediaFileMenu::NEXT_PAGE:{
-            currentPage++;
+            if (currentPage < totalPage) {
+                currentPage++;
+            }
+            else {
+                std::cout << "This is the last page\n";
+            }
             break;
         }
         case MediaFileMenu::PREV_PAGE:{
             if (currentPage > 1) {
                 currentPage--;
+            }
+            else {
+                std::cout << "This is the first page\n";
             }
             break;
         }   

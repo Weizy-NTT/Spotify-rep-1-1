@@ -20,8 +20,13 @@ void ViewManager::showCurrentView() {
     }
 }
 
+void ViewManager::hideCurrentView() {
+    if (currentView && currentView->isShown()) {
+        currentView->hideMenu();
+    }
+}
+
 void ViewManager::switchView(SwitchView viewIndex) {
-    currentView->hideMenu();
     currentView = views[viewIndex].get();
     showCurrentView();
 }

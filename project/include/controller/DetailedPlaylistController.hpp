@@ -8,8 +8,7 @@
 
 class DetailedPlaylistController : public BaseController {
 public:
-    void inputFromKeyboard();
-    void handleInput(const size_t & input);
+    void handleInput(const std::string & ID);
     Playlist getPlaylistDetails(const std::string& playlistName) const;
     void addSongToPlaylist(const std::string& playlistName, const std::string songID);
     void removeSongFromPlaylist(const std::string& playlistName, const std::string songID);

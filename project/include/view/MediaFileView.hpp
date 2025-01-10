@@ -16,7 +16,7 @@ enum MediaFileMenu {
 
 class MediaFileView : public BaseView {
 public:
-    void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, int currentPage, int firstSong, int lastSong);
+    void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong);
     void showMenu() override;
     void hideMenu() override;
     ~MediaFileView() override = default;

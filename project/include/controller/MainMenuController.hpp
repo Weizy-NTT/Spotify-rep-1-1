@@ -5,7 +5,6 @@
 
 class MainMenuController : public BaseController {
 public:
-    void inputFromKeyboard();
     void handleInput();
     void back();
 };

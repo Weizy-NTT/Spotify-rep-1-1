@@ -13,12 +13,10 @@
 
 namespace fs = std::filesystem;
 
-void ScanfOptionController::inputFromKeyboard(){
-    handleInput();
-}
 void ScanfOptionController::handleInput(){
     size_t mainChoice;
     do {
+    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_SCANF_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validateScanfMenu);
     switch (mainChoice)
@@ -62,7 +60,7 @@ std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanDirectory(con
                 std::string ID = std::to_string(count);
                 std::shared_ptr<MediaFile> new_mediafile = std::make_shared<MediaFile>();
                 new_mediafile->setID(ID);
-                new_mediafile->setName(tag->title().toCString(true));
+                new_mediafile->setName(entry.path().filename().string());
                 new_mediafile->setPath(entry.path().string());
                 new_mediafile->setType(AUDIO);
 
@@ -107,7 +105,7 @@ std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanDirectory(con
                 std::string ID = std::to_string(count);
                 std::shared_ptr<MediaFile> new_videofile = std::make_shared<MediaFile>();
                 new_videofile->setID(ID);
-                new_videofile->setName(tag->title().toCString(true));
+                new_videofile->setName(entry.path().filename().string());
                 new_videofile->setPath(entry.path().string());
                 new_videofile->setType(VIDEO);
 

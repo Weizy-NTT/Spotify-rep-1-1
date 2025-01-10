@@ -5,13 +5,12 @@
 #include <iostream>
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
-#include "ControllerManager.hpp"
+#include "memory"
 
 class MediaFileController : public BaseController {
 private:
     int currentPage = 1;
 public:
-    void inputFromKeyboard();
     void handleInput();
     std::vector<MediaFile> getAllMediaFiles() const;
     void back();

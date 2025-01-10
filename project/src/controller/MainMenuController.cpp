@@ -1,12 +1,11 @@
 #include "MainMenuController.hpp"
 #include "ControllerManager.hpp"
 
-void MainMenuController::inputFromKeyboard(){
-    handleInput();
-}
 void MainMenuController::handleInput(){
     size_t mainChoice;
     do {
+    system("clear");
+    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MAIN_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
     switch (mainChoice)
@@ -16,11 +15,11 @@ void MainMenuController::handleInput(){
             break;
         }
         case MainMenu::SCAN_OPTIONS: {
-            ControllerManager::getInstance()->getScanfOptionController()->inputFromKeyboard();
+            ControllerManager::getInstance()->getScanfOptionController()->handleInput();
             break;
         }
         case MainMenu::ALL_SONGS: {
-            ControllerManager::getInstance()->getMediaFileController()->inputFromKeyboard();
+            ControllerManager::getInstance()->getMediaFileController()->handleInput();
             break;
         }
            
