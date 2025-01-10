@@ -3,14 +3,12 @@
 #include "ScanfOptionView.hpp"
 #include "ControllerManager.hpp"
 
-void ScanfOptionController::inputFromKeyboard(){
+
+void ScanfOptionController::handleInput(){
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_SCANF_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-    handleInput(mainChoice);
-}
-void ScanfOptionController::handleInput(const size_t& input){
-    switch (input)
+    switch (mainChoice)
         {
         case ScanfMenu::BACK_FROM_SCAN: {
             back();

@@ -1,15 +1,10 @@
 #include "MediaFileController.hpp"
 
-void MediaFileController::inputFromKeyboard(){
+void MediaFileController::handleInput(){
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-    handleInput(mainChoice);
-}
-
-
-void MediaFileController::handleInput(const size_t& input){
-    switch (input)
+    switch (mainChoice)
         {
         case MediaFileMenu::BACK_FROM_MEDIA: {
             back();

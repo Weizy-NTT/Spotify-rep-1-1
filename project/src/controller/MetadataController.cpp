@@ -1,15 +1,10 @@
 #include "MetadataController.hpp"
 
-void MetadataController::inputFromKeyboard(){
+void MetadataController::handleInput(){
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
     size_t mainChoice;
     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-    handleInput(mainChoice);
-}
-
-
-void MetadataController::handleInput(const size_t& input){
-    switch (input)
+    switch (mainChoice)
         {
         case MetadataMenu::BACK_FROM_METADATA: {
             back();

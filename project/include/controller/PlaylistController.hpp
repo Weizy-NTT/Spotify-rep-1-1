@@ -7,17 +7,16 @@
 #include "BaseController.hpp"
 #include "ControllerManager.hpp"
 #include "ModelManager.hpp"
+#include "ViewManager.hpp"
 
 class PlaylistController : public BaseController {
 public:
-    void inputFromKeyboard();
-    void handleInput(const size_t & input);
-    std::vector<Playlist> getAllPlaylists() const;
-    void createPlaylist(const std::string& name);
+    void handleInput();
+    void createPlaylist(const std::string& name, const std::string Id);
     void back();
-    void deletePlaylist(const std::string& name);
+    void deletePlaylist(const std::string& Id);
     void showMediafileInList(const std::string& listId);
 };
 
 
-#endif // PLAYLIST_CONTROLLER_
+#endif // PLAYLIST_CONTROLLER

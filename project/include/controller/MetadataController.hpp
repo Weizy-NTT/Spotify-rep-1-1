@@ -8,8 +8,7 @@
 
 class MetadataController : public BaseController {
 public:
-    void inputFromKeyboard();
-    void handleInput(const size_t& input);
+    void handleInput();
     std::map<std::string, std::string> getMediaFileMetadata(const MediaFile& file) const;
     void updateMediaFileMetadata(const MediaFile& file, const std::map<std::string, std::string>& metadata);
     void back();

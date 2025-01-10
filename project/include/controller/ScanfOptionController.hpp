@@ -7,8 +7,7 @@
 
 class ScanfOptionController : public BaseController {
 public:
-    void inputFromKeyboard();
-    void handleInput(const size_t & input);
+    void handleInput();
     std::vector<MediaFile> scanDirectory(const std::string& path);
     std::vector<MediaFile> scanUSBDevice();
     void back();

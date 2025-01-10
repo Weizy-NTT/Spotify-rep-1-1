@@ -29,6 +29,7 @@ public:
     ViewManager();
     void showCurrentView();
     void switchView(SwitchView viewIndex);
+    void hideCurrentView();
     
     ScanfOptionView* getScanfOptionView() const;
     PlaylistView* getPlaylistView() const;

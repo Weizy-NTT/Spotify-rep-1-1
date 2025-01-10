@@ -40,3 +40,8 @@ void Playlist::setID(const std::string& ID) {
 std::string Playlist::getID() const {
     return ID;
 }
+
+Playlist::Playlist(std::string id, std::string name){
+    ID = id;
+    name = name;
+}

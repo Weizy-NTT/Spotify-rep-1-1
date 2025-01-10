@@ -9,8 +9,8 @@
 
 class MediaFileController : public BaseController {
 public:
-    void inputFromKeyboard();
-    void handleInput(const size_t & input);
+
+    void handleInput();
     std::vector<MediaFile> getAllMediaFiles() const;
     void back();
     MediaFile getMediaFileDetails(const std::string& name) const;
