@@ -7,28 +7,25 @@ void DetailedPlaylistController::handleInput(std::string listId){
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getPlaylistController()->showMediafileInList(listId);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_DETAILED_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
+    Exception_Handler("Enter your choice: ",mainChoice,validateDetailedPlaylistMenu);
     switch (mainChoice)
         {
             case DetailedPlaylistMenu::SHOW_DETAIL_SONG:{
                 std::string songID;
-                std::cout <<"Enter play song ID for looking details: ";
-                std::getline(std::cin, songID);
+                Exception_Handler("Enter song ID for looking details: ",songID,validateID);
                 showDetailSong(listId,songID);
                 break;
             }
             case DetailedPlaylistMenu::ADD_SONG:{
                 std::string songID;
-                std::cout <<"Enter play song ID for adding: ";
-                std::getline(std::cin, songID);
+                Exception_Handler("Enter song ID for adding: ",songID,validateID);
                 addSongToPlaylist(listId,songID);
             }
                 break;
             case DetailedPlaylistMenu::DELETE_SONG:{
                 std::string songID;
-                std::cout <<"Enter play song ID for removing: ";
-                std::getline(std::cin, songID);
-                ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId)->removeSong(songID);
+                Exception_Handler("Enter song ID for removing: ",songID,validateID);
+                removeSongFromPlaylist(listId,songID);
             }
                 break;
             case DetailedPlaylistMenu::BACK_FROM_DETAIL:{
@@ -37,12 +34,11 @@ void DetailedPlaylistController::handleInput(std::string listId){
             }
             case DetailedPlaylistMenu::PLAY_SONG_FROM_PLAYLIST:{
                 std::string songID;
-                std::cout <<"Enter play song ID for playing: ";
-                std::getline(std::cin, songID);
-                playSong(songID);
+                Exception_Handler("Enter song ID for playing: ",songID,validateID);
+                ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
                 break;
             }
-    }
+        }
     }while(mainChoice != DetailedPlaylistMenu::BACK_FROM_DETAIL);
 }
 
@@ -63,6 +59,4 @@ void DetailedPlaylistController::back(){
     
 }
 
-void DetailedPlaylistController::playSong(const std::string songID){
-}
 

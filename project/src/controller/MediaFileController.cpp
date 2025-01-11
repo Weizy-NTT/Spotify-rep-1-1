@@ -9,7 +9,7 @@ void MediaFileController::handleInput(){
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
+    Exception_Handler("Enter your choice: ",mainChoice,validateMediaFilesMenu);
     switch (mainChoice)
         {
         case MediaFileMenu::BACK_FROM_MEDIA: {
@@ -17,13 +17,15 @@ void MediaFileController::handleInput(){
             break;
         }
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
+            std::string songID;
+            Exception_Handler("Enter song ID for playing: ",songID,validateID);
+            ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
             break;
         }
            
         case MediaFileMenu::SHOW_DETAIL:{
             std::string songID;
-            std::cout <<"Enter play song ID for looking details: ";
-            std::getline(std::cin, songID);
+            Exception_Handler("Enter song ID for looking details: ",songID,validateID);
             ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
             break;
         }
@@ -45,16 +47,9 @@ void MediaFileController::handleInput(){
             }
             break;
         }   
-        default:
-            std::cout << "Your choice is not valid\n";
-            break;
         }
     } while(mainChoice != MediaFileMenu::BACK_FROM_MEDIA);
 }
-
-// std::vector<MediaFile> MediaFileController::getAllMediaFiles() const{
-
-// }
 
 void MediaFileController::back(){}
 

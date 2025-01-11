@@ -14,7 +14,6 @@ public:
     void addSongToPlaylist(const std::string& PlaylistId, const std::string& songID);
     void removeSongFromPlaylist(const std::string& PlaylistId, const std::string& songID);
     void back();
-    void playSong(const std::string songID);
 };
 
 #endif // DETAILED_PLAYLIST_CONTROLLER

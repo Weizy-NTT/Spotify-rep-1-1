@@ -7,31 +7,27 @@ void PlaylistController::handleInput(){
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
+    Exception_Handler("Enter your choice: ",mainChoice,validatePlaylistsMenu);
     switch (mainChoice)
         {
             case PlaylistMenu::SELECT_PLAYLIST:{
                 std::string PlaylistID;
-                std::cout <<"Enter play list ID for looking: ";
-                std::getline(std::cin, PlaylistID);
+                Exception_Handler("Enter playlist ID for looking: ",PlaylistID,validateID);
                 ControllerManager::getInstance()->getDetailedPlaylistController()->handleInput(PlaylistID);
                 break;
             }
             case PlaylistMenu::ADD_PLAYLIST:{
                 std::string playlistID, playlistName;
-                std::cout <<"Enter playlist ID for adding: ";
-                std::getline(std::cin, playlistID);
-                std::cout <<"Enter playlist name for adding: ";
-                std::getline(std::cin, playlistName);
+                Exception_Handler("Enter playlist ID for adding: ",playlistID,validateID);
+                Exception_Handler("Enter playlist name for adding: ",playlistName,validateAlphaSring);
                 createPlaylist(playlistID, playlistName);
                 break;
             }
         
             case PlaylistMenu::REMOVE_PLAYLIST:{
-                std::string PlaylistName;
-                std::cout <<"Enter playlist ID for removing: ";
-                std::getline(std::cin, PlaylistName);
-                deletePlaylist(PlaylistName);
+                std::string playlistID;
+                Exception_Handler("Enter playlist ID for removing: ",playlistID,validateID);
+                deletePlaylist(playlistID);
                 break;
             }
 
@@ -39,10 +35,6 @@ void PlaylistController::handleInput(){
                 back();
                 break;
             }
-            default:
-                std::cout << "Your choice is not valid\n";
-                break;
-
         }
     }while (mainChoice != PlaylistMenu::BACK_FROM_PLAYLIST);
     

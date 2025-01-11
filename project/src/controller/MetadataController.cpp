@@ -15,27 +15,24 @@ void MetadataController::handleInput(const std::string& ID){
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
+    Exception_Handler("Enter your choice: ",mainChoice,validateMetadataMenu);
     switch (mainChoice)
         {
-        case MetadataMenu::BACK_FROM_METADATA: {
-            back();
-            break;
-        }
-        case MetadataMenu::EDIT_METADATA:{
-            if (type == AUDIO) {
-                ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
-                handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
+            case MetadataMenu::BACK_FROM_METADATA: {
+                back();
+                break;
             }
-            else {
-                ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
-                handleEditVideo(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
+            case MetadataMenu::EDIT_METADATA:{
+                if (type == AUDIO) {
+                    ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
+                    handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
+                }
+                else {
+                    ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
+                    handleEditVideo(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
+                }
+                break;
             }
-            break;
-        }
-        default:
-            std::cout << "Your choice is not valid\n";
-            break;
         }
     } while(mainChoice != MetadataMenu::BACK_FROM_METADATA);
 }
@@ -60,7 +57,7 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
     TagLib::Tag* tag = f.tag();
     //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
-        Exception_Handler("Enter your choice: ",editChoice,validatePosInteger);
+        Exception_Handler("Enter your choice: ",editChoice,validateEditAudioMenu);
         switch(editChoice)
         {
             case AudioEdit::AUDIO_BACK: {
@@ -68,37 +65,37 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
                 break;
             }
             case AudioEdit::AUDIO_TITLE: {
-                Exception_Handler("Enter new title: ",newValue,validateFullName);
+                Exception_Handler("Enter new title: ",newValue,validateAlphaSring);
                 tag->setTitle(TagLib::String(newValue));
                 updateMediaFileMetadata("Title",newValue,ID);
                 break;
             }
             case AudioEdit::AUDIO_ARTIST: {
-                Exception_Handler("Enter new artist: ",newValue,validateFullName);
+                Exception_Handler("Enter new artist: ",newValue,validateAlphaSring);
                 tag->setArtist(TagLib::String(newValue));
                 updateMediaFileMetadata("Artist",newValue,ID);
                 break;
             }
             case AudioEdit::AUDIO_ALBUM: {
-                Exception_Handler("Enter new album: ",newValue,validateFullName);
+                Exception_Handler("Enter new album: ",newValue,validateAlphaSring);
                 tag->setAlbum(TagLib::String(newValue));
                 updateMediaFileMetadata("Album",newValue,ID);
                 break;
             }
             case AudioEdit::AUDIO_YEAR: {
-                Exception_Handler("Enter new year: ",newValue,validateEntryYear);
+                Exception_Handler("Enter new year: ",newValue,validateYear);
                 tag->setYear(std::stoi(newValue));
                 updateMediaFileMetadata("Year",newValue,ID);
                 break;
             }
             case AudioEdit::AUDIO_TRACK: {
-                Exception_Handler("Enter new track: ",newValue,validateFullName);
+                Exception_Handler("Enter new track: ",newValue,validateTrack);
                 tag->setTrack(std::stoi(newValue));
                 updateMediaFileMetadata("Track",newValue,ID);
                 break;
             }
             case AudioEdit::AUDIO_GENRE: {
-                Exception_Handler("Enter new genre: ",newValue,validateFullName);
+                Exception_Handler("Enter new genre: ",newValue,validateAlphaSring);
                 tag->setGenre(TagLib::String(newValue));
                 updateMediaFileMetadata("Genre",newValue,ID);
                 break;
@@ -128,7 +125,7 @@ void MetadataController::handleEditVideo(const std::string& filepath,const std::
     TagLib::Tag* tag = f.tag();
     //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
-        Exception_Handler("Enter your choice: ",editChoice,validatePosInteger);
+        Exception_Handler("Enter your choice: ",editChoice,validateEditVideoMenu);
         switch(editChoice)
         {
             case VideoEdit::VIDEO_BACK: {
@@ -136,7 +133,7 @@ void MetadataController::handleEditVideo(const std::string& filepath,const std::
                 break;
             }
             case VideoEdit::VIDEO_TITLE: {
-                Exception_Handler("Enter new title: ",newValue,validateFullName);
+                Exception_Handler("Enter new title: ",newValue,validateAlphaSring);
                 tag->setTitle(TagLib::String(newValue));
                 updateMediaFileMetadata("Title",newValue,ID);
                 break;
