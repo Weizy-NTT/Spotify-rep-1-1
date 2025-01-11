@@ -12,5 +12,7 @@ public:
     void getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const;
     void updateMediaFileMetadata(const std::string& key, const std::string& value,const std::string& ID);
     void back();
+    void handleEditAudio(const std::string& filepath,const std::string& ID);
+    void handleEditVideo(const std::string& filepath,const std::string& ID);
 };
 #endif // METADATA_CONTROLLER_H

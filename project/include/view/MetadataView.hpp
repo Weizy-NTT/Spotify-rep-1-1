@@ -11,11 +11,28 @@ enum MetadataMenu {
     EDIT_METADATA
 };
 
+enum AudioEdit {
+    AUDIO_BACK,
+    AUDIO_TITLE,
+    AUDIO_ARTIST,
+    AUDIO_ALBUM,
+    AUDIO_YEAR,
+    AUDIO_TRACK,
+    AUDIO_GENRE,
+};
+
+enum VideoEdit {
+    VIDEO_BACK,
+    VIDEO_TITLE
+};
+
 class MetadataView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
     void showFileMetadata(const std::shared_ptr<MediaFile>& file);
+    void menuEditAudio();
+    void menuEditVideo();
     ~MetadataView() override = default;
 };
 

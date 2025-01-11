@@ -24,4 +24,23 @@ void MetadataView::showFileMetadata(const std::shared_ptr<MediaFile>& file) {
     }
 }
 
+void MetadataView::menuEditAudio() {
+    std::cout << "======================= Audio Edit =======================" << std::endl;
+    std::cout << AUDIO_TITLE << ".Title " 
+                << AUDIO_ARTIST << ".Artist " 
+                << AUDIO_ALBUM << ".Album " 
+                << AUDIO_YEAR << ".Year " 
+                << AUDIO_TRACK << ".Track " 
+                << AUDIO_GENRE << ".Genre " 
+                << AUDIO_BACK << ".Go Back\n";
+    std::cout << "==========================================================" << std::endl;
+}
+
+void MetadataView::menuEditVideo() {
+    std::cout << "===========Video Edit ===========" << std::endl;
+    std::cout << VIDEO_TITLE << ".Title " 
+                << VIDEO_BACK << ".Go Back\n";
+    std::cout << "=================================" << std::endl;
+}
+
 

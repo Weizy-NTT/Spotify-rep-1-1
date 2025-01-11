@@ -1,14 +1,14 @@
 #include "ScanfOptionController.hpp"
-#include <iostream>
 #include "ScanfOptionView.hpp"
 #include "ControllerManager.hpp"
+#include <iostream>
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 #include <taglib/audioproperties.h>
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <filesystem>
 #include <MediaFile.hpp>
 
 namespace fs = std::filesystem;
