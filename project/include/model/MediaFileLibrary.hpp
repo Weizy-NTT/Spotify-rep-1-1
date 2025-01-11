@@ -2,19 +2,20 @@
 #define MEDIA_FILE_LIBRARY_H
 
 #include <vector>
+#include <memory>
+#include <string>
 #include "MediaFile.hpp"
 
 class MediaFileLibrary {
 private:
-    std::vector<MediaFile> mediaFiles;
+    std::vector<std::shared_ptr<MediaFile>> mediaFiles;
 
 public:
-    std::vector<MediaFile> getAllMediaFiles() const;
-    void addMediaFile(const MediaFile& file);
-    void removeMediaFile(const MediaFile& file);
-    MediaFile getMediaFileByName(const std::string& name) const;
-    void scanDirectory(const std::string& path);
-    void scanUSBDevice();
+    const std::vector<std::shared_ptr<MediaFile>>& getAllMediaFiles() const;
+    void addMediaFile(const std::shared_ptr<MediaFile>& files);
+    void removeMediaFile(const std::string& ID);
+    void setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files);
+    std::shared_ptr<MediaFile> getMediaFileByID(const std::string& ID) const;
 };
 
 #endif // MEDIA_FILE_LIBRARY_H

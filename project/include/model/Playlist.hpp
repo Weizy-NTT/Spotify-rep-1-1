@@ -4,17 +4,24 @@
 #include <string>
 #include <vector>
 #include "MediaFile.hpp"
+#include <memory>
+
 
 class Playlist {
 private:
+    std::string ID;
     std::string name;
-    std::vector<MediaFile> songs;
+    std::vector<std::shared_ptr<MediaFile>> songs;
 
 public:
+    Playlist(const std::string& id, const std::string& name);
+    void setID(const std::string& ID);
+    std::string getID() const;
     std::string getName() const;
-    std::vector<MediaFile> getSongs() const;
-    void addSong(const MediaFile& song);
-    void removeSong(const MediaFile& song);
+    const std::vector<std::shared_ptr<MediaFile>>& getSongs() const;
+    void addSong(const std::shared_ptr<MediaFile>& song);
+    void removeSong(const std::string& ID);
+    std::shared_ptr<MediaFile> getSongByID(const std::string& ID) const;
 };
 
 #endif // PLAYLIST_H

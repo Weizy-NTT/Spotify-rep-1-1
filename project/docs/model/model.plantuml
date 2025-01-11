@@ -1,0 +1,136 @@
+@startuml Model
+package Model {
+    class MediaFile {
+        - ID : string
+        - name: string
+        - path: string
+        - type: MediaType
+        - metadata: Metadata
+
+        + setID(ID: string): void
+        + setName(name: string): void
+        + setPath(path: string): void
+        + getID(): string
+        + getName(): string
+        + getPath(): string
+        + getType(): string
+        + getMetadata(): Metadata
+        + setMetadata(metadata: Metadata): void
+        + setType(type: string): void
+    }
+
+    class Playlist {
+        - ID : string
+        - name: string
+        - songs: vector<shared_ptr<MediaFile>>
+
+        + setID(ID: string): void
+        + setName(name: string): void
+        + getName(): string
+        + getID(): string
+        + getSongs(): vector<shared_ptr<MediaFile>>
+        + addSong(song: shared_ptr<MediaFile): void
+        + removeSong(ID: string): void
+        + getSongByID(ID: string): shared_ptr<MediaFile>
+    }
+
+    class MediaLibrary {
+        - mediaFiles: vector<share_ptr<MediaFile>>
+
+        + getAllMediaFiles(): vector<share_ptr<MediaFile>>
+        + addMediaFile(file: share_ptr<MediaFile>): void
+        + removeMediaFile(ID : string): void
+        + getMediaFileByID(ID: string): share_ptr<MediaFile>
+    }
+
+    class PlaylistLibrary {
+        - playlists: vector<shared_ptr<Playlist>>
+
+        + getAllPlaylists(): vector<shared_ptr<Playlist>>
+        + addPlaylist(playlist: shared_ptr<Playlist>): void
+        + removePlaylist(ID: string): void
+        + getPlaylistByID(ID: string): Playlist
+    }
+
+    class ModelManager {
+        - mediaLibrary: unique_ptr<MediaFileLibrary>
+        - playlistLibrary: unique_ptr<PlaylistLibrary>
+        - playingMedia: unique_ptr<PlayingMedia>
+        - device: unique_ptr<Device>
+
+        + getMediaLibrary(): MediaLibrary*
+        + getPlaylistLibrary(): PlaylistLibrary*
+        + getPlayingMedia(): PlayingMedia*
+        + getDevice(): Device*
+    }
+
+    class PlayingMedia {
+        - currentMediaFile: shared_ptr<MediaFile>
+        - currentTime: int
+        - isPlaying: bool
+
+        + getCurrentMediaFile(): shared_ptr<MediaFile>
+        + setCurrentMediaFile(mediaFile: shared_ptr<MediaFile>): void
+        + getCurrentTime(): int
+        + setCurrentTime(time: int): void
+        + getIsPlaying(): bool
+        + setIsPlaying(playing: bool): void
+    }
+
+    class Metadata {
+        - data: map<string, string>
+
+        + getMetadata(): map<string, string>
+        + setMetadata(data: map<string, string>): void
+        + getValue(key: string): string
+        + setValue(key: string, value: string): void
+    }
+
+    class Device {
+        - volume: int
+        - KL46ZConnection: KL46ZInterface*
+        + setVolume(level: int)
+        + getVolume(): int
+        + updateDisplay(info: string)
+        + handleButtonPress(button: ButtonType)
+    }
+
+    enum ButtonType {
+        PLAY_PAUSE
+        NEXT
+        PREVIOUS
+        STOP
+    }
+
+    Device --> ButtonType : handles >
+
+    enum MediaType {
+        AUDIO
+        VIDEO
+    }
+
+    MediaFile --> "1" MediaType : has type >
+
+    ModelManager --> PlayingMedia
+    ModelManager --> MediaLibrary
+    ModelManager --> PlaylistLibrary
+    ModelManager --> Device
+    MediaLibrary o--> MediaFile
+    PlaylistLibrary o--> Playlist
+    Playlist o--> MediaFile
+    MediaFile o--> Metadata
+}
+
+package Hardware {
+    class KL46ZInterface {
+        - serialConnection: SerialPort*
+        + connect(): void
+        + disconnect(): void
+        + readADC(): int
+        + readButton(): ButtonState
+        + updateDisplay(text: string): void
+    }
+    Device "1" --> "1" KL46ZInterface : interfaces with >
+}
+
+@enduml

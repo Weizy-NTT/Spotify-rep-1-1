@@ -6,13 +6,13 @@
 
 class PlaylistLibrary {
 private:
-    std::vector<Playlist> playlists;
+    std::vector<std::shared_ptr<Playlist>> playlists;
 
 public:
-    std::vector<Playlist> getAllPlaylists() const;
-    void addPlaylist(const Playlist& playlist);
-    void removePlaylist(const Playlist& playlist);
-    Playlist getPlaylistByName(const std::string& name) const;
+    const std::vector<std::shared_ptr<Playlist>>& getAllPlaylists() const;
+    void addPlaylist(const std::shared_ptr<Playlist>& playlist);
+    void removePlaylist(const std::string& ID);
+    std::shared_ptr<Playlist> getPlaylistByID(const std::string& name) const;
 };
 
 #endif // PLAYLISTLIBRARY_H

@@ -6,8 +6,8 @@ CC = g++
 CFLAGS = -Wall -g
 
 # Source folder, header folder
-SRCDIR = Src
-INCDIR = Include
+SRCDIR = src
+INCDIR = include
 
 # Automatically find all subdirectories in Include and Src
 INCLUDES = $(shell find $(INCDIR) -type d)
@@ -16,13 +16,18 @@ CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 # Find all .cpp files in Src (do not include main.cpp multiple times)
 SRCS = $(shell find $(SRCDIR) -name "*.cpp")
 
+# TagLib settings (adjust these if TagLib is in a custom location)
+CFLAGS += -I/usr/include/taglib        # Đường dẫn đến thư mục chứa header của TagLib
+LDFLAGS += -L/usr/lib/x86_64-linux-gnu  # Đường dẫn đến thư mục chứa thư viện libtag.so
+LDLIBS += -ltag                        # Liên kết với thư viện TagLib
+
 # Main rule
 all: $(TARGET)
 
 # Create executable file without .o files
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $@ $^
-
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+	
 # Clean rule (no need to clean .o files)
 clean:
 	rm -f $(TARGET)

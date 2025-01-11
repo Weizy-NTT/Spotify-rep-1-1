@@ -15,4 +15,4 @@ public:
     void setValue(const std::string& key, const std::string& value);
 };
 
-#endif // METADATA_H
+#endif // METADATA_HH
