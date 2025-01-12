@@ -3,20 +3,40 @@
 
 #include "MediaFile.hpp"
 #include <memory>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class PlayingMedia {
 private:
-    std::shared_ptr<MediaFile> currentMediaFile;
-    int currentTime;
-    bool isPlaying;
+    std::vector<std::shared_ptr<MediaFile>> currentplaylist;
+    Mix_Music *currentMusic = nullptr;
+    bool isPaused = false;
+    size_t volume;
+    size_t currentTime;
+    size_t currentTrackIndex = 0;
 
 public:
+    PlayingMedia();
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
     void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
-    int getCurrentTime() const;
+    size_t getCurrentTime() const;
     void setCurrentTime(int time);
-    bool getIsPlaying() const;
-    void setIsPlaying(bool playing);
+    void play(const std::string &filePath);
+    bool isPause() const;
+    void pauseMusic();
+    void resumeMusic();
+    void stopMusic();
+    void nextTrack();
+    void previousTrack();
+    bool hasNextTrack() const;
+    bool hasPrevTrack() const;
+    void playCurrentTrack();
+    void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
+    void adjustVolume(int newVolume);
+    ~PlayingMedia();
 };
 
 #endif // PLAYING_MEDIA_H

@@ -3,9 +3,10 @@
 
 void PlayingMediaController::handleInput(const std::string& ID){
     size_t mainChoice;
+    playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile());
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validatePlayingMediaMenu);
     switch (mainChoice)
@@ -15,12 +16,12 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 break;
             }
             case PlayingMediaMenu::PLAY_PAUSE:{
-                if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getIsPlaying())
+                if (!ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPause())
                 {
-                    pause();
+                    play();
                 }
                 else {
-                    play();
+                    pause();
                 }
                 break;
             }
@@ -37,20 +38,22 @@ void PlayingMediaController::handleInput(const std::string& ID){
 }
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(file);
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
 }
 
 void PlayingMediaController::play(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setIsPlaying(true);
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->resumeMusic();
 }
 void PlayingMediaController::pause(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setIsPlaying(false);
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->pauseMusic();
 }
 void PlayingMediaController::skipToNext(){
-
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
 }
 void PlayingMediaController::skipToPrevious(){
-
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
 }
 void PlayingMediaController::adjustVolume(int level){
 
