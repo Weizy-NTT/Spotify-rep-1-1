@@ -12,7 +12,6 @@ private:
     size_t currentPage = 1;
 public:
     void handleInput();
-    std::vector<MediaFile> getAllMediaFiles() const;
     void back();
     void displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize = 25);
 };

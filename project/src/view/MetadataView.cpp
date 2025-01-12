@@ -1,5 +1,6 @@
 #include "MetadataView.hpp"
 #include <iostream>
+#include <iomanip>
 
 void MetadataView::showMenu() {
     BaseView::showMenu();
@@ -18,10 +19,19 @@ void MetadataView::hideMenu() {
 void MetadataView::showFileMetadata(const std::shared_ptr<MediaFile>& file) {
     auto metadata = file->getMetadata();
 
-    std::cout << "Metadata of " << file->getName() << std::endl;
+    // Header
+    std::cout << "\n+-------------------------------------------------+\n";
+    std::cout << "   METADATA OF " << std::setw(20) << file->getName() << "\n";
+    std::cout << "+-------------------------------------------------+\n";
+
+    // Content
     for (const auto& entry : metadata.getMetadata()) {
-        std::cout << entry.first << ": " << entry.second << "\n";
+        std::cout << std::left << std::setw(15) << entry.first 
+                    << ": " << std::setw(25) << entry.second << "\n";
     }
+
+    // Footer
+    std::cout << "+-------------------------------------------------+\n";
 }
 
 void MetadataView::menuEditAudio() {

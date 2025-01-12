@@ -121,8 +121,8 @@ void Exception_Handler(const std::string& str,size_t& variable, void(*func)(cons
             if (std::cin.fail()) {
                 throw InvalidInputIntegerException();
             }
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             func(variable);
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             break;  
         }
         catch (const std::exception& e) {

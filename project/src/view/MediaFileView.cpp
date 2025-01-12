@@ -45,3 +45,29 @@ void MediaFileView::hideMenu() {
     std::system("clear");
 }
 
+void MediaFileView::displayStatusMessage(MediaFileStatus& status) {
+    switch (status) {
+        case MediaFileStatus::MEDIAFILE_PLAY_STATUS:
+            std::cout << "Song ID not found in media library. Cannot play.\n";
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset lại trạng thái
+            break;
+        case MediaFileStatus::MEDIAFILE_DETAIL_STATUS:
+            std::cout << "Song ID not found in media library. Cannot show details.\n";
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset lại trạng thái
+            break;
+        case MediaFileStatus::MEDIAFILE_NEXT_PAGE_STATUS:
+            std::cout << "This is the last page. Cannot go next.\n";
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset lại trạng thái
+            break;
+        case MediaFileStatus::MEDIAFILE_PREV_PAGE_STATUS:
+            std::cout << "This is the first page. Cannot go back.\n";
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset lại trạng thái
+            break;
+        case MediaFileStatus::MEDIAFILE_NORMAL:
+        default:
+            // Không cần thông báo khi ở trạng thái bình thường
+            break;
+    }
+}
+
+

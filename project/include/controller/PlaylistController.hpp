@@ -12,10 +12,9 @@
 class PlaylistController : public BaseController {
 public:
     void handleInput();
-    void createPlaylist(const std::string& id, const std::string& name);
+    void createPlaylist(const std::string& name);
     void back();
     void deletePlaylist(const std::string& Id);
-    void showMediafileInList(const std::string& listId);
     void showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists);
 };
 #endif // PLAYLIST_CONTROLLER

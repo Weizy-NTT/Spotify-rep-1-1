@@ -13,6 +13,7 @@ enum MediaType {
 
 class MediaFile {
 private:
+    static size_t mediaFileCount;
     std::string ID;
     std::string name;
     std::string path;
@@ -31,5 +32,6 @@ public:
     Metadata& getMetadata();
     void setMetadata(const Metadata& metadata);
     void setType(MediaType type);
+    ~MediaFile();
 };
 #endif // MEDIA_FILE_H

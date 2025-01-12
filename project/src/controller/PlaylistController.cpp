@@ -3,9 +3,11 @@
 
 void PlaylistController::handleInput(){
     size_t mainChoice;
+    PlaylistStatus status = PlaylistStatus::PLAYLIST_NORMAL;
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
+    ControllerManager::getInstance()->getViewManager()->getPlaylistView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validatePlaylistsMenu);
     switch (mainChoice)
@@ -13,21 +15,32 @@ void PlaylistController::handleInput(){
             case PlaylistMenu::SELECT_PLAYLIST:{
                 std::string PlaylistID;
                 Exception_Handler("Enter playlist ID for looking: ",PlaylistID,validateID);
-                ControllerManager::getInstance()->getDetailedPlaylistController()->handleInput(PlaylistID);
+                if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(PlaylistID))
+                {
+                    ControllerManager::getInstance()->getDetailedPlaylistController()->handleInput(PlaylistID);
+                }
+                else {
+                    status = PlaylistStatus::PLAYLIST_SELECT_STATUS;
+                }
                 break;
             }
             case PlaylistMenu::ADD_PLAYLIST:{
-                std::string playlistID, playlistName;
-                Exception_Handler("Enter playlist ID for adding: ",playlistID,validateID);
+                std::string playlistName;
                 Exception_Handler("Enter playlist name for adding: ",playlistName,validateAlphaSring);
-                createPlaylist(playlistID, playlistName);
+                createPlaylist(playlistName);
                 break;
             }
         
             case PlaylistMenu::REMOVE_PLAYLIST:{
                 std::string playlistID;
                 Exception_Handler("Enter playlist ID for removing: ",playlistID,validateID);
-                deletePlaylist(playlistID);
+                if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(playlistID))
+                {
+                    deletePlaylist(playlistID);
+                }
+                else {
+                    status = PlaylistStatus::PLAYLIST_REMOVE_STATUS;
+                }
                 break;
             }
 
@@ -40,8 +53,8 @@ void PlaylistController::handleInput(){
     
 }
 
-void PlaylistController::createPlaylist(const std::string& id, const std::string& name ){
-    std::shared_ptr<Playlist> ptr = std::make_shared<Playlist>(id, name);
+void PlaylistController::createPlaylist(const std::string& name ){
+    std::shared_ptr<Playlist> ptr = std::make_shared<Playlist>(name);
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->addPlaylist(ptr);
 }
 
@@ -50,10 +63,6 @@ void PlaylistController::deletePlaylist(const std::string& Id){
 }
 void PlaylistController::back(){
 
-}
-
-void PlaylistController::showMediafileInList(const std::string& listId){
-    ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->showListOfSongs(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId));
 }
 
 void PlaylistController::showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists) {

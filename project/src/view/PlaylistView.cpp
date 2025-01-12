@@ -18,14 +18,6 @@ void PlaylistView::hideMenu() {
     std::system("clear");
 }
 
-// void PlaylistView::showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists) {
-//     std::cout << "===== Playlist List =====\n";
-//     for (size_t i = 0; i < playlists.size(); ++i) {
-//         std::cout << i + 1 << ". " << playlists[i]->getName() << std::endl;
-//     }
-//     std::cout << "=========================\n";
-// }
-
 void PlaylistView::showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists) {
     constexpr int ID_WIDTH = 5;       // Width for ID column
     constexpr int NAME_WIDTH = 30;   // Width for Name column
@@ -48,6 +40,27 @@ void PlaylistView::showPlaylistList(const std::vector<std::shared_ptr<Playlist>>
 
     // Footer
     std::cout << "----------------------------------------\n";
+}
+
+void PlaylistView::displayStatusMessage(PlaylistStatus& status) {
+    switch (status) {
+        case PlaylistStatus::PLAYLIST_SELECT_STATUS:
+            std::cout << "Error: The playlist ID was not found in the library.\n";
+            status = PlaylistStatus::PLAYLIST_NORMAL;  // Reset trạng thái sau khi thông báo lỗi
+            break;
+        case PlaylistStatus::PLAYLIST_ADD_STATUS:
+            std::cout << "Error: Could not add playlist. Please try again.\n";
+            status = PlaylistStatus::PLAYLIST_NORMAL;  // Reset trạng thái sau khi thông báo lỗi
+            break;
+        case PlaylistStatus::PLAYLIST_REMOVE_STATUS:
+            std::cout << "Error: The playlist ID was not found in the library. Could not remove.\n";
+            status = PlaylistStatus::PLAYLIST_NORMAL;  // Reset trạng thái sau khi thông báo lỗi
+            break;
+        case PlaylistStatus::PLAYLIST_NORMAL:
+        default:
+            // Không cần thông báo khi ở trạng thái bình thường
+            break;
+    }
 }
 
 

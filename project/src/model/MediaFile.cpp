@@ -1,8 +1,9 @@
 #include "MediaFile.hpp"
 
+size_t MediaFile::mediaFileCount = 0;
 
 MediaFile::MediaFile(const std::string& ID,const std::string& name, const std::string& path, MediaType type, const Metadata& metadata) 
-    : ID(ID), name(name), path(path), type(type), metadata(metadata) {}
+    : ID(ID), name(name), path(path), type(type), metadata(metadata) {mediaFileCount++;}
 
 void MediaFile::setName(const std::string& name) {
     this->name = name;
@@ -43,4 +44,6 @@ void MediaFile::setMetadata(const Metadata& newMetadata) {
 void MediaFile::setType(MediaType newType) {
     type = newType;
 }
+
+MediaFile::~MediaFile() {mediaFileCount--;}
 

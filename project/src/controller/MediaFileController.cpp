@@ -3,11 +3,13 @@
 
 void MediaFileController::handleInput(){
     size_t mainChoice;
+    MediaFileStatus status = MediaFileStatus::MEDIAFILE_NORMAL;
     size_t totalPage = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles().size();
     totalPage = (size_t)(totalPage/25) + 1;
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+    ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validateMediaFilesMenu);
     switch (mainChoice)
@@ -19,14 +21,26 @@ void MediaFileController::handleInput(){
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             std::string songID;
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
-            ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
+            if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
+            {
+                ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
+            }
+            else {
+                status = MediaFileStatus::MEDIAFILE_PLAY_STATUS;
+            }
             break;
         }
            
         case MediaFileMenu::SHOW_DETAIL:{
             std::string songID;
             Exception_Handler("Enter song ID for looking details: ",songID,validateID);
-            ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
+            if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
+            {
+                ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
+            }
+            else {
+                status = MediaFileStatus::MEDIAFILE_DETAIL_STATUS;
+            }
             break;
         }
         case MediaFileMenu::NEXT_PAGE:{
@@ -34,7 +48,7 @@ void MediaFileController::handleInput(){
                 currentPage++;
             }
             else {
-                std::cout << "This is the last page\n";
+                status = MediaFileStatus::MEDIAFILE_NEXT_PAGE_STATUS;
             }
             break;
         }
@@ -43,7 +57,7 @@ void MediaFileController::handleInput(){
                 currentPage--;
             }
             else {
-                std::cout << "This is the first page\n";
+                status = MediaFileStatus::MEDIAFILE_PREV_PAGE_STATUS;
             }
             break;
         }   

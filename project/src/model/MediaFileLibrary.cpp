@@ -18,6 +18,15 @@ void MediaFileLibrary::removeMediaFile(const std::string& ID) {
     }
 }
 
+bool MediaFileLibrary::isValidMediaFileIDInLibrary(const std::string& ID) {
+    for (const auto& mediaFile : mediaFiles) {
+        if (mediaFile->getID() == ID) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void MediaFileLibrary::setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files) {
     mediaFiles = files;
 }

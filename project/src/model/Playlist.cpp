@@ -1,6 +1,10 @@
 #include "Playlist.hpp"
 #include <algorithm>
 
+size_t Playlist::playlistCount = 0;
+size_t Playlist::playlistNextID = 1;
+std::queue<int> Playlist::playlistFreeIDs;
+
 std::string Playlist::getName() const {
     return name;
 }
@@ -24,6 +28,15 @@ void Playlist::removeSong(const std::string& ID) {
     }
 }
 
+bool Playlist::isValidMediaFileIDInPlaylist(const std::string& ID) {
+    for (const auto& song : songs) {
+        if (song->getID() == ID) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::shared_ptr<MediaFile> Playlist::getSongByID(const std::string& ID) const {
     for (const auto& song : songs) {
         if (song->getID() == ID) {
@@ -33,15 +46,30 @@ std::shared_ptr<MediaFile> Playlist::getSongByID(const std::string& ID) const {
     return nullptr;
 }
 
-void Playlist::setID(const std::string& ID) {
-    this->ID = ID;
-}
+size_t Playlist::getCount() { return playlistCount; }
 
 std::string Playlist::getID() const {
     return ID;
 }
 
-Playlist::Playlist(const std::string& id, const std::string& name){
-    this->ID = id;
+void Playlist::resetIDs() {
+    playlistNextID = 1;
+    playlistCount = 0;
+    std::queue<int>().swap(playlistFreeIDs);
+}
+
+Playlist::Playlist(const std::string& name) {
+    if (!playlistFreeIDs.empty()) {
+        ID = std::to_string(playlistFreeIDs.front());
+        playlistFreeIDs.pop();
+    } else {
+        ID = std::to_string(playlistNextID++);
+    }
     this->name = name;
+    playlistCount++;
+}
+
+Playlist::~Playlist() {
+    playlistFreeIDs.push(std::stoi(ID));
+    playlistCount--;
 }

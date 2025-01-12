@@ -48,3 +48,27 @@ void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& play
     // Footer
     std::cout << "----------------------------------------\n";
 }
+
+void DetailedPlaylistView::displayStatusMessage(DetailedPlaylistStatus& status) {
+    switch (status) {
+        case DetailedPlaylistStatus::DETAILED_ADD_STATUS:
+            status = DetailedPlaylistStatus::DETAILED_NORMAL;
+            std::cout << "Error: Song ID not found in media library or Song ID exists in playlist. Cannot add.\n";
+            break;
+        case DetailedPlaylistStatus::DETAILED_PLAY_STATUS:
+            status = DetailedPlaylistStatus::DETAILED_NORMAL;
+            std::cout << "Error: Song ID not found in playlist. Cannot play.\n";
+            break;
+        case DetailedPlaylistStatus::DETAILED_DELETE_STATUS:
+            status = DetailedPlaylistStatus::DETAILED_NORMAL;
+            std::cout << "Error: Song ID not found in playlist. Cannot delete.\n";
+            break;
+        case DetailedPlaylistStatus::DETAILED_SHOW_STATUS:
+            status = DetailedPlaylistStatus::DETAILED_NORMAL;
+            std::cout << "Error: Song ID not found in playlist. Cannot show.\n";
+            break;
+        case DetailedPlaylistStatus::DETAILED_NORMAL:
+        default:
+            break;
+    }
+}
