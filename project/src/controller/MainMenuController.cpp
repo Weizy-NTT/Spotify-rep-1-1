@@ -28,6 +28,7 @@ void MainMenuController::handleInput(){
             }
         }
     } while(mainChoice != MainMenu::EXIT);
+     ControllerManager::getInstance()->finalize();
 }
 
 void MainMenuController::back(){

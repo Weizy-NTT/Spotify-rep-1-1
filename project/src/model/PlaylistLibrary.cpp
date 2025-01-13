@@ -37,3 +37,74 @@ bool PlaylistLibrary::isValidPlaylistIDInLibrary(const std::string& ID) {
     }
     return false;
 }
+
+void PlaylistLibrary::loadFromFile(const std::string& filePath) {
+    std::ifstream inFile(filePath);
+    if (!inFile) {
+        std::cerr << "Failed to open file for reading: " << filePath << "\n";
+        return;
+    }
+
+    std::string line;
+    std::shared_ptr<Playlist> currentPlaylist = nullptr;
+
+    while (std::getline(inFile, line)) {
+        // Xóa khoảng trắng
+        line.erase(0, line.find_first_not_of(" \t"));
+        line.erase(line.find_last_not_of(" \t") + 1);
+
+        if (line.empty()) {
+            continue;
+        }
+
+        // Nếu dòng không chứa đường dẫn (tức là tên playlist)
+        if (line.find("/") == std::string::npos) {
+            if (currentPlaylist) {
+                playlists.push_back(currentPlaylist);
+            }
+
+            currentPlaylist = std::make_shared<Playlist>(line); // Tạo playlist mới với tên
+        } else {
+            // Thêm bài hát vào playlist hiện tại
+            if (currentPlaylist) {
+                auto new_mediafile = std::make_shared<MediaFile>();
+                new_mediafile->setPath(line);
+                new_mediafile->setName(fs::path(line).filename().string());
+                currentPlaylist->addSong(new_mediafile);
+            }
+        }
+    }
+
+    if (currentPlaylist) {
+        playlists.push_back(currentPlaylist);
+    }
+
+    inFile.close();
+    std::cout << "Playlists loaded from " << filePath << "\n";
+}
+
+
+
+void PlaylistLibrary::saveToFile(const std::string& filePath) const {
+    std::ofstream outFile(filePath, std::ios::out);
+    if (!outFile) {
+        std::cerr << "Failed to open file for writing: " << filePath << "\n";
+        return;
+    }
+
+    for (const auto& playlist : playlists) {
+        // Ghi tên playlist
+        outFile << playlist->getName() << "\n";
+
+        // Ghi các bài hát
+        for (const auto& song : playlist->getSongs()) {
+            outFile << song->getPath() << "\n";
+        }
+
+        // Ngăn cách các playlist
+        outFile << "\n";
+    }
+
+    outFile.close();
+    std::cout << "Playlists saved to " << filePath << "\n";
+}

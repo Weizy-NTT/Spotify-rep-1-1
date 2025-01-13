@@ -1,0 +1,10 @@
+Playlist 1 Chill Vibes
+/home/ngotantrung/shared/Spotify-rep-1-1/project/resources/playlists/CoViNaoHonViTetNha-TrucNhan-6183655.mp3
+/home/ngotantrung/shared/Spotify-rep-1-1/project/resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
+
+
+
+Playlist 2 Workout Hits
+/home/ngotantrung/shared/Spotify-rep-1-1/project/resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
+/home/ngotantrung/shared/Spotify-rep-1-1/project/resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
+
