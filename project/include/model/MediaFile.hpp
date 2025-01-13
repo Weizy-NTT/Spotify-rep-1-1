@@ -8,7 +8,8 @@
 
 enum MediaType {
     AUDIO,
-    VIDEO
+    VIDEO,
+    UNKNOWN
 };
 
 class MediaFile {

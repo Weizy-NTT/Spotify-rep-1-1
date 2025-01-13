@@ -5,6 +5,7 @@
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
 #include <memory>
+#include "Playlist.hpp"
 
 class ScanfOptionController : public BaseController {
 public:
@@ -14,6 +15,7 @@ public:
     void back();
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
     std::string extractAudio(const std::string &videoPath);
+    void scanPlaylistsFromTxt(const std::string& filePath);
 };
 
 #endif // SCANF_OPTION_CONTROLLER_H

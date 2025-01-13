@@ -6,7 +6,9 @@ const std::vector<std::shared_ptr<MediaFile>>& MediaFileLibrary::getAllMediaFile
 }
 
 void MediaFileLibrary::addMediaFile(const std::shared_ptr<MediaFile>& file) {
-    mediaFiles.push_back(file);
+    if(!isValidMediaFileIDInLibrary(file->getID())){
+        mediaFiles.push_back(file);
+    }
 }
 
 void MediaFileLibrary::removeMediaFile(const std::string& ID) {

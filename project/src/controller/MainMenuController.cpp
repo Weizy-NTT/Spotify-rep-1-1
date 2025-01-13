@@ -2,6 +2,8 @@
 #include "ControllerManager.hpp"
 
 void MainMenuController::handleInput(){
+    std::string filePath = "resources/playlists.txt";
+    ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
     size_t mainChoice;
     do {
     system("clear");
@@ -32,5 +34,7 @@ void MainMenuController::handleInput(){
 }
 
 void MainMenuController::back(){
+    td::string filePath = "resources/playlists.txt";
+    ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->saveToFile(filePath);
     std::exit(0);
 }

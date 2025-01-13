@@ -3,6 +3,11 @@
 
 #include <vector>
 #include "Playlist.hpp"
+#include <memory>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 class PlaylistLibrary {
 private:
@@ -14,6 +19,7 @@ public:
     void removePlaylist(const std::string& ID);
     std::shared_ptr<Playlist> getPlaylistByID(const std::string& ID) const;
     bool isValidPlaylistIDInLibrary(const std::string& ID);
+    void saveToFile(const std::string& filePath) const;
 };
 
 #endif // PLAYLISTLIBRARY_H
