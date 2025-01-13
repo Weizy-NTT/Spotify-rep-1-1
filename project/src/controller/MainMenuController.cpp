@@ -30,11 +30,10 @@ void MainMenuController::handleInput(){
             }
         }
     } while(mainChoice != MainMenu::EXIT);
-     ControllerManager::getInstance()->finalize();
 }
 
 void MainMenuController::back(){
-    td::string filePath = "resources/playlists.txt";
+    std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->saveToFile(filePath);
     std::exit(0);
 }
