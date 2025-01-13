@@ -63,6 +63,7 @@ void DetailedPlaylistController::handleInput(std::string listId){
                 Exception_Handler("Enter song ID for playing: ",songID,validateID);
                 if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId)->isValidMediaFileIDInPlaylist(songID))
                 {
+                    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId)->getSongs());
                     ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
                 }
                 else {

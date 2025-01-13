@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <MediaFile.hpp>
+#include <cstdlib>
 
 namespace fs = std::filesystem;
 
@@ -56,81 +57,12 @@ std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanDirectory(con
     unsigned int count = 0;
 
     for (const auto& entry : fs::directory_iterator(folderPath)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".mp3") {
-            TagLib::FileRef f(entry.path().c_str());
-
-            if (!f.isNull() && f.tag() && f.audioProperties()) {
-                TagLib::Tag* tag = f.tag();
-                TagLib::AudioProperties* audioProperties = f.audioProperties();
-
+        if (entry.is_regular_file()) {
+            std::shared_ptr<MediaFile> mediaFile = scanfFilePath(entry.path().string());
+            if (mediaFile) {
                 count++;
-                std::string ID = std::to_string(count);
-                std::shared_ptr<MediaFile> new_mediafile = std::make_shared<MediaFile>();
-                new_mediafile->setID(ID);
-                new_mediafile->setName(entry.path().filename().string());
-                new_mediafile->setPath(entry.path().string());
-                new_mediafile->setType(AUDIO);
-
-                Metadata new_metadata;
-                new_metadata.setValue("Title",tag->title().toCString(true));
-                new_metadata.setValue("Artist",tag->artist().toCString(true));
-                new_metadata.setValue("Album",tag->album().toCString(true));
-                // Convert year from unsigned int to string
-                std::string yearString = std::to_string(tag->year());
-                new_metadata.setValue("Year",yearString);
-                // Convert track from unsigned int to string
-                std::string trackString = std::to_string(tag->track());                
-                new_metadata.setValue("Track", trackString);
-                new_metadata.setValue("Genre",tag->genre().toCString(true));
-                // Convert and set the duration
-                int durationInSeconds = audioProperties->length();
-                int minutes = durationInSeconds / 60;
-                int seconds = durationInSeconds % 60;
-                std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
-                new_metadata.setValue("Duration", durationFormatted);
-                // Convert channels to string
-                std::string channels = std::to_string(audioProperties->channels());
-                new_metadata.setValue("Channels", channels);
-                // Convert sample rate to string
-                std::string sampleRate = std::to_string(audioProperties->sampleRate()) + " Hz";
-                new_metadata.setValue("Sample Rate", sampleRate);
-                // Convert bitrate to string
-                std::string bitrate = std::to_string(audioProperties->bitrate()) + " kbps";
-                new_metadata.setValue("Bitrate", bitrate);
-                new_mediafile->setMetadata(new_metadata);
-                songList.push_back(new_mediafile);
-            }
-        }
-        else if(entry.is_regular_file() && entry.path().extension() == ".mp4") {
-            fs::path file_path = entry.path();
-                TagLib::FileRef f(entry.path().c_str());
-            if (!f.isNull() && f.tag() && f.audioProperties()) {
-                TagLib::Tag* tag = f.tag();
-                TagLib::AudioProperties* audioProperties = f.audioProperties();
-
-                count++;
-                std::string ID = std::to_string(count);
-                std::shared_ptr<MediaFile> new_videofile = std::make_shared<MediaFile>();
-                new_videofile->setID(ID);
-                new_videofile->setName(entry.path().filename().string());
-                new_videofile->setPath(entry.path().string());
-                new_videofile->setType(VIDEO);
-
-                Metadata new_metadata;
-                new_metadata.setValue("Tittle", tag->title().toCString(true));
-                new_metadata.setValue("Size", std::to_string(fs::file_size(entry.path())));
-                // Convert and set the duration
-                int durationInSeconds = audioProperties->length();
-                int minutes = durationInSeconds / 60;
-                int seconds = durationInSeconds % 60;
-                std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
-                new_metadata.setValue("Duration", durationFormatted);
-                // Convert bitrate to string
-                std::string bitrate = std::to_string(audioProperties->bitrate()) + " kbps";
-                new_metadata.setValue("Bitrate", bitrate);
-                //codec
-                new_videofile->setMetadata(new_metadata);
-                songList.push_back(new_videofile);
+                mediaFile->setID(std::to_string(count));
+                songList.push_back(mediaFile);
             }
         }            
     }
@@ -142,81 +74,12 @@ std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanUSBDevice(con
     unsigned int count = 0;
 
     for (const auto& entry : fs::directory_iterator("/dev/" + device)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".mp3") {
-            TagLib::FileRef f(entry.path().c_str());
-
-            if (!f.isNull() && f.tag() && f.audioProperties()) {
-                TagLib::Tag* tag = f.tag();
-                TagLib::AudioProperties* audioProperties = f.audioProperties();
-
+        if (entry.is_regular_file()) {
+            std::shared_ptr<MediaFile> mediaFile = scanfFilePath(entry.path().string());
+            if (mediaFile) {
                 count++;
-                std::string ID = std::to_string(count);
-                std::shared_ptr<MediaFile> new_mediafile = std::make_shared<MediaFile>();
-                new_mediafile->setID(ID);
-                new_mediafile->setName(entry.path().filename().string());
-                new_mediafile->setPath(entry.path().string());
-                new_mediafile->setType(AUDIO);
-
-                Metadata new_metadata;
-                new_metadata.setValue("Title",tag->title().toCString(true));
-                new_metadata.setValue("Artist",tag->artist().toCString(true));
-                new_metadata.setValue("Album",tag->album().toCString(true));
-                // Convert year from unsigned int to string
-                std::string yearString = std::to_string(tag->year());
-                new_metadata.setValue("Year",yearString);
-                // Convert track from unsigned int to string
-                std::string trackString = std::to_string(tag->track());                
-                new_metadata.setValue("Track", trackString);
-                new_metadata.setValue("Genre",tag->genre().toCString(true));
-                // Convert and set the duration
-                int durationInSeconds = audioProperties->length();
-                int minutes = durationInSeconds / 60;
-                int seconds = durationInSeconds % 60;
-                std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
-                new_metadata.setValue("Duration", durationFormatted);
-                // Convert channels to string
-                std::string channels = std::to_string(audioProperties->channels());
-                new_metadata.setValue("Channels", channels);
-                // Convert sample rate to string
-                std::string sampleRate = std::to_string(audioProperties->sampleRate()) + " Hz";
-                new_metadata.setValue("Sample Rate", sampleRate);
-                // Convert bitrate to string
-                std::string bitrate = std::to_string(audioProperties->bitrate()) + " kbps";
-                new_metadata.setValue("Bitrate", bitrate);
-                new_mediafile->setMetadata(new_metadata);
-                songList.push_back(new_mediafile);
-            }
-        }
-        else if(entry.is_regular_file() && entry.path().extension() == ".mp4") {
-            fs::path file_path = entry.path();
-                TagLib::FileRef f(entry.path().c_str());
-            if (!f.isNull() && f.tag() && f.audioProperties()) {
-                TagLib::Tag* tag = f.tag();
-                TagLib::AudioProperties* audioProperties = f.audioProperties();
-
-                count++;
-                std::string ID = std::to_string(count);
-                std::shared_ptr<MediaFile> new_videofile = std::make_shared<MediaFile>();
-                new_videofile->setID(ID);
-                new_videofile->setName(entry.path().filename().string());
-                new_videofile->setPath(entry.path().string());
-                new_videofile->setType(VIDEO);
-
-                Metadata new_metadata;
-                new_metadata.setValue("Tittle", tag->title().toCString(true));
-                new_metadata.setValue("Size", std::to_string(fs::file_size(entry.path())));
-                // Convert and set the duration
-                int durationInSeconds = audioProperties->length();
-                int minutes = durationInSeconds / 60;
-                int seconds = durationInSeconds % 60;
-                std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
-                new_metadata.setValue("Duration", durationFormatted);
-                // Convert bitrate to string
-                std::string bitrate = std::to_string(audioProperties->bitrate()) + " kbps";
-                new_metadata.setValue("Bitrate", bitrate);
-                //codec
-                new_videofile->setMetadata(new_metadata);
-                songList.push_back(new_videofile);
+                mediaFile->setID(std::to_string(count));
+                songList.push_back(mediaFile);
             }
         }            
     }
@@ -226,3 +89,111 @@ std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanUSBDevice(con
 void ScanfOptionController::back(){
     //nothing
 }
+
+std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::string& filePath) {
+    namespace fs = std::filesystem;
+
+    // Kiểm tra nếu đường dẫn không tồn tại hoặc không phải là file
+    if (!fs::exists(filePath) || !fs::is_regular_file(filePath)) {
+        return nullptr;
+    }
+
+    std::shared_ptr<MediaFile> new_mediafile = std::make_shared<MediaFile>();
+    fs::path path(filePath);
+
+    // Kiểm tra định dạng file .mp3
+    if (path.extension() == ".mp3") {
+        TagLib::FileRef f(filePath.c_str());
+
+        if (!f.isNull() && f.tag() && f.audioProperties()) {
+            TagLib::Tag* tag = f.tag();
+            TagLib::AudioProperties* audioProperties = f.audioProperties();
+
+            new_mediafile->setName(path.filename().string());
+            new_mediafile->setPath(filePath);
+            new_mediafile->setType(AUDIO);
+
+            Metadata new_metadata;
+            new_metadata.setValue("Title", tag->title().toCString(true));
+            new_metadata.setValue("Artist", tag->artist().toCString(true));
+            new_metadata.setValue("Album", tag->album().toCString(true));
+            new_metadata.setValue("Year", std::to_string(tag->year()));
+            new_metadata.setValue("Track", std::to_string(tag->track()));
+            new_metadata.setValue("Genre", tag->genre().toCString(true));
+
+            int durationInSeconds = audioProperties->length();
+            int minutes = durationInSeconds / 60;
+            int seconds = durationInSeconds % 60;
+            std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
+            new_metadata.setValue("Duration", durationFormatted);
+
+            new_metadata.setValue("Channels", std::to_string(audioProperties->channels()));
+            new_metadata.setValue("Sample Rate", std::to_string(audioProperties->sampleRate()) + " Hz");
+            new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
+
+            new_mediafile->setMetadata(new_metadata);
+        }
+    }
+    // Kiểm tra định dạng file .mp4
+    else if (path.extension() == ".mp4") {
+        TagLib::FileRef f(filePath.c_str());
+
+        if (!f.isNull() && f.tag() && f.audioProperties()) {
+            TagLib::Tag* tag = f.tag();
+            TagLib::AudioProperties* audioProperties = f.audioProperties();
+
+            new_mediafile->setName(path.filename().string());
+            std::string wavFilePath = extractAudio(filePath);
+            if (!wavFilePath.empty()) {
+                new_mediafile->setPath(wavFilePath);
+            }
+            new_mediafile->setType(VIDEO);
+
+            Metadata new_metadata;
+            new_metadata.setValue("Title", tag->title().toCString(true));
+            new_metadata.setValue("Size", std::to_string(fs::file_size(filePath)));
+
+            int durationInSeconds = audioProperties->length();
+            int minutes = durationInSeconds / 60;
+            int seconds = durationInSeconds % 60;
+            std::string durationFormatted = std::to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + std::to_string(seconds);
+            new_metadata.setValue("Duration", durationFormatted);
+
+            new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
+
+            new_mediafile->setMetadata(new_metadata);
+        }
+    } else {
+        return nullptr;
+    }
+
+    return new_mediafile;
+}
+
+std::string ScanfOptionController::extractAudio(const std::string &videoPath) {
+    // Đường dẫn folder cho các file .wav
+    std::string outputFolderPath = "./resources/musicfrommp4";
+    // Tên file đầu ra 
+    std::string outputAudioPath = outputFolderPath + "/" + fs::path(videoPath).stem().string() + ".wav";
+    std::string command = "ffmpeg -i \"" + videoPath + "\" -q:a 0 -map a \"" + outputAudioPath + "\" -y";
+
+    // Kiểm tra và tạo folder nếu chưa tồn tại
+    if(!fs::exists(outputFolderPath)){
+        fs::create_directories(outputFolderPath);
+    }
+
+    if (fs::exists(outputAudioPath)) {
+        std::cout << "Audio file already exists: " << outputAudioPath << "\n";
+        return outputAudioPath;
+    }
+    
+    // Thực thi lệnh ffmpeg
+    int result = system(command.c_str());
+    if(result != 0){
+        std::cerr << "Failed to extract audio using FFmpeg.\n";
+        return "";
+    }
+
+    std::cout <<  "Audio extracted to: " << outputAudioPath << "\n";
+    return outputAudioPath;
+}  

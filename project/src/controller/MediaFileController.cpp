@@ -23,6 +23,7 @@ void MediaFileController::handleInput(){
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
+                ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
                 ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
             }
             else {

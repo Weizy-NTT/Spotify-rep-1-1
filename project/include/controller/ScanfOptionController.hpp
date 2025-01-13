@@ -12,6 +12,8 @@ public:
     std::vector<std::shared_ptr<MediaFile>> scanDirectory(const std::string& folderPath);
     std::vector<std::shared_ptr<MediaFile>> scanUSBDevice(const std::string& device);
     void back();
+    std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
+    std::string extractAudio(const std::string &videoPath);
 };
 
 #endif // SCANF_OPTION_CONTROLLER_H
