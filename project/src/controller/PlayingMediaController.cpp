@@ -16,13 +16,7 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 break;
             }
             case PlayingMediaMenu::PLAY_PAUSE:{
-                if (!ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPause())
-                {
-                    play();
-                }
-                else {
-                    pause();
-                }
+                play();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
@@ -42,18 +36,14 @@ void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& fil
 }
 
 void PlayingMediaController::play(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->resumeMusic();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->togglePlayPause();
 }
-void PlayingMediaController::pause(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->pauseMusic();
-}
+
 void PlayingMediaController::skipToNext(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
 }
 void PlayingMediaController::skipToPrevious(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
 }
 void PlayingMediaController::adjustVolume(int level){
 

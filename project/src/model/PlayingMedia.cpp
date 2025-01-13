@@ -52,6 +52,7 @@ void PlayingMedia::play(const std::string &filePath){
         std::cerr << "Failed to load music: " << Mix_GetError() << std::endl;
         return;
     }
+    Mix_HookMusicFinished(whenMusicFinished);
     if(Mix_PlayMusic(currentMusic, 1) == -1){
         std::cerr << "Failed to play music: " << Mix_GetError() << std::endl;
         Mix_FreeMusic(currentMusic);
@@ -70,6 +71,14 @@ void PlayingMedia::resumeMusic(){
     if(isPaused){
         Mix_ResumeMusic();
         isPaused = false;
+    }
+}
+
+void PlayingMedia::togglePlayPause() {
+    if (isPaused) {
+        resumeMusic();
+    } else {
+        pauseMusic();
     }
 }
 
@@ -99,10 +108,6 @@ void PlayingMedia::playCurrentTrack(){
     }
 }
 
-bool PlayingMedia::isPause() const {
-    return isPaused;
-}
-
 void PlayingMedia::nextTrack() {
     if (!currentplaylist.empty() && hasNextTrack()) {
         currentTrackIndex++;
@@ -127,4 +132,13 @@ bool PlayingMedia::hasNextTrack() const {
 
 bool PlayingMedia::hasPrevTrack() const {
     return currentTrackIndex > 0 && currentTrackIndex < currentplaylist.size();
+}
+
+PlayingMedia* PlayingMedia::instance = nullptr;
+
+void PlayingMedia::whenMusicFinished() {
+    if (instance) {
+        std::cout << "TRack finished. Moving to next track....\n";
+        instance->nextTrack();
+    }
 }

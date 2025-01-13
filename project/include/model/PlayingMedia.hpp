@@ -17,6 +17,7 @@ private:
     size_t volume;
     size_t currentTime;
     size_t currentTrackIndex = 0;
+    static PlayingMedia* instance;
 
 public:
     PlayingMedia();
@@ -25,7 +26,6 @@ public:
     size_t getCurrentTime() const;
     void setCurrentTime(int time);
     void play(const std::string &filePath);
-    bool isPause() const;
     void pauseMusic();
     void resumeMusic();
     void stopMusic();
@@ -36,6 +36,8 @@ public:
     void playCurrentTrack();
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
     void adjustVolume(int newVolume);
+    void togglePlayPause();
+    static void whenMusicFinished();
     ~PlayingMedia();
 };
 
