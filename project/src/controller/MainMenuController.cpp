@@ -2,12 +2,17 @@
 #include "ControllerManager.hpp"
 
 void MainMenuController::handleInput(){
+    bool status = false;
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
     size_t mainChoice;
     do {
     system("clear");
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+    if (status) {
+        std::cout << "No current mediafile playing\n";
+        status = false;
+    }
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MAIN_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validateMainMenu);
     switch (mainChoice)
@@ -26,6 +31,17 @@ void MainMenuController::handleInput(){
             }
             case MainMenu::PLAYLIST:{
                 ControllerManager::getInstance()->getPlaylistController()->handleInput();
+                break;
+            }
+            case MainMenu::NOW_PLAYING:{
+                if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile())
+                {
+                std::string ID = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile()->getID();
+                ControllerManager::getInstance()->getPlayingMediaController()->handleInput(ID);
+                }
+                else {
+                    status = true;
+                }
                 break;
             }
         }

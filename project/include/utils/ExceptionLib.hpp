@@ -52,6 +52,14 @@ public:
     }
 };
 
+class InvalidVolumeException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid volume. The volume must be between 0 and 128.";
+    }
+};
+
+void validateVolume(const size_t& value);
 void validateScanfMenu(const size_t& value);
 void validateMainMenu(const size_t& value);
 void validateMediaFilesMenu(const size_t& value);

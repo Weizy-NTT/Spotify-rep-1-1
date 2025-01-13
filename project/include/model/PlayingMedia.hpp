@@ -24,8 +24,9 @@ public:
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
     void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
     size_t getCurrentTime() const;
-    void setCurrentTime(int time);
+    void setCurrentTime(size_t time);
     void play(const std::string &filePath);
+    int isPlaying();
     void pauseMusic();
     void resumeMusic();
     void stopMusic();
@@ -35,9 +36,10 @@ public:
     bool hasPrevTrack() const;
     void playCurrentTrack();
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
-    void adjustVolume(int newVolume);
+    void adjustVolume(size_t newVolume);
     void togglePlayPause();
     static void whenMusicFinished();
+    std::string extractAudio(const std::string &videoPath);
     ~PlayingMedia();
 };
 

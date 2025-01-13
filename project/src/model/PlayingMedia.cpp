@@ -23,18 +23,20 @@ size_t PlayingMedia::getCurrentTime() const {
     return currentTime;
 }
 
-void PlayingMedia::setCurrentTime(int time) {
+void PlayingMedia::setCurrentTime(size_t time) {
     currentTime = time;
 }
 
 
 PlayingMedia::PlayingMedia() : volume(50){
+    Mix_VolumeMusic(volume);
     if(SDL_Init(SDL_INIT_AUDIO) < 0){
         std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
     }
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0){
         std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
     }
+    instance = this;
 }
 
 PlayingMedia::~PlayingMedia(){
@@ -91,9 +93,13 @@ void PlayingMedia::stopMusic(){
         currentMusic = nullptr;
     }
     isPaused = true;
-} 
+}
 
-void PlayingMedia::adjustVolume(int newVolume){
+int PlayingMedia::isPlaying() {
+    return Mix_PlayingMusic();
+}
+
+void PlayingMedia::adjustVolume(size_t newVolume){
     volume = newVolume;
     Mix_VolumeMusic(volume);
     std::cout<< "Volume set to: " << volume << "\n";
@@ -101,19 +107,51 @@ void PlayingMedia::adjustVolume(int newVolume){
 
 void PlayingMedia::playCurrentTrack(){
     if(!currentplaylist.empty()){
-        std::string currentTrackPath = currentplaylist[currentTrackIndex]->getPath();
+        std::string currentTrackPath;
+        if (currentplaylist[currentTrackIndex]->getType() == MediaType::AUDIO) {
+            currentTrackPath = currentplaylist[currentTrackIndex]->getPath();
+        }
+        else {
+            std::string wavFilePath = extractAudio(currentplaylist[currentTrackIndex]->getPath());
+            if (!wavFilePath.empty()) {
+                currentTrackPath = wavFilePath;
+            }
+        }
         play(currentTrackPath);
     } else {
         std::cerr <<"No tracks available to play.\n";
     }
 }
 
+std::string PlayingMedia::extractAudio(const std::string &videoPath) {
+    std::string outputFolderPath = "./resources/musicfrommp4";
+    std::string outputAudioPath = outputFolderPath + "/" + fs::path(videoPath).stem().string() + ".wav";
+    std::string command = "ffmpeg -i \"" + videoPath + "\" -q:a 0 -map a \"" + outputAudioPath + "\" -y";
+
+    if(!fs::exists(outputFolderPath)){
+        fs::create_directories(outputFolderPath);
+    }
+
+    if (fs::exists(outputAudioPath)) {
+        return outputAudioPath;
+    }
+    
+    int result = system(command.c_str());
+    if(result != 0){
+        std::cerr << "Failed to extract audio using FFmpeg.\n";
+        return "";
+    }
+
+    std::cout <<  "Audio extracted to: " << outputAudioPath << "\n";
+    return outputAudioPath;
+} 
+
 void PlayingMedia::nextTrack() {
     if (!currentplaylist.empty() && hasNextTrack()) {
         currentTrackIndex++;
         playCurrentTrack();
     } else {
-        std::cerr << "No next track available.\n";
+        stopMusic();
     }
 }
 
@@ -122,7 +160,7 @@ void PlayingMedia::previousTrack() {
         currentTrackIndex--;
         playCurrentTrack();
     } else {
-        std::cerr << "No previous track available.\n";
+        stopMusic();
     }
 }
 
@@ -138,7 +176,6 @@ PlayingMedia* PlayingMedia::instance = nullptr;
 
 void PlayingMedia::whenMusicFinished() {
     if (instance) {
-        std::cout << "TRack finished. Moving to next track....\n";
         instance->nextTrack();
     }
 }

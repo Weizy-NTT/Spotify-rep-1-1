@@ -14,7 +14,6 @@ public:
     std::vector<std::shared_ptr<MediaFile>> scanUSBDevice(const std::string& device);
     void back();
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
-    std::string extractAudio(const std::string &videoPath);
     void scanPlaylistsFromTxt(const std::string& filePath);
 };
 

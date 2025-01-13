@@ -8,6 +8,7 @@ void MainMenuView::showMenu() {
     std::cout << MainMenu::SCAN_OPTIONS << ". Scan\n";
     std::cout << MainMenu::ALL_SONGS << ". All Songs\n";
     std::cout << MainMenu::PLAYLIST << ". Playlist\n";
+    std::cout << MainMenu::NOW_PLAYING << ". Now Playing\n";
     std::cout << MainMenu::EXIT << ". Exit\n";
     std::cout << "=====================" << std::endl;
 }

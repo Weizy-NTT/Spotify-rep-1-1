@@ -32,7 +32,7 @@ void validateScanfMenu(const size_t& value) {
 }
 
 void validateMainMenu(const size_t& value) {
-    if (value < 0 || value > 3) {
+    if (value < 0 || value > 4) {
         throw InvalidMenuChoiceException();
     } 
 }
@@ -67,9 +67,15 @@ void validateDetailedPlaylistMenu(const size_t& value) {
     }  
 }
 void validatePlayingMediaMenu(const size_t& value) {
-    if (value < 0 || value > 3) {
+    if (value < 0 || value > 4) {
         throw InvalidMenuChoiceException();
     }  
+}
+
+void validateVolume(const size_t& value) {
+    if (value < 0 || value > 128) {
+        throw InvalidVolumeException();
+    }   
 }
 
 void validateID(const std::string& ID) {

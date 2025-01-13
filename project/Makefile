@@ -8,6 +8,7 @@ CFLAGS = -Wall -g
 # Source folder, header folder
 SRCDIR = src
 INCDIR = include
+OBJDIR = build/obj
 
 # Automatically find all subdirectories in Include and Src
 INCLUDES = $(shell find $(INCDIR) -type d)
@@ -15,6 +16,7 @@ CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 
 # Find all .cpp files in Src (do not include main.cpp multiple times)
 SRCS = $(shell find $(SRCDIR) -name "*.cpp")
+OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 
 # TagLib settings (adjust these if TagLib is in a custom location)
 CFLAGS += -I/usr/include/taglib        # Đường dẫn đến thư mục chứa header của TagLib
@@ -28,13 +30,18 @@ LDLIBS += -lSDL2 -lSDL2_mixer           # Liên kết với thư viện SDL2
 # Main rule
 all: $(TARGET)
 
-# Create executable file without .o files
-$(TARGET): $(SRCS)
+# Create executable file
+$(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
-	
-# Clean rule (no need to clean .o files)
+
+# Compile .cpp files to .o files
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean rule (clean object files and executable)
 clean:
-	rm -f $(TARGET)
+	rm -rf $(OBJDIR) $(TARGET)
 
 # Run executable
 run: all

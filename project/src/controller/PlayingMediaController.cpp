@@ -16,7 +16,7 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 break;
             }
             case PlayingMediaMenu::PLAY_PAUSE:{
-                play();
+                play_pause();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
@@ -27,25 +27,38 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 skipToPrevious();
                 break;
             }
+            case PlayingMediaMenu::VOLUME:{
+                size_t volume;
+                Exception_Handler("Enter new volume(0 to 128): ",volume,validateVolume);
+                adjustVolume(volume);
+                break;
+            }
         }
     } while(mainChoice != PlayingMediaMenu::BACK_FROM_PLAYING);
 }
+
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
+    if (!ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPlaying())
+    {
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
+    }
 }
 
-void PlayingMediaController::play(){
+void PlayingMediaController::play_pause(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->togglePlayPause();
 }
 
 void PlayingMediaController::skipToNext(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
 }
+
 void PlayingMediaController::skipToPrevious(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
 }
-void PlayingMediaController::adjustVolume(int level){
 
+void PlayingMediaController::adjustVolume(size_t level){
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->adjustVolume(level);
 }
+
 void PlayingMediaController::back(){}

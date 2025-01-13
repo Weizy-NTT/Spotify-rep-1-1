@@ -9,11 +9,10 @@ class PlayingMediaController : public BaseController {
 public:
     void handleInput(const std::string& ID);
     void playMediaFile(const std::shared_ptr<MediaFile>& file);
-    void play();
-    void pause();
+    void play_pause();
     void skipToNext();
     void skipToPrevious();
-    void adjustVolume(int level);
+    void adjustVolume(size_t level);
     void back();
 };
 
