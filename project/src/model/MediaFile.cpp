@@ -1,9 +1,18 @@
 #include "MediaFile.hpp"
 
-size_t MediaFile::mediaFileCount = 0;
+size_t MediaFile::mediaFileNextID = 1;
+std::queue<int> MediaFile::mediaFileFreeIDs;
 
-MediaFile::MediaFile(const std::string& ID,const std::string& name, const std::string& path, MediaType type, const Metadata& metadata) 
-    : ID(ID), name(name), path(path), type(type), metadata(metadata) {mediaFileCount++;}
+MediaFile::MediaFile(const std::string& name, const std::string& path, MediaType type, const Metadata& metadata) 
+    :name(name), path(path), type(type), metadata(metadata) 
+    {
+    if (!mediaFileFreeIDs.empty()) {
+        ID = std::to_string(mediaFileFreeIDs.front());
+        mediaFileFreeIDs.pop();
+    } else {
+        ID = std::to_string(mediaFileNextID++);
+    }
+    }
 
 void MediaFile::setName(const std::string& name) {
     this->name = name;
@@ -11,10 +20,6 @@ void MediaFile::setName(const std::string& name) {
 
 void MediaFile::setPath(const std::string& path) {
     this->path = path;
-}
-
-void MediaFile::setID(const std::string& ID) {
-    this->ID = ID;
 }
 
 std::string MediaFile::getName() const {
@@ -45,5 +50,7 @@ void MediaFile::setType(MediaType newType) {
     type = newType;
 }
 
-MediaFile::~MediaFile() {mediaFileCount--;}
+MediaFile::~MediaFile() {
+    mediaFileFreeIDs.push(std::stoi(ID));
+}
 

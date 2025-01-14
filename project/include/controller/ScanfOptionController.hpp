@@ -10,8 +10,8 @@
 class ScanfOptionController : public BaseController {
 public:
     void handleInput();
-    std::vector<std::shared_ptr<MediaFile>> scanDirectory(const std::string& folderPath);
-    std::vector<std::shared_ptr<MediaFile>> scanUSBDevice(const std::string& device);
+    void scanDirectory(const std::string& folderPath);
+    void scanUSBDevice(const std::string& device);
     void back();
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
     void scanPlaylistsFromTxt(const std::string& filePath);

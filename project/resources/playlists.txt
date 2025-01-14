@@ -8,10 +8,18 @@ long
 ./resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
 ./resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
 ./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
+./resources/new/AAA-WEANThisisVietnameseartistQueenB-35024694.mp3
+./resources/new/CaiDep-tlinhPhaoPhapKieu-35024697.mp3
+./resources/new/DenLaDon-TageRHYDERLOPEPHAM-35024695.mp3
+./resources/new/GiauNhatKhuPhuHoa-JustateeWxrdieGillDangrangtoHustlangRobber-35024693.mp3
+./resources/new/MienDatKyDieu-HoangDungKimmese52Hz-35024696.mp3
+./resources/new/VietNamToiDo-SOOBINVuCatTuongLilWuyn-35024692.mp3
 
 trung
 ./resources/playlists/f0onwhixt1.mp3
 ./resources/playlists/EXID - Up & Down (Chinese Version) Official Music Video.mp4
 ./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
 ./resources/playlists/Hello Song (你好歌) _ Chinese Greeting & Numbers _ Chinese song _ By Little Fox.mp4
+
+nam
 

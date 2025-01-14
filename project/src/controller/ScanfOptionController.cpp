@@ -31,7 +31,7 @@ void ScanfOptionController::handleInput(){
         case ScanfMenu::SCANF_DIRECTORY:{
             std::string path;
             Exception_Handler("Enter your path you want to scan: ",path,validatePath);
-            ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->setAllMediaFiles(scanDirectory(path));
+            scanDirectory(path);
             status = ScanStatus::SCAN_DIRECTORY_SUCCESS;
             break;
         }
@@ -52,38 +52,28 @@ void ScanfOptionController::handleInput(){
     } while(mainChoice != ScanfMenu::BACK_FROM_SCAN);
 }
 
-std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanDirectory(const std::string& folderPath){
-    std::vector<std::shared_ptr<MediaFile>> songList;
-    unsigned int count = 0;
-
+void ScanfOptionController::scanDirectory(const std::string& folderPath){
     for (const auto& entry : fs::directory_iterator(folderPath)) {
-        if (entry.is_regular_file()) {
+        auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(entry.path().filename().string());
+        if (entry.is_regular_file() && !checkName) {
             std::shared_ptr<MediaFile> mediaFile = scanfFilePath(entry.path().string());
             if (mediaFile) {
-                count++;
-                mediaFile->setID(std::to_string(count));
-                songList.push_back(mediaFile);
+                ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(mediaFile);
             }
         }            
     }
-    return songList;
 }
 
-std::vector<std::shared_ptr<MediaFile>> ScanfOptionController::scanUSBDevice(const std::string& device) {
-    std::vector<std::shared_ptr<MediaFile>> songList;
-    unsigned int count = 0;
-
+void ScanfOptionController::scanUSBDevice(const std::string& device) {
     for (const auto& entry : fs::directory_iterator("/dev/" + device)) {
-        if (entry.is_regular_file()) {
+        auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(entry.path().filename().string());
+        if (entry.is_regular_file() && !checkName) {
             std::shared_ptr<MediaFile> mediaFile = scanfFilePath(entry.path().string());
             if (mediaFile) {
-                count++;
-                mediaFile->setID(std::to_string(count));
-                songList.push_back(mediaFile);
+                ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(mediaFile);
             }
         }            
     }
-    return songList;
 }
 
 void ScanfOptionController::back(){
@@ -194,23 +184,19 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
                 std::cerr << "File not found: " << line << "\n";
                 continue;
             }
-            std::shared_ptr<MediaFile> new_mediafile = scanfFilePath(line);
-            
-            size_t fileIndex = 1;
-            try {
-                for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::path(line).parent_path())) {
-                    if (entry.path() == line) {
-                        break;
-                    }
-                    fileIndex++;
-                }
-            } catch (const std::filesystem::filesystem_error& e) {
-                std::cerr << "Error accessing folder: " << e.what() << "\n";
-            }
+            size_t pos = line.find_last_of("/");
+            std::string filename = line.substr(pos + 1);
 
-            new_mediafile->setID(std::to_string(fileIndex));
-            currentPlaylist->addSong(new_mediafile);
-            ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(new_mediafile);
+            auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(filename);
+            if (!checkName) {
+                std::shared_ptr<MediaFile> new_mediafile = scanfFilePath(line);
+                currentPlaylist->addSong(new_mediafile);
+                ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(new_mediafile);              
+            }
+            else {
+                std::shared_ptr<MediaFile> new_mediafile = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByName(filename);
+                currentPlaylist->addSong(new_mediafile);
+            }
         }
     }
 

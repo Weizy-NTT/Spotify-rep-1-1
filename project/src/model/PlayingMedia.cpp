@@ -54,7 +54,9 @@ void PlayingMedia::play(const std::string &filePath){
         std::cerr << "Failed to load music: " << Mix_GetError() << std::endl;
         return;
     }
-    Mix_HookMusicFinished(whenMusicFinished);
+    if (!isManualAction) {
+        Mix_HookMusicFinished(whenMusicFinished);
+    }
     if(Mix_PlayMusic(currentMusic, 1) == -1){
         std::cerr << "Failed to play music: " << Mix_GetError() << std::endl;
         Mix_FreeMusic(currentMusic);
@@ -78,10 +80,11 @@ void PlayingMedia::resumeMusic(){
 
 void PlayingMedia::togglePlayPause() {
     if (isPaused) {
-        resumeMusic();
+        Mix_ResumeMusic();
     } else {
-        pauseMusic();
+        Mix_PauseMusic();
     }
+    isPaused = !isPaused;
 }
 
 void PlayingMedia::stopMusic(){
@@ -147,21 +150,27 @@ std::string PlayingMedia::extractAudio(const std::string &videoPath) {
 } 
 
 void PlayingMedia::nextTrack() {
+    Mix_HookMusicFinished(nullptr);
+    isManualAction = true;
     if (!currentplaylist.empty() && hasNextTrack()) {
         currentTrackIndex++;
         playCurrentTrack();
     } else {
         stopMusic();
     }
+    isManualAction = false;
 }
 
 void PlayingMedia::previousTrack() {
+    Mix_HookMusicFinished(nullptr);
+    isManualAction = true;
     if (!currentplaylist.empty() && hasPrevTrack()) {
         currentTrackIndex--;
         playCurrentTrack();
     } else {
         stopMusic();
     }
+    isManualAction = false;
 }
 
 bool PlayingMedia::hasNextTrack() const {
@@ -176,6 +185,15 @@ PlayingMedia* PlayingMedia::instance = nullptr;
 
 void PlayingMedia::whenMusicFinished() {
     if (instance) {
-        instance->nextTrack();
+        instance->autoNextTrack();
+    }
+}
+
+void PlayingMedia::autoNextTrack() {
+    if (!currentplaylist.empty() && hasNextTrack()) {
+        currentTrackIndex++;
+        playCurrentTrack();
+    } else {
+        stopMusic();
     }
 }

@@ -1,5 +1,5 @@
 #include "MediaFileLibrary.hpp"
-#include <algorithm> // std::find_if, std::remove_if
+#include <algorithm>
 
 const std::vector<std::shared_ptr<MediaFile>>& MediaFileLibrary::getAllMediaFiles() const {
     return mediaFiles;
@@ -29,6 +29,15 @@ bool MediaFileLibrary::isValidMediaFileIDInLibrary(const std::string& ID) {
     return false;
 }
 
+bool MediaFileLibrary::isValidMediaFileNameInLibrary(const std::string& fileName) {
+    for (const auto& mediaFile : mediaFiles) {
+        if (mediaFile->getName() == fileName) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void MediaFileLibrary::setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files) {
     mediaFiles = files;
 }
@@ -36,6 +45,15 @@ void MediaFileLibrary::setAllMediaFiles(const std::vector<std::shared_ptr<MediaF
 std::shared_ptr<MediaFile> MediaFileLibrary::getMediaFileByID(const std::string& ID) const {
     for (const auto& mediaFile : mediaFiles) {
         if (mediaFile->getID() == ID) {
+            return mediaFile;
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<MediaFile> MediaFileLibrary::getMediaFileByName(const std::string& fileName) const {
+    for (const auto& mediaFile : mediaFiles) {
+        if (mediaFile->getName() == fileName) {
             return mediaFile;
         }
     }

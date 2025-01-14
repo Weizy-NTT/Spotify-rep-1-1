@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include "Metadata.hpp"
+#include <queue>
 
 enum MediaType {
     AUDIO,
@@ -14,7 +15,8 @@ enum MediaType {
 
 class MediaFile {
 private:
-    static size_t mediaFileCount;
+    static size_t mediaFileNextID;
+    static std::queue<int> mediaFileFreeIDs;
     std::string ID;
     std::string name;
     std::string path;
@@ -22,9 +24,8 @@ private:
     Metadata metadata;
 
 public:
-    MediaFile(const std::string& ID = "",const std::string& name = "", const std::string& path = "", MediaType type = AUDIO, const Metadata& metadata = Metadata());
+    MediaFile(const std::string& name = "", const std::string& path = "", MediaType type = AUDIO, const Metadata& metadata = Metadata());
     void setName(const std::string& name);
-    void setID(const std::string& ID);
     void setPath(const std::string& path);
     std::string getName() const;
     std::string getID() const;

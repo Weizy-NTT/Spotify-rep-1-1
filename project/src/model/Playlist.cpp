@@ -1,7 +1,6 @@
 #include "Playlist.hpp"
 #include <algorithm>
 
-size_t Playlist::playlistCount = 0;
 size_t Playlist::playlistNextID = 1;
 std::queue<int> Playlist::playlistFreeIDs;
 
@@ -46,16 +45,8 @@ std::shared_ptr<MediaFile> Playlist::getSongByID(const std::string& ID) const {
     return nullptr;
 }
 
-size_t Playlist::getCount() { return playlistCount; }
-
 std::string Playlist::getID() const {
     return ID;
-}
-
-void Playlist::resetIDs() {
-    playlistNextID = 1;
-    playlistCount = 0;
-    std::queue<int>().swap(playlistFreeIDs);
 }
 
 Playlist::Playlist(const std::string& name) {
@@ -66,10 +57,8 @@ Playlist::Playlist(const std::string& name) {
         ID = std::to_string(playlistNextID++);
     }
     this->name = name;
-    playlistCount++;
 }
 
 Playlist::~Playlist() {
     playlistFreeIDs.push(std::stoi(ID));
-    playlistCount--;
 }

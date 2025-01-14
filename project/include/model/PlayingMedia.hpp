@@ -14,6 +14,7 @@ private:
     std::vector<std::shared_ptr<MediaFile>> currentplaylist;
     Mix_Music *currentMusic = nullptr;
     bool isPaused = false;
+    bool isManualAction = false;
     size_t volume;
     size_t currentTime;
     size_t currentTrackIndex = 0;
@@ -32,6 +33,7 @@ public:
     void stopMusic();
     void nextTrack();
     void previousTrack();
+    void autoNextTrack();
     bool hasNextTrack() const;
     bool hasPrevTrack() const;
     void playCurrentTrack();

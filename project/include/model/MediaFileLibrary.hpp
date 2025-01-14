@@ -16,7 +16,9 @@ public:
     void removeMediaFile(const std::string& ID);
     void setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files);
     std::shared_ptr<MediaFile> getMediaFileByID(const std::string& ID) const;
+    std::shared_ptr<MediaFile> getMediaFileByName(const std::string& fileName) const;
     bool isValidMediaFileIDInLibrary(const std::string& ID);
+    bool isValidMediaFileNameInLibrary(const std::string& fileName);
 };
 
 #endif // MEDIA_FILE_LIBRARY_H
