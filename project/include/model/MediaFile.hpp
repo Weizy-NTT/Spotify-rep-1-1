@@ -20,6 +20,7 @@ private:
     std::string ID;
     std::string name;
     std::string path;
+    size_t duration;
     MediaType type;
     Metadata metadata;
 
@@ -27,8 +28,10 @@ public:
     MediaFile(const std::string& name = "", const std::string& path = "", MediaType type = AUDIO, const Metadata& metadata = Metadata());
     void setName(const std::string& name);
     void setPath(const std::string& path);
+    void setDuration(const size_t& duration);
     std::string getName() const;
     std::string getID() const;
+    size_t getDuration() const;
     std::string getPath() const;
     MediaType getType() const;
     Metadata& getMetadata();

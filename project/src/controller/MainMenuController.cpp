@@ -37,6 +37,7 @@ void MainMenuController::handleInput(){
                 if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile())
                 {
                 std::string ID = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile()->getID();
+                ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlayingView(true);
                 ControllerManager::getInstance()->getPlayingMediaController()->handleInput(ID);
                 }
                 else {

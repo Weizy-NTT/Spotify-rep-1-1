@@ -111,6 +111,7 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
 
 
             int durationInSeconds = audioProperties->length();
+            new_mediafile->setDuration(durationInSeconds);
             new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
             new_metadata.setValue("SampleRate", std::to_string(audioProperties->sampleRate()) + " Hz");
@@ -134,6 +135,7 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_metadata.setValue("Title", tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true));
             new_metadata.setValue("Size", std::to_string(fs::file_size(filePath)));
             int durationInSeconds = audioProperties->length();
+            new_mediafile->setDuration(durationInSeconds);
             new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
 

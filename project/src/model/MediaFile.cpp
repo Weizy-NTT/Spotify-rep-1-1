@@ -22,12 +22,20 @@ void MediaFile::setPath(const std::string& path) {
     this->path = path;
 }
 
+void MediaFile::setDuration(const size_t& duration) {
+    this->duration = duration;
+}
+
 std::string MediaFile::getName() const {
     return name;
 }
 
 std::string MediaFile::getID() const {
     return ID;
+}
+
+size_t MediaFile::getDuration() const {
+    return duration;
 }
 
 std::string MediaFile::getPath() const {

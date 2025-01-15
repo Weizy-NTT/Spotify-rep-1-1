@@ -64,6 +64,7 @@ void DetailedPlaylistController::handleInput(std::string listId){
                 if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId)->isValidMediaFileIDInPlaylist(songID))
                 {
                     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId)->getSongs());
+                    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlayingView(true);
                     ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
                 }
                 else {

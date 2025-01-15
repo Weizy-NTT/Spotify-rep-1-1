@@ -1,13 +1,12 @@
 #include "PlayingMediaController.hpp"
 #include "ControllerManager.hpp"
 
+
 void PlayingMediaController::handleInput(const std::string& ID){
     size_t mainChoice;
     playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
-    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile());
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
+    updateTime();
     Exception_Handler("Enter your choice: ",mainChoice,validatePlayingMediaMenu);
     switch (mainChoice)
         {
@@ -16,7 +15,7 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 break;
             }
             case PlayingMediaMenu::PLAY_PAUSE:{
-                play_pause();
+                play();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
@@ -38,14 +37,18 @@ void PlayingMediaController::handleInput(const std::string& ID){
 }
 
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
-    if (!ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPlaying())
-    {
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
-    }
+ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
 }
 
-void PlayingMediaController::play_pause(){
+// void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
+//     if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPlaying() != 1)
+//     {
+//     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
+//     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
+//     }
+// }
+
+void PlayingMediaController::play(){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->togglePlayPause();
 }
 
@@ -61,4 +64,14 @@ void PlayingMediaController::adjustVolume(size_t level){
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->adjustVolume(level);
 }
 
-void PlayingMediaController::back(){}
+void PlayingMediaController::updateTime() {
+    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+    size_t current = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime();
+    size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total);
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
+}
+
+void PlayingMediaController::back(){
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlayingView(false);
+}

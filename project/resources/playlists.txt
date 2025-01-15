@@ -14,6 +14,7 @@ long
 ./resources/new/GiauNhatKhuPhuHoa-JustateeWxrdieGillDangrangtoHustlangRobber-35024693.mp3
 ./resources/new/MienDatKyDieu-HoangDungKimmese52Hz-35024696.mp3
 ./resources/new/VietNamToiDo-SOOBINVuCatTuongLilWuyn-35024692.mp3
+./resources/playlists/07 Nhac thien.mp3
 
 trung
 ./resources/playlists/f0onwhixt1.mp3
