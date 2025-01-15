@@ -10,25 +10,6 @@ std::shared_ptr<MediaFile> PlayingMedia::getCurrentMediaFile() const {
     return currentplaylist[currentTrackIndex];
 }
 
-// void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile) {
-//     if (!mediaFile) {
-//         std::cerr << "Error: Invalid media file." << std::endl;
-//         return;
-//     }
-
-//     // Kiểm tra nếu bài hát này đã có trong playlist
-//     for (size_t i = 0; i < currentplaylist.size(); ++i) {
-//         if (currentplaylist[i]->getID() == mediaFile->getID()) {
-//             currentTrackIndex = i;  // Lưu lại chỉ số bài hát
-//             stopMusic();  // Dừng nhạc nếu có nhạc đang phát 
-//             return;
-//         }
-//     }
-
-//     // Nếu không tìm thấy bài hát trong playlist, reset chỉ số và playlist
-//     currentTrackIndex = -1;  // Không tìm thấy bài hát này
-// }
-
 void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile) {
     if (!mediaFile) {
         std::cerr << "Error: Invalid media file." << std::endl;
@@ -40,7 +21,6 @@ void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFi
                 stopMusic();
                 currentTrackIndex = i;  // Lưu lại chỉ số bài hát
                 playCurrentTrack();
-                //stop?
                 return;
             }
         }
@@ -50,9 +30,7 @@ void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFi
 void PlayingMedia::setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist) 
 {
     if (newPlaylist != currentplaylist) {
-        stopMusic();  // Dừng nhạc nếu có nhạc đang phát
         currentplaylist = newPlaylist;
-        currentTrackIndex = -1;  // Đặt chỉ số bài hát hiện tại là -1 hoặc một giá trị hợp lý
     }
 }
 
@@ -141,6 +119,7 @@ void PlayingMedia::togglePlayPause() {
 }
 
 void PlayingMedia::stopMusic(){
+
     isPlayingMediaFile.store(false, std::memory_order_relaxed);
 
     if (updateThread.joinable()) { 
