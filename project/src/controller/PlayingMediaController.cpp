@@ -1,8 +1,6 @@
 #include "PlayingMediaController.hpp"
 #include "ControllerManager.hpp"
-#include <condition_variable>
 
-std::mutex cvMutex;
 
 void PlayingMediaController::handleInput(const std::string& ID){
     isPlayingView.store(true, std::memory_order_relaxed);
@@ -37,12 +35,6 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 skipToPrevious();
                 break;
             }
-            case PlayingMediaMenu::VOLUME:{
-                size_t volume;
-                Exception_Handler("Enter new volume(0 to 128): ",volume,validateVolume);
-                adjustVolume(volume);
-                break;
-            }
         }
     } while(mainChoice != PlayingMediaMenu::BACK_FROM_PLAYING);
 }
@@ -53,11 +45,13 @@ void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& fil
 }
 
 void PlayingMediaController::play() {
+    startUpdateThread();
     auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
     playingMedia->resumeMusic();
 }
 
 void PlayingMediaController::pause() {
+    stopUpdateThread();
     auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
     playingMedia->pauseMusic();
 }
@@ -105,9 +99,6 @@ void PlayingMediaController::updateElapsedTime() {
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
             ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
-            if (!playing->getCurrentMediaFile()) {  // Hết playlist
-                isPlayingMediaFile.store(false, std::memory_order_relaxed);
-            }
         }
     }
 }
@@ -130,5 +121,6 @@ void PlayingMediaController::stopUpdateThread() {
         }
     }
 }
+
 
 

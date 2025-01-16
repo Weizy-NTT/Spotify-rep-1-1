@@ -3,22 +3,28 @@
 
 #include "MediaFile.hpp"
 #include <memory>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
 #include <filesystem>
 #include <atomic>
+#include <mutex>
+#include <stdint.h>
+#include <thread>
 
 namespace fs = std::filesystem;
+
+void audioCallback(void* userdata, uint8_t* stream, int len);
 
 class PlayingMedia {
 private:
     std::vector<std::shared_ptr<MediaFile>> currentplaylist;
-    Mix_Music *currentMusic = nullptr;
+    //Mix_Music *currentMusic = nullptr;
     size_t volume;
     size_t currentTime = 0;
     size_t totalTime = 0;
     size_t currentTrackIndex = -1;
     std::atomic<bool> paused{false};
+    std::atomic<bool> playing{false};
+    std::thread playbackThread;
+    std::recursive_mutex stateMutex; // Allow recursive locking
 public:
     PlayingMedia();
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
@@ -26,11 +32,13 @@ public:
     size_t getCurrentTime() const;
     size_t getTotalTime() const;
     void setCurrentTime(size_t time);
-    void play(const std::string &filePath);
+    void playAudio(const char* filePath);
+    void playVideo(const char* filePath);
     bool isPlaying();
+    void play();
     void pauseMusic();
     void resumeMusic();
-    void stopMusic();
+    void stop();
     void nextTrack();
     void previousTrack();
     bool hasNextTrack() const;
@@ -38,7 +46,8 @@ public:
     void playCurrentTrack();
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
     void adjustVolume(size_t newVolume);
-    std::string extractAudio(const std::string &videoPath);
+
+    void stopPlaybackThread();
     
     ~PlayingMedia();
 };

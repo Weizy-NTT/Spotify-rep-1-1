@@ -10,7 +10,6 @@ void PlayingMediaView::showMenu() {
     std::cout << PlayingMediaMenu::PAUSE << ". Pause\n";
     std::cout << PlayingMediaMenu::NEXT << ". Next Song\n";
     std::cout << PlayingMediaMenu::PREV << ". Previous Song\n";
-    std::cout << PlayingMediaMenu::VOLUME << ". Adjust Volume\n";
     std::cout << PlayingMediaMenu::BACK_FROM_PLAYING << ". Go Back\n";
     std::cout << "======================" << std::endl;
 }

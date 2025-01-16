@@ -3,7 +3,7 @@ TARGET = build/main.exe
 
 # Compiler and Flag
 CC = g++
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -std=c++20
 
 # Source folder, header folder
 SRCDIR = src
@@ -18,20 +18,27 @@ CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 SRCS = $(shell find $(SRCDIR) -name "*.cpp")
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
 
-# TagLib settings (adjust these if TagLib is in a custom location)
-CFLAGS += -I/usr/include/taglib        # Đường dẫn đến thư mục chứa header của TagLib
-LDFLAGS += -L/usr/lib/x86_64-linux-gnu  # Đường dẫn đến thư mục chứa thư viện libtag.so
-LDLIBS += -ltag                        # Liên kết với thư viện TagLib
+# FFmpeg settings
+FFMPEG_FLAGS = $(shell pkg-config --cflags --libs libavformat libavcodec libswresample libavutil libswscale)
+CFLAGS += $(FFMPEG_FLAGS)
+LDLIBS += $(shell pkg-config --libs libavformat libavcodec libswscale libswresample libavutil)
 
 # SDL2 settings
-CFLAGS += -I/usr/include/SDL2           # Đường dẫn đến thư mục chứa header của SDL2
-LDLIBS += -lSDL2 -lSDL2_mixer           # Liên kết với thư viện SDL2
+SDL2_FLAGS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer)
+CFLAGS += $(SDL2_FLAGS)
+LDLIBS += $(shell pkg-config --libs sdl2 SDL2_mixer)
+
+# TagLib settings (adjust these if TagLib is in a custom location)
+CFLAGS += -I/usr/include/taglib
+LDFLAGS += -L/usr/lib/x86_64-linux-gnu
+LDLIBS += -ltag
 
 # Main rule
 all: $(TARGET)
 
 # Create executable file
 $(TARGET): $(OBJS)
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 # Compile .cpp files to .o files

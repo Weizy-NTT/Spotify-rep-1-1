@@ -8,6 +8,8 @@
 #include <atomic>
 #include <mutex>
 #include <PlayingMedia.hpp>
+#include <stdexcept>
+#include <queue>
 
 extern std::mutex mediaMutex;
 
@@ -15,7 +17,6 @@ class PlayingMediaController : public BaseController {
     std::thread updateThread;
     std::atomic<bool> isPlayingMediaFile{false};
     std::atomic<bool> isPlayingView{false};
-
     void updateElapsedTime();
 public:
     void handleInput(const std::string& ID);
