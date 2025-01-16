@@ -24,7 +24,6 @@ void MediaFileController::handleInput(){
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
                 ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
-                ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlayingView(true);
                 ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
             }
             else {

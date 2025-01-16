@@ -6,7 +6,8 @@ extern std::mutex mediaMutex;
 void PlayingMediaView::showMenu() {
     BaseView::showMenu();
     std::cout << "===== Now Playing =====" << std::endl;
-    std::cout << PlayingMediaMenu::PLAY_PAUSE << ". Play/Pause\n";
+    std::cout << PlayingMediaMenu::PLAY << ". Play\n";
+    std::cout << PlayingMediaMenu::PAUSE << ". Pause\n";
     std::cout << PlayingMediaMenu::NEXT << ". Next Song\n";
     std::cout << PlayingMediaMenu::PREV << ". Previous Song\n";
     std::cout << PlayingMediaMenu::VOLUME << ". Adjust Volume\n";

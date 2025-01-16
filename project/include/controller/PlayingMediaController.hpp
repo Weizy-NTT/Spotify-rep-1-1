@@ -4,16 +4,30 @@
 #include "MediaFile.hpp"
 #include "BaseController.hpp"
 #include <memory>
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <PlayingMedia.hpp>
+
+extern std::mutex mediaMutex;
 
 class PlayingMediaController : public BaseController {
+    std::thread updateThread;
+    std::atomic<bool> isPlayingMediaFile{false};
+    std::atomic<bool> isPlayingView{false};
+
+    void updateElapsedTime();
 public:
     void handleInput(const std::string& ID);
     void playMediaFile(const std::shared_ptr<MediaFile>& file);
     void play();
+    void pause();
     void skipToNext();
     void skipToPrevious();
     void adjustVolume(size_t level);
     void updateTime();
+    void startUpdateThread();
+    void stopUpdateThread();
     void back();
 };
 
