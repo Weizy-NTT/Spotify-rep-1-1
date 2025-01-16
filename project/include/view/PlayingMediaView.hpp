@@ -8,7 +8,8 @@
 
 enum PlayingMediaMenu {
     BACK_FROM_PLAYING,
-    PLAY_PAUSE,
+    PLAY,
+    PAUSE,
     NEXT,
     PREV,
     VOLUME

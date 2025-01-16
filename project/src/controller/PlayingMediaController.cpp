@@ -1,8 +1,11 @@
 #include "PlayingMediaController.hpp"
 #include "ControllerManager.hpp"
+#include <condition_variable>
 
+std::mutex cvMutex;
 
 void PlayingMediaController::handleInput(const std::string& ID){
+    isPlayingView.store(true, std::memory_order_relaxed);
     size_t mainChoice;
     playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
@@ -14,8 +17,12 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 back();
                 break;
             }
-            case PlayingMediaMenu::PLAY_PAUSE:{
+            case PlayingMediaMenu::PLAY:{
                 play();
+                break;
+            }
+            case PlayingMediaMenu::PAUSE:{
+                pause();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
@@ -37,27 +44,30 @@ void PlayingMediaController::handleInput(const std::string& ID){
 }
 
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
-ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
+    startUpdateThread();
 }
 
-// void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
-//     if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->isPlaying() != 1)
-//     {
-//     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
-//     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->playCurrentTrack();
-//     }
-// }
+void PlayingMediaController::play() {
+    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+    playingMedia->resumeMusic();
+}
 
-void PlayingMediaController::play(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->togglePlayPause();
+void PlayingMediaController::pause() {
+    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+    playingMedia->pauseMusic();
 }
 
 void PlayingMediaController::skipToNext(){
+    stopUpdateThread();
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
+    startUpdateThread();
 }
 
 void PlayingMediaController::skipToPrevious(){
+    stopUpdateThread();
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
+    startUpdateThread();
 }
 
 void PlayingMediaController::adjustVolume(size_t level){
@@ -73,5 +83,47 @@ void PlayingMediaController::updateTime() {
 }
 
 void PlayingMediaController::back(){
-    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlayingView(false);
+    isPlayingView.store(false, std::memory_order_relaxed);
 }
+
+void PlayingMediaController::updateElapsedTime() {
+    auto playing = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+
+    while (isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        // Cập nhật thời gian phát nhạc
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        playing->setCurrentTime(playing->getCurrentTime() + 1);
+
+        if (isPlayingView.load(std::memory_order_relaxed)) {
+            updateTime();  // Cập nhật giao diện nếu cần
+        }
+
+        if (playing->getCurrentTime() >= playing->getTotalTime()) {
+            playing->nextTrack();
+            if (!playing->getCurrentMediaFile()) {  // Hết playlist
+                isPlayingMediaFile.store(false, std::memory_order_relaxed);
+            }
+        }
+    }
+}
+
+
+void PlayingMediaController::startUpdateThread() {
+    if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        isPlayingMediaFile.store(true, std::memory_order_relaxed);
+        if (!updateThread.joinable()) {  // Nếu thread chưa chạy, khởi động
+            updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
+        }
+    }
+}
+
+void PlayingMediaController::stopUpdateThread() {
+    if (isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        isPlayingMediaFile.store(false, std::memory_order_relaxed);
+        if (updateThread.joinable()) {
+            updateThread.join();
+        }
+    }
+}
+
+
