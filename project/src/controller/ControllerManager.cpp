@@ -98,7 +98,7 @@ MetadataController* ControllerManager::getMetadataController() const {
 
 HardwareController* ControllerManager::getHardwareController() const{
     if (controllers[modeController::CT_HARDWARE]) {
-        return (dynamic_cast<MetadataController*>(controllers[modeController::CT_HARDWARE].get()));
+        return (dynamic_cast<HardwareController*>(controllers[modeController::CT_HARDWARE].get()));
     }
     else {
         return nullptr;

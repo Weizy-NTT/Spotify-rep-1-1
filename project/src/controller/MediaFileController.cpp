@@ -1,5 +1,6 @@
 #include "MediaFileController.hpp"
 #include "ControllerManager.hpp"
+#include "HardwareController.hpp"
 
 void MediaFileController::handleInput(){
     size_t mainChoice;
@@ -21,6 +22,8 @@ void MediaFileController::handleInput(){
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             std::string songID;
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
+            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
                 ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());

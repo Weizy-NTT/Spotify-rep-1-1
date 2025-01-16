@@ -1,4 +1,5 @@
 #include "HardwareController.hpp"
+#include "ControllerManager.hpp"
 
 // Constructor: Khởi tạo HardwareController
 HardwareController::HardwareController(const std::string& device, int baudRate)
@@ -62,4 +63,8 @@ void HardwareController::threadReading(){
 
 void HardwareController::stopReading(){
     uart.stop();
+}
+
+void HardwareController::sendSignal(const std::string& signal){
+    uart.writeData(signal);
 }

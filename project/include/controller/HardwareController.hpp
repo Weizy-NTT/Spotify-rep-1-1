@@ -3,7 +3,7 @@
 
 #include <string>
 #include "UART.hpp" // Include lớp UART bạn đã viết
-#include "ControllerManager.hpp"
+#include "BaseController.hpp"
 
 class HardwareController : public BaseController {
 private:
@@ -17,7 +17,8 @@ public:
     void threadReading();
     int getVolume();
     std::string receiveData();
-    void stopReading()
+    void stopReading();
+    void sendSignal(const std::string& signal);
 };
 
 #endif // UART_CONTROLLER_HPP

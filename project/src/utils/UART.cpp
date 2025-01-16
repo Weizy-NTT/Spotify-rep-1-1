@@ -6,7 +6,7 @@
 #include <cstring>
 #include <thread>
 #include <stdexcept>
-
+#include "ControllerManager.hpp"
 UART::UART(const std::string& device, int baudRate) : uart_fd(-1), running(true) {
     // Mở cổng UART
     uart_fd = open(device.c_str(), O_RDWR | O_NOCTTY);
@@ -77,16 +77,16 @@ void UART::startReadLoop() {
             while (running) {
                 std::string data = readData();
                 if (data == "1"){
-                    std::cout<<"mode 1";
-                }
-                if(data == "2"){
-                    std::cout<<"mode 2";
+                    ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
                 }
                 if(data == "3"){
-                    std::cout<<"mode 3";
+                    ControllerManager::getInstance()->getPlayingMediaController()->play();
+                }
+                if(data == "6"){
+                    ControllerManager::getInstance()->getPlayingMediaController()->pause();
                 }
                 if (data == "4"){
-                    std::cout<<"mode 4";
+                    ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
                 }
                 if (!data.empty()) {
                     std::cout << "Received: " << data << std::endl;
@@ -94,7 +94,6 @@ void UART::startReadLoop() {
             }
         }).detach();
     }
-
 void UART::stop() {
     running = false;
 }

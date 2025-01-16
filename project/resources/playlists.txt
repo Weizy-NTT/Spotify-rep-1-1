@@ -1,22 +1,12 @@
 long
-./resources/playlists/CoViNaoHonViTetNha-TrucNhan-6183655.mp3
-./resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
-./resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
-./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
-./resources/new/AAA-WEANThisisVietnameseartistQueenB-35024694.mp3
-./resources/new/CaiDep-tlinhPhaoPhapKieu-35024697.mp3
-./resources/new/DenLaDon-TageRHYDERLOPEPHAM-35024695.mp3
-./resources/new/GiauNhatKhuPhuHoa-JustateeWxrdieGillDangrangtoHustlangRobber-35024693.mp3
-./resources/new/MienDatKyDieu-HoangDungKimmese52Hz-35024696.mp3
-./resources/new/VietNamToiDo-SOOBINVuCatTuongLilWuyn-35024692.mp3
-./resources/playlists/07 Nhac thien.mp3
-./resources/playlists/f0onwhixt1.mp3
+
+
 
 trung
-./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
-./resources/playlists/EXID - Up & Down (Chinese Version) Official Music Video.mp4
+
+
 
 okel
-./resources/playlists/Short song ( English song) 🎵 [W Lyrics] 30 seconds song - Memories ~ Maroon 5.mp4
-./resources/playlists/ComDoanVien-NgocMai-13538708.mp3
+
+
 
