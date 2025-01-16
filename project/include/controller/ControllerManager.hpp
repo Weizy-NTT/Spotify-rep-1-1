@@ -11,6 +11,7 @@
 #include "DetailedPlaylistController.hpp"
 #include "MetadataController.hpp"
 #include "BaseController.hpp"
+#include "HardwareController.hpp"
 #include "ViewManager.hpp"
 #include "ModelManager.hpp"
 #include "ExceptionLib.hpp"
@@ -23,7 +24,8 @@ enum modeController {
     CT_MEDIA_FILES,
     CT_PLAYING_MEDIA,
     CT_DETAILED_PLAYLIST,
-    CT_METADATA
+    CT_METADATA,
+    CT_HARDWARE
 };
 
 class ControllerManager {
@@ -54,6 +56,7 @@ public:
     MetadataController* getMetadataController() const;
     ViewManager* getViewManager() const;
     ModelManager* getModelManager() const;
+    HardwareController* getHardwareController() const;
 };
 
 #endif // CONTROLLER_MANAGER_H

@@ -2,6 +2,7 @@
 #include "ControllerManager.hpp"
 
 void MainMenuController::handleInput(){
+    ControllerManager::getInstance()->getHardwareController()->threadReading();
     bool status = false;
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
@@ -52,5 +53,6 @@ void MainMenuController::handleInput(){
 void MainMenuController::back(){
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->saveToFile(filePath);
+    ControllerManager::getInstance()->getHardwareController()->stopReading();
     std::exit(0);
 }
