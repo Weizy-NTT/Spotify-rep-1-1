@@ -1,6 +1,9 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
-
+std::mutex adc_mutex;       // Mutex bảo vệ adcValue
+std::mutex mode_mutex;      // Mutex bảo vệ mode
+int adcValue = 0;           // Biến cho giá trị ADC
+std::string mode = "";      // Biến cho mode (chuỗi)
 #include<bits/stdc++.h>
 
 class InvalidAlphaSringException : public std::exception {
