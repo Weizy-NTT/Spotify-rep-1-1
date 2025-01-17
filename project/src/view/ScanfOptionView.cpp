@@ -3,11 +3,36 @@
 
 void ScanfOptionView::showMenu() {
     BaseView::showMenu();
-    std::cout << "===== Scanf Option Menu =====" << std::endl;
-    std::cout << ScanfMenu::SCANF_DIRECTORY << ". Scan Directory\n";
-    std::cout << ScanfMenu::SCANF_USB << ". Scan USB Device\n";
-    std::cout << ScanfMenu::BACK_FROM_SCAN << ". Go Back\n";
-    std::cout << "=============================" << std::endl;
+
+    constexpr int MENU_WIDTH = 66; // Chiều rộng của menu, đồng bộ với các menu khác
+
+    // Hàm vẽ đường viền trên/dưới
+    auto drawLine = []() {
+        std::cout << "+" << std::string(MENU_WIDTH, '-') << "+" << "\n";
+    };
+
+    // Vẽ đường viền trên
+    drawLine();
+
+    // Tiêu đề menu, căn giữa
+    std::string title = "Scanf Option Menu";
+    int padding = (MENU_WIDTH - title.size()) / 2;
+    std::cout << "|" << std::string(padding, ' ') << title
+              << std::string(MENU_WIDTH - title.size() - padding, ' ') << "|\n";
+
+    // Vẽ đường ngăn cách
+    drawLine();
+
+    // Hiển thị các tùy chọn menu
+    std::cout << "| " << ScanfMenu::SCANF_DIRECTORY << ". Scan Directory" 
+              << std::string(MENU_WIDTH - 18, ' ') << "|\n";
+    std::cout << "| " << ScanfMenu::SCANF_USB << ". Scan USB Device" 
+              << std::string(MENU_WIDTH - 19, ' ') << "|\n";
+    std::cout << "| " << ScanfMenu::BACK_FROM_SCAN << ". Go Back" 
+              << std::string(MENU_WIDTH - 11, ' ') << "|\n";
+
+    // Vẽ đường viền dưới
+    drawLine();
 }
 
 void ScanfOptionView::hideMenu() {

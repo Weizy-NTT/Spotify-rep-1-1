@@ -109,10 +109,11 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_metadata.setValue("Track", tag->track() > 0 ? std::to_string(tag->track()) : "Unknown");
             new_metadata.setValue("Genre", tag->genre().isEmpty() ? "Unknown" : tag->genre().toCString(true));
 
-
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
-            new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
+            std::string duration = (durationInSeconds / 60 < 10 ? "0" : "") + std::to_string(durationInSeconds / 60) + ":" +
+                                (durationInSeconds % 60 < 10 ? "0" : "") + std::to_string(durationInSeconds % 60);
+            new_metadata.setValue("Duration",duration);
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
             new_metadata.setValue("SampleRate", std::to_string(audioProperties->sampleRate()) + " Hz");
             new_metadata.setValue("Channels", std::to_string(audioProperties->channels()));
@@ -136,7 +137,9 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_metadata.setValue("Size", std::to_string(fs::file_size(filePath)));
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
-            new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
+            std::string duration = (durationInSeconds / 60 < 10 ? "0" : "") + std::to_string(durationInSeconds / 60) + ":" +
+                                (durationInSeconds % 60 < 10 ? "0" : "") + std::to_string(durationInSeconds % 60);
+            new_metadata.setValue("Duration",duration);
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
 
             new_mediafile->setMetadata(new_metadata);
@@ -211,5 +214,4 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     for (auto playlist : playlists) {
         ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->addPlaylist(playlist);
     }
-
 }
