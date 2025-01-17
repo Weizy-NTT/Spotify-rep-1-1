@@ -4,7 +4,6 @@
 #include "MediaFileLibrary.hpp"
 #include "PlaylistLibrary.hpp"
 #include "PlayingMedia.hpp"
-#include "Device.hpp"
 #include "Playlist.hpp"
 #include <memory>
 

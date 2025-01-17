@@ -544,6 +544,8 @@ void PlayingMedia::playVideo(const char* filePath) {
 
 
 
-
+void PlayingMedia::setVolume(const int &value){
+    volume = value;
+}
 
 
