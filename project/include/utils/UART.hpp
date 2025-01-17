@@ -15,8 +15,6 @@
 
 extern std::mutex adc_mutex;  
 extern std::mutex mode_mutex;  
-extern int adcValue;           
-extern std::string mode;
 
 
 class UART {

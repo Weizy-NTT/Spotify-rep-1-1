@@ -46,7 +46,7 @@ public:
     void playCurrentTrack();
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
     void adjustVolume(size_t newVolume);
-
+    void setVolume(const int &value);
     void stopPlaybackThread();
     
     ~PlayingMedia();

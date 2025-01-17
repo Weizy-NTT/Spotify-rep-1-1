@@ -98,7 +98,7 @@ void UART::startReadLoop() {
                     if (receivedData.length() == 4) {
                         std::lock_guard<std::mutex> lock(adc_mutex);
                         try {
-                            ControllerManager::getInstance()->getModelManager()->getDeviceInfor()->setVolume(std::stoi(receivedData));
+                            ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setVolume(std::stoi(receivedData));
                         } catch (const std::invalid_argument& e) {
                             std::cerr << "Invalid ADC value: " << receivedData << std::endl;
                         }

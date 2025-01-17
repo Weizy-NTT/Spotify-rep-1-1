@@ -4,7 +4,6 @@
 #include "MediaFileLibrary.hpp"
 #include "PlaylistLibrary.hpp"
 #include "PlayingMedia.hpp"
-#include "Device.hpp"
 #include "Playlist.hpp"
 #include <memory>
 
@@ -13,13 +12,11 @@ private:
     std::unique_ptr<MediaFileLibrary> mediaLibrary;
     std::unique_ptr<PlaylistLibrary> playlistLibrary;
     std::unique_ptr<PlayingMedia> playingMedia;
-    std::unique_ptr<Device> device;
 
 public:
     MediaFileLibrary* getMediaLibrary() const;
     PlaylistLibrary* getPlaylistLibrary() const;
     PlayingMedia* getPlayingMedia() const;
-    Device* getDeviceInfor() const;
     ModelManager();
 };
 
