@@ -4,9 +4,9 @@
 // void MainMenuController::handleInput(){
 //     // ControllerManager::getInstance()->getHardwareController()->threadReading();
 //     // ControllerManager::getInstance()->getHardwareController()->sendSignal("S");
-//     bool status = false;
-//     std::string filePath = "resources/playlists.txt";
-//     ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
+    // bool status = false;
+    // std::string filePath = "resources/playlists.txt";
+    // ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
 //     size_t mainChoice;
 //     do {
 //     //system("clear");
@@ -51,6 +51,15 @@
 // }
 
 void MainMenuController::handleInput() {
+    bool status = false;
+    std::string filePath = "resources/playlists.txt";
+    ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
+    do {
+    ControllerManager::getInstance()->getViewManager()->getMainMenuView()->hideMenu();
+    if (status) {
+        std::cout << "No current mediafile playing\n";
+        status = false;
+    }
     ControllerManager::getInstance()->getViewManager()->getMainMenuView()->showMenu();
     switch (ControllerManager::getInstance()->getViewManager()->getMainMenuView()->getSelectedOption()) {
         case MainMenu::SCAN_OPTIONS:
@@ -63,17 +72,22 @@ void MainMenuController::handleInput() {
             ControllerManager::getInstance()->getPlaylistController()->handleInput();
             break;
         case MainMenu::NOW_PLAYING:
-
+            if (ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile())
+            {
+            std::string ID = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile()->getID();
+            ControllerManager::getInstance()->getPlayingMediaController()->handleInput(ID);
+            }
+            else {
+                status = true;
+            }
             break;
         case MainMenu::EXIT:
 
             back();
             break;
     }
+    } while(ControllerManager::getInstance()->getViewManager()->getMainMenuView()->getSelectedOption() != MainMenu::EXIT);
 }
-
-
-
 
 void MainMenuController::back(){
     std::string filePath = "resources/playlists.txt";

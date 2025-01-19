@@ -70,7 +70,7 @@ void MediaFileController::handleInput(){
 }
 
 void MediaFileController::back(){
-    ControllerManager::getInstance()->getMainMenuController()->handleInput();
+    //ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {

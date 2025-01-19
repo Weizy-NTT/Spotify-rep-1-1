@@ -134,28 +134,23 @@ void PlayingMedia::play() {
 void PlayingMedia::pauseMusic() {
     std::unique_lock<std::recursive_mutex> lock(stateMutex);
     if (!playing || paused) {
-        std::cerr << "Cannot pause. No media is playing or already paused.\n";
         return;
     }
     paused = true;
     Mix_PauseMusic();
-    std::cout << "Playback paused.\n";
 }
 
 void PlayingMedia::resumeMusic() {
     std::unique_lock<std::recursive_mutex> lock(stateMutex);
     if (!playing || !paused) {
-        std::cerr << "Cannot resume. No media is paused.\n";
         return;
     }
     paused = false;
     Mix_ResumeMusic();
-    std::cout << "Playback resumed.\n";
 }
 
 void PlayingMedia::stop(){  
     stopPlaybackThread();
-    std::cout << "Playback stopped.\n";
 }
 
 bool PlayingMedia::isPlaying() {

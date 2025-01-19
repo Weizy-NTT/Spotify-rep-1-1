@@ -76,7 +76,7 @@ void ScanfOptionController::scanUSBDevice(const std::string& device) {
 }
 
 void ScanfOptionController::back(){
-    ControllerManager::getInstance()->getMainMenuController()->handleInput();
+    //ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::string& filePath) {

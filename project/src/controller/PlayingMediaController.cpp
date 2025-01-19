@@ -7,7 +7,6 @@ void PlayingMediaController::handleInput(const std::string& ID){
     playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
     updateTime();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showMenu();
     switch (ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption())
         {
             case PlayingMediaMenu::BACK_FROM_PLAYING: {
@@ -75,8 +74,7 @@ void PlayingMediaController::updateTime() {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     size_t current = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime();
     size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total);
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total,!isPlayingMediaFile);
 }
 
 void PlayingMediaController::back(){
@@ -91,9 +89,9 @@ void PlayingMediaController::updateElapsedTime() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         playing->setCurrentTime(playing->getCurrentTime() + 1);
 
-        if (isPlayingView.load(std::memory_order_relaxed)) {
-            updateTime();  // Cập nhật giao diện nếu cần
-        }
+        // if (isPlayingView.load(std::memory_order_relaxed)) {
+        //     updateTime();  // Cập nhật giao diện nếu cần
+        // }
 
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();

@@ -1,3 +1,7 @@
-trung
-/home/ngotantrung/shared/add_adc/Spotify-rep-1-1/project/resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
+long
+./resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
+./resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
+./resources/playlists/DuongVeQue-Jun365-4305037.mp3
+./resources/playlists/DuongVeQue-OlewLorLukeD-13291723.mp3
+./resources/playlists/EXID - Up & Down (Chinese Version) Official Music Video.mp4
 

@@ -56,6 +56,7 @@ private:
     int selected_option = 0; // Lưu lựa chọn của người dùng
 
 public:
+    void showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t initialTime, size_t totalTime, bool paused);
     void showMenu() override;
     int getSelectedOption() const ;
     ~PlayingMediaView() override = default;
