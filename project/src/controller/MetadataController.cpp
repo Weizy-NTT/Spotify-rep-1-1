@@ -24,11 +24,9 @@ void MetadataController::handleInput(const std::string& ID){
             }
             case MetadataMenu::EDIT_METADATA:{
                 if (type == AUDIO) {
-                    ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
                     handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
                 }
                 else {
-                    ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
                     handleEditVideo(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
                 }
                 break;
@@ -57,6 +55,9 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
     TagLib::Tag* tag = f.tag();
     //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+        ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
         Exception_Handler("Enter your choice: ",editChoice,validateEditAudioMenu);
         switch(editChoice)
         {
@@ -104,12 +105,7 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
                 std::cout << "Invalid input\n";
         }
     } while(editChoice != AudioEdit::AUDIO_BACK);
-
-    if (f.save()) {
-        std::cout << "\nMetadata updated successfully\n" << std::endl;
-    } else {
-        std::cerr << "Error: Could not save changes to the file." << std::endl;
-    }
+    f.save();
     }
     else {
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;
@@ -125,6 +121,9 @@ void MetadataController::handleEditVideo(const std::string& filepath,const std::
     TagLib::Tag* tag = f.tag();
     //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+        ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
         Exception_Handler("Enter your choice: ",editChoice,validateEditVideoMenu);
         switch(editChoice)
         {
@@ -142,12 +141,7 @@ void MetadataController::handleEditVideo(const std::string& filepath,const std::
                 std::cout << "Invalid input\n";
         }
     } while(editChoice != AudioEdit::AUDIO_BACK);
-    
-    if (f.save()) {
-        std::cout << "\nMetadata updated successfully\n" << std::endl;
-    } else {
-        std::cerr << "Error: Could not save changes to the file." << std::endl;
-    }
+    f.save();
     }
     else {
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;

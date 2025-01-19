@@ -18,7 +18,7 @@ class PlayingMediaView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime);
+    void showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime, int volumeLevel);
     ~PlayingMediaView() override = default;
 };
 

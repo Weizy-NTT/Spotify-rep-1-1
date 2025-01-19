@@ -8,14 +8,22 @@ long
 ./resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
 ./resources/playlists/DuongVeQue-Jun365-4305037.mp3
 ./resources/playlists/DuongVeQue-OlewLorLukeD-13291723.mp3
-./resources/playlists/EXID - Up & Down (Chinese Version) Official Music Video.mp4
 
 ninh
-./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
 ./resources/playlists/f0onwhixt1.mp3
-./resources/playlists/Hello Song (你好歌) _ Chinese Greeting & Numbers _ Chinese song _ By Little Fox.mp4
 ./resources/playlists/k9tl69fy3b.mp3
 ./resources/playlists/LamLemEmAmMaiMaVe-HoaMinzyHuaKimTuyen-13284937.mp3
 ./resources/playlists/MangTetVeNha-Double2T-13064325.mp3
 ./resources/playlists/MinhCungVeQueAnTet-TruongThaoNhi-5835278.mp3
+
+trung
+./resources/new/AAA-WEANThisisVietnameseartistQueenB-35024694.mp3
+./resources/new/CaiDep-tlinhPhaoPhapKieu-35024697.mp3
+./resources/new/DenLaDon-TageRHYDERLOPEPHAM-35024695.mp3
+./resources/new/GiauNhatKhuPhuHoa-JustateeWxrdieGillDangrangtoHustlangRobber-35024693.mp3
+./resources/new/KhuatLoiVinahouseRemix-HKrayH2ORemix-9525276.mp3
+./resources/new/LeTinhVinahouseRemix-DICKSONVietNamH2ORemix-9789206.mp3
+./resources/new/MienDatKyDieu-HoangDungKimmese52Hz-35024696.mp3
+./resources/new/NhinEmLanCuoiH2OVinahouseRemix-YukiHuyNamH2ORemix-11863054.mp3
+./resources/new/VietNamToiDo-SOOBINVuCatTuongLilWuyn-35024692.mp3
 

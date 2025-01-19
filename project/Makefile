@@ -33,6 +33,10 @@ CFLAGS += -I/usr/include/taglib
 LDFLAGS += -L/usr/lib/x86_64-linux-gnu
 LDLIBS += -ltag
 
+# ICU settings
+ICU_FLAGS = -licuuc -licudata -licui18n
+LDLIBS += $(ICU_FLAGS)
+
 # Main rule
 all: $(TARGET)
 

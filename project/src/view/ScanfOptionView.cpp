@@ -37,7 +37,6 @@ void ScanfOptionView::showMenu() {
 
 void ScanfOptionView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Scanf Option View...\n";
     std::system("clear");
 }
 

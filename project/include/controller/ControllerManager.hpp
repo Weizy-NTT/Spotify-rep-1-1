@@ -56,7 +56,7 @@ public:
     MetadataController* getMetadataController() const;
     ViewManager* getViewManager() const;
     ModelManager* getModelManager() const;
-    //HardwareController* getHardwareController() const;
+    HardwareController* getHardwareController() const;
 };
 
 #endif // CONTROLLER_MANAGER_H

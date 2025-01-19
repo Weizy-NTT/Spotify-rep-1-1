@@ -7,8 +7,8 @@ void DetailedPlaylistController::handleInput(std::string listId){
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showMediafileInList(listId);
-    ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_DETAILED_VIEW);
+    ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->displayStatusMessage(status);
     Exception_Handler("Enter your choice: ",mainChoice,validateDetailedPlaylistMenu);
     switch (mainChoice)
         {

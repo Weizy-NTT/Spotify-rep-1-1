@@ -17,21 +17,21 @@ void PlayingMediaController::handleInput(const std::string& ID){
             }
             case PlayingMediaMenu::PLAY:{
                 play();
-                //ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+                ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
                 break;
             }
             case PlayingMediaMenu::PAUSE:{
                 pause();
-                //ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
+                ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
                 skipToNext();
-                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 break;
             }
             case PlayingMediaMenu::PREV:{
-                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 skipToPrevious();
                 break;
             }
@@ -76,7 +76,8 @@ void PlayingMediaController::updateTime() {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     size_t current = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime();
     size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total);
+    size_t volume = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getVolume();
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showSongInfo(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total,volume);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
 }
 
@@ -98,7 +99,7 @@ void PlayingMediaController::updateElapsedTime() {
 
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
-            //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
         }
     }
 }

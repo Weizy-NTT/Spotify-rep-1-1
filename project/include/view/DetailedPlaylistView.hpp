@@ -27,7 +27,6 @@ class DetailedPlaylistView : public BaseView {
 public:
     void showMenu() override;
     void hideMenu() override;
-    void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist);
     void showListOfSongs(const std::shared_ptr<Playlist>& playlist);
     void displayStatusMessage(DetailedPlaylistStatus& status);
 };

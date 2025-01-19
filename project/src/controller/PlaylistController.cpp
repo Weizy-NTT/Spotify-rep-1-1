@@ -7,8 +7,8 @@ void PlaylistController::handleInput(){
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
-    ControllerManager::getInstance()->getViewManager()->getPlaylistView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
+    ControllerManager::getInstance()->getViewManager()->getPlaylistView()->displayStatusMessage(status);
     Exception_Handler("Enter your choice: ",mainChoice,validatePlaylistsMenu);
     switch (mainChoice)
         {

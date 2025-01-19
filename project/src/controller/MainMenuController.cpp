@@ -11,11 +11,11 @@ void MainMenuController::handleInput(){
     do {
     system("clear");
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MAIN_VIEW);
     if (status) {
         std::cout << "No current mediafile playing\n";
         status = false;
     }
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MAIN_VIEW);
     Exception_Handler("Enter your choice: ",mainChoice,validateMainMenu);
     switch (mainChoice)
         {

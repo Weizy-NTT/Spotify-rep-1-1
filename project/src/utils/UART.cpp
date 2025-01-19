@@ -79,14 +79,14 @@ void UART::startReadLoop() {
                 // Nếu là ký tự A, B, C, D thì xử lý ngay
                 if (data == "A" || data == "B" || data == "C" || data == "D") 
                 {
-                    if(data == "A"){
+                    if(data == "C"){
                         ControllerManager::getInstance()->getPlayingMediaController()->play();
                     }
-                    else if(data =="B"){
+                    else if(data =="D"){
                         ControllerManager::getInstance()->getPlayingMediaController()->pause();
-                    }else if(data == "C"){
+                    }else if(data == "A"){
                         ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
-                    }else if(data =="D"){
+                    }else if(data =="B"){
                         ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
                     }
                 }

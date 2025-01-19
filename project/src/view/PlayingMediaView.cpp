@@ -5,49 +5,101 @@
 extern std::mutex mediaMutex;
 void PlayingMediaView::showMenu() {
     BaseView::showMenu();
-    std::cout << "===== Now Playing =====" << std::endl;
-    std::cout << PlayingMediaMenu::PLAY << ". Play\n";
-    std::cout << PlayingMediaMenu::PAUSE << ". Pause\n";
-    std::cout << PlayingMediaMenu::NEXT << ". Next Song\n";
-    std::cout << PlayingMediaMenu::PREV << ". Previous Song\n";
-    std::cout << PlayingMediaMenu::BACK_FROM_PLAYING << ". Go Back\n";
-    std::cout << "======================" << std::endl;
+    
+    constexpr int MENU_WIDTH = 66; // Độ rộng của menu, đồng bộ với các menu trước đó
+
+    // Hàm vẽ đường viền trên/dưới
+    auto drawLine = []() {
+        std::cout << "+" << std::string(MENU_WIDTH, '-') << "+" << "\n";
+    };
+
+    // Vẽ đường viền trên
+    drawLine();
+
+    // Tiêu đề menu, căn giữa
+    std::string title = "Media Player Menu";
+    int padding = (MENU_WIDTH - title.size()) / 2;
+    std::cout << "|" << std::string(padding, ' ') << title
+              << std::string(MENU_WIDTH - title.size() - padding, ' ') << "|\n";
+
+    // Vẽ đường ngăn cách
+    drawLine();
+
+    // Hiển thị các tùy chọn menu
+    std::cout << "| " << PlayingMediaMenu::PLAY << ". Play" << std::string(MENU_WIDTH - 8, ' ') << "|\n";
+    std::cout << "| " << PlayingMediaMenu::PAUSE << ". Pause" << std::string(MENU_WIDTH - 9, ' ') << "|\n";
+    std::cout << "| " << PlayingMediaMenu::NEXT << ". Next Song" << std::string(MENU_WIDTH - 13, ' ') << "|\n";
+    std::cout << "| " << PlayingMediaMenu::PREV << ". Previous Song" << std::string(MENU_WIDTH - 17, ' ') << "|\n";
+    std::cout << "| " << PlayingMediaMenu::BACK_FROM_PLAYING << ". Go Back" << std::string(MENU_WIDTH - 11, ' ') << "|\n";
+
+    // Vẽ đường viền dưới
+    drawLine();
 }
 
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Playing Media View...\n";
     std::system("clear");
 }
 
-void PlayingMediaView::showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime) {
-    auto metadata = file->getMetadata();
+void PlayingMediaView::showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime, int volumeLevel) {
+    constexpr int MENU_WIDTH = 66; // Độ rộng của menu
+    constexpr int BAR_WIDTH = 40; // Độ rộng thanh tiến trình
+    constexpr int VOLUME_BAR_WIDTH = 40; // Độ rộng thanh âm lượng
+
+    // Hàm vẽ đường viền
+    auto drawLine = []() {
+        std::cout << "+" << std::string(MENU_WIDTH, '-') << "+" << "\n";
+    };
+
+    // Tính toán thời gian
     std::string current = (currentTime / 60 < 10 ? "0" : "") + std::to_string(currentTime / 60) + ":" +
-                        (currentTime % 60 < 10 ? "0" : "") + std::to_string(currentTime % 60);
+                          (currentTime % 60 < 10 ? "0" : "") + std::to_string(currentTime % 60);
 
     std::string total = (totalTime / 60 < 10 ? "0" : "") + std::to_string(totalTime / 60) + ":" +
                         (totalTime % 60 < 10 ? "0" : "") + std::to_string(totalTime % 60);
 
     float progress = static_cast<float>(currentTime) / totalTime;
+    int pos = static_cast<int>(BAR_WIDTH * progress);
 
-    // Số lượng ký tự sẽ hiển thị trong thanh tiến trình
-    int barWidth = 50;
+    // Vẽ thông tin Now Playing
+    drawLine();
+    std::string title = "Now Playing";
+    int padding = (MENU_WIDTH - title.size()) / 2;
+    std::cout << "|" << std::string(padding, ' ') << title
+              << std::string(MENU_WIDTH - title.size() - padding, ' ') << "|\n";
+    drawLine();
 
-    // Tính toán số lượng ký tự cần hiển thị
-    int pos = static_cast<int>(barWidth * progress);
+    // Hiển thị Title
+    std::string songTitle = file->getMetadata().getValue("Title");
+    std::cout << "| Title: " << std::left << std::setw(58) << songTitle << "|\n";
 
-    std::cout   << " Now Playing: " << file->getName() << " - " 
-                << metadata.getMetadata()["Artist"] << std::endl;
+    // Hiển thị Artist
+    std::string artist = file->getMetadata().getValue("Artist");
+    std::cout << "| Artist: " << std::left << std::setw(57) << artist << "|\n";
+    drawLine();
+
     // Hiển thị thanh tiến trình
-    std::cout << "[";
-    for (int i = 0; i < barWidth; ++i) {
+    std::cout << "| Process:[";
+    for (int i = 0; i < BAR_WIDTH; ++i) {
         if (i < pos) {
-            std::cout << "#";  // Phần đã trôi qua
+            std::cout << "#";
         } else {
-            std::cout << "=";  // Phần chưa trôi qua
+            std::cout << "=";
         }
     }
-    std::cout << "] " << current << "/" << total << std::endl;  // Hiển thị phần trăm
-    std::cout.flush();
+    std::cout << "] " << current << "/" << total << " " << std::string(2, ' ') << "|\n";
+    drawLine();
 
+    // Hiển thị thanh âm lượng
+    std::cout << "| Volume: [";
+    int volumePos = static_cast<int>((VOLUME_BAR_WIDTH * volumeLevel) / 127);
+    for (int i = 0; i < VOLUME_BAR_WIDTH; ++i) {
+        if (i < volumePos) {
+            std::cout << "#";
+        } else {
+            std::cout << "=";
+        }
+    }
+    std::cout << "] " << volumeLevel*100/127 << "%" << std::string(10, ' ') << "|\n";
+    drawLine();
 }

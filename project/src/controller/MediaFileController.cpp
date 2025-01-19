@@ -10,8 +10,8 @@ void MediaFileController::handleInput(){
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
-    ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
+    ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
     Exception_Handler("Enter your choice: ",mainChoice,validateMediaFilesMenu);
     switch (mainChoice)
         {
@@ -22,8 +22,8 @@ void MediaFileController::handleInput(){
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             std::string songID;
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
-            //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
-            //ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
                 ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());

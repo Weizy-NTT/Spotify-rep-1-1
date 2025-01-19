@@ -41,14 +41,7 @@ void DetailedPlaylistView::showMenu() {
 
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Detailed Playlist View...\n";
     std::system("clear");
-}
-
-void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& playlist) {
-    std::cout << "Playlist Details:\n";
-    std::cout << "Name: " << playlist->getName() << "\n";
-    std::cout << "Number of Songs: " << playlist->getSongs().size() << "\n";
 }
 
 void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& playlist) {
@@ -98,7 +91,7 @@ void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& play
         // Map type to string
         std::string typeStr = (songs[i]->getType() == 1) ? "VIDEO" : "AUDIO";
 
-        std::cout << "| " << std::left << std::setw(ID_WIDTH) << (i + 1) << " | "
+        std::cout << "| " << std::left << std::setw(ID_WIDTH) << songs[i]->getID() << " | "
                   << std::left << std::setw(NAME_WIDTH) << truncatedName << " | "
                   << std::left << std::setw(DURATION_WIDTH) << songs[i]->getMetadata().getValue("Duration") << " | "
                   << std::left << std::setw(TYPE_WIDTH) << typeStr << " |\n";

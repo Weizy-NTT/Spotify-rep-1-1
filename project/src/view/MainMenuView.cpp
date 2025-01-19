@@ -37,7 +37,6 @@ void MainMenuView::showMenu() {
 
 void MainMenuView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Main Menu..." << std::endl;
     std::system("clear");
 }
 
