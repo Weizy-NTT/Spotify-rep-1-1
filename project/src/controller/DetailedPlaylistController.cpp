@@ -2,15 +2,13 @@
 #include "ControllerManager.hpp"
 
 void DetailedPlaylistController::handleInput(std::string listId){
-    size_t mainChoice;
     DetailedPlaylistStatus status = DetailedPlaylistStatus::DETAILED_NORMAL;
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showMediafileInList(listId);
     ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_DETAILED_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validateDetailedPlaylistMenu);
-    switch (mainChoice)
+    switch (ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->getSelectedOption())
         {
             case DetailedPlaylistMenu::SHOW_DETAIL_SONG:{
                 std::string songID;
@@ -72,9 +70,9 @@ void DetailedPlaylistController::handleInput(std::string listId){
                 break;
             }
         }
-    }while(mainChoice != DetailedPlaylistMenu::BACK_FROM_DETAIL);
-}
+    }while(ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->getSelectedOption() != DetailedPlaylistMenu::BACK_FROM_DETAIL);
 
+}
 void DetailedPlaylistController::addSongToPlaylist(const std::string& PlaylistId, const std::string& songID){
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(PlaylistId)->addSong((ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(songID)));
 }

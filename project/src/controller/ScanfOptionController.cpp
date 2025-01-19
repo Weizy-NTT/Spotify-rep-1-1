@@ -14,20 +14,13 @@
 
 namespace fs = std::filesystem;
 
-void ScanfOptionController::handleInput(){
+void ScanfOptionController::handleInput() {
     ScanStatus status = ScanStatus::SCAN_NORMAL;
-    size_t mainChoice;
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_SCANF_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validateScanfMenu);
-    switch (mainChoice)
-        {
-        case ScanfMenu::BACK_FROM_SCAN: {
-            back();
-            break;
-        }
+    switch (ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->getSelectedOption()) {
         case ScanfMenu::SCANF_DIRECTORY:{
             std::string path;
             Exception_Handler("Enter your path you want to scan: ",path,validatePath);
@@ -35,7 +28,7 @@ void ScanfOptionController::handleInput(){
             status = ScanStatus::SCAN_DIRECTORY_SUCCESS;
             break;
         }
-           
+
         case ScanfMenu::SCANF_USB:{
             std::string device;
             Exception_Handler("Enter your usb device: ",device,validateAlphaSring);
@@ -48,9 +41,15 @@ void ScanfOptionController::handleInput(){
             }
             break;
         }
+
+        case ScanfMenu::BACK_FROM_SCAN:{
+            back();
+            break;
         }
-    } while(mainChoice != ScanfMenu::BACK_FROM_SCAN);
+    }
+    } while(ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->getSelectedOption() != ScanfMenu::BACK_FROM_SCAN);
 }
+
 
 void ScanfOptionController::scanDirectory(const std::string& folderPath){
     for (const auto& entry : fs::directory_iterator(folderPath)) {
@@ -77,7 +76,7 @@ void ScanfOptionController::scanUSBDevice(const std::string& device) {
 }
 
 void ScanfOptionController::back(){
-    //nothing
+    ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::string& filePath) {

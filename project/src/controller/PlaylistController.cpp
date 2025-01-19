@@ -1,18 +1,16 @@
 #include"PlaylistController.hpp"
 #include "ControllerManager.hpp"
 
-void PlaylistController::handleInput(){
-    size_t mainChoice;
+void PlaylistController::handleInput() {
     PlaylistStatus status = PlaylistStatus::PLAYLIST_NORMAL;
+    
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
     ControllerManager::getInstance()->getViewManager()->getPlaylistView()->displayStatusMessage(status);
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePlaylistsMenu);
-    switch (mainChoice)
-        {
-            case PlaylistMenu::SELECT_PLAYLIST:{
+    switch (ControllerManager::getInstance()->getViewManager()->getPlaylistView()->getSelectedOption()) {
+        case PlaylistMenu::SELECT_PLAYLIST:{
                 std::string PlaylistID;
                 Exception_Handler("Enter playlist ID for looking: ",PlaylistID,validateID);
                 if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(PlaylistID))
@@ -48,9 +46,8 @@ void PlaylistController::handleInput(){
                 back();
                 break;
             }
-        }
-    }while (mainChoice != PlaylistMenu::BACK_FROM_PLAYLIST);
-    
+        }  
+    }while (ControllerManager::getInstance()->getViewManager()->getPlaylistView()->getSelectedOption() != PlaylistMenu::BACK_FROM_PLAYLIST);
 }
 
 void PlaylistController::createPlaylist(const std::string& name ){
@@ -62,7 +59,7 @@ void PlaylistController::deletePlaylist(const std::string& Id){
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->removePlaylist(Id);
 }
 void PlaylistController::back(){
-
+    ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 void PlaylistController::showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists) {

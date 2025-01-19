@@ -9,14 +9,15 @@
 namespace fs = std::filesystem;
 
 void MetadataController::handleInput(const std::string& ID){
-    size_t mainChoice;
+    //size_t mainChoice;
     MediaType type = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getType();
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validateMetadataMenu);
-    switch (mainChoice)
+    //Exception_Handler("Enter your choice: ",mainChoice,validateMetadataMenu);
+    //ControllerManager::getInstance()->getViewManager()->getMetadataView()->showMenu();
+    switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption())
         {
             case MetadataMenu::BACK_FROM_METADATA: {
                 back();
@@ -34,7 +35,7 @@ void MetadataController::handleInput(const std::string& ID){
                 break;
             }
         }
-    } while(mainChoice != MetadataMenu::BACK_FROM_METADATA);
+    } while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption() != MetadataMenu::BACK_FROM_METADATA);
 }
 
 void MetadataController::getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const{
@@ -45,7 +46,7 @@ void MetadataController::updateMediaFileMetadata(const std::string& key, const s
     ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getMetadata().setValue(key,value);
 }
 void MetadataController::back(){
-    
+    ControllerManager::getInstance()->getMediaFileController()->handleInput();
 }
 
 void MetadataController::handleEditAudio(const std::string& filepath,const std::string& ID) {

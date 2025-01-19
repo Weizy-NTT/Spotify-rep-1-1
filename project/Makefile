@@ -1,7 +1,7 @@
 # Output file
 TARGET = build/main.exe
 
-# Compiler and Flag
+# Compiler and Flags
 CC = g++
 CFLAGS = -Wall -g -std=c++20
 
@@ -28,7 +28,13 @@ SDL2_FLAGS = $(shell pkg-config --cflags --libs sdl2 SDL2_mixer)
 CFLAGS += $(SDL2_FLAGS)
 LDLIBS += $(shell pkg-config --libs sdl2 SDL2_mixer)
 
-# TagLib settings (adjust these if TagLib is in a custom location)
+# FTXUI settings
+FTXUI_FLAGS = -I./FTXUI/include
+FTXUI_LIBS = ./FTXUI/build/libftxui-component.a ./FTXUI/build/libftxui-dom.a ./FTXUI/build/libftxui-screen.a
+CFLAGS += $(FTXUI_FLAGS)
+LDLIBS += $(FTXUI_LIBS) -pthread -lncurses
+
+# TagLib settings
 CFLAGS += -I/usr/include/taglib
 LDFLAGS += -L/usr/lib/x86_64-linux-gnu
 LDLIBS += -ltag

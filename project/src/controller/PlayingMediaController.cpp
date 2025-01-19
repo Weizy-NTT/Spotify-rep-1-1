@@ -4,12 +4,11 @@
 
 void PlayingMediaController::handleInput(const std::string& ID){
     isPlayingView.store(true, std::memory_order_relaxed);
-    size_t mainChoice;
     playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
     updateTime();
-    Exception_Handler("Enter your choice: ",mainChoice,validatePlayingMediaMenu);
-    switch (mainChoice)
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showMenu();
+    switch (ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption())
         {
             case PlayingMediaMenu::BACK_FROM_PLAYING: {
                 back();
@@ -17,26 +16,26 @@ void PlayingMediaController::handleInput(const std::string& ID){
             }
             case PlayingMediaMenu::PLAY:{
                 play();
-                ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+                //ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
                 break;
             }
             case PlayingMediaMenu::PAUSE:{
                 pause();
-                ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
+                //ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
                 skipToNext();
-                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 break;
             }
             case PlayingMediaMenu::PREV:{
-                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 skipToPrevious();
                 break;
             }
         }
-    } while(mainChoice != PlayingMediaMenu::BACK_FROM_PLAYING);
+    } while(ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption() != PlayingMediaMenu::BACK_FROM_PLAYING);
 }
 
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
@@ -98,7 +97,7 @@ void PlayingMediaController::updateElapsedTime() {
 
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
-            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
         }
     }
 }

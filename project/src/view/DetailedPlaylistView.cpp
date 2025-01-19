@@ -1,15 +1,55 @@
-#include "DetailedPlaylistView.hpp"
 #include <iomanip>
+#include "DetailedPlaylistView.hpp"
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
+#include <iostream>
+#include "MediaFile.hpp"
+#include "Playlist.hpp"
+
+using namespace ftxui;
 
 void DetailedPlaylistView::showMenu() {
-    BaseView::showMenu();
-    std::cout << "===== Detailed Playlist Menu =====" << std::endl;
-    std::cout << DetailedPlaylistMenu::PLAY_SONG_FROM_PLAYLIST << ". Play a song\n";
-    std::cout << DetailedPlaylistMenu::ADD_SONG << ". Add a song to playlist\n";
-    std::cout << DetailedPlaylistMenu::DELETE_SONG << ". Delete a song from playlist\n";
-    std::cout << DetailedPlaylistMenu::SHOW_DETAIL_SONG << ". Show details of a song\n";
-    std::cout << DetailedPlaylistMenu::BACK_FROM_DETAIL << ". Go Back\n";
-    std::cout << "===============================" << std::endl;
+    // Tạo menu
+    auto menu = Menu(&menu_entries, &selected_option);
+
+    // Tạo renderer để hiển thị menu
+    auto renderer = Renderer(menu, [&] {
+        return vbox({
+                   text("===== Detailed Playlist Menu ====="),
+                   menu->Render(),
+                   text("==============================="),
+                   text("Use arrow keys or mouse to navigate, press Enter or click to select."),
+               }) |
+               border;
+    });
+
+    // Tạo đối tượng ScreenInteractive
+    auto screen = ScreenInteractive::TerminalOutput();
+
+    // Xử lý sự kiện
+    auto event_handler = CatchEvent(renderer, [&](Event event) {
+        if (event.is_mouse()) {
+            if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
+                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
+                return true;
+            }
+        }
+        if (event == Event::Escape || event == Event::Character('q')) {
+            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            return true;
+        }
+        return menu->OnEvent(event);
+
+    });
+
+    // Chạy vòng lặp giao diện
+    screen.Loop(event_handler);
+    std::system("clear");
+}
+
+int DetailedPlaylistView::getSelectedOption() const {
+    return selected_option;
 }
 
 void DetailedPlaylistView::hideMenu() {

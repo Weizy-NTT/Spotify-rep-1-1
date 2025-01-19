@@ -1,6 +1,11 @@
 #include "MediaFileView.hpp"
 #include <iostream>
 #include <iomanip>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp> // Để dùng text, vbox, border
+
+using namespace ftxui;
 
 void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong) {
     constexpr int ID_WIDTH = 5;       // Width for ID column
@@ -29,14 +34,45 @@ void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFi
 }
 
 void MediaFileView::showMenu() {
-    BaseView::showMenu();
-    std::cout << "==== Media Player Menu ====" << std::endl;
-    std::cout << MediaFileMenu::PLAY_SONG_FROM_FILES << ". Play\n";
-    std::cout << MediaFileMenu::SHOW_DETAIL << ". Show Media File Details\n";
-    std::cout << MediaFileMenu::NEXT_PAGE << ". Show Next Page\n";
-    std::cout << MediaFileMenu::PREV_PAGE << ". Show Previous Page\n";
-    std::cout << MediaFileMenu::BACK_FROM_MEDIA << ". Go Back\n";
-    std::cout << "===========================" << std::endl;
+    // Tạo menu với các mục
+    auto menu = Menu(&menu_entries, &selected_option);
+
+    // Tạo renderer để hiển thị menu
+    auto renderer = Renderer(menu, [&] {
+        return vbox({
+                   text("==== Media Player Menu ===="),
+                   menu->Render(),
+                   text("==========================="),
+                   text("Use arrow keys or mouse to navigate, press Enter or click to select."),
+               }) |
+               border;
+    });
+
+    // Tạo đối tượng ScreenInteractive
+    auto screen = ScreenInteractive::TerminalOutput();
+
+    // Xử lý sự kiện
+    auto event_handler = CatchEvent(renderer, [&](Event event) {
+        if (event.is_mouse()) {
+            if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
+                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
+                return true;
+            }
+        }
+        if (event == Event::Escape || event == Event::Character('q')) {
+            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            return true;
+        }
+        return menu->OnEvent(event);
+    });
+
+    // Chạy vòng lặp giao diện
+    screen.Loop(event_handler);
+    std::system("clear");
+}
+
+int MediaFileView::getSelectedOption() const {
+    return selected_option;
 }
 
 void MediaFileView::hideMenu() {

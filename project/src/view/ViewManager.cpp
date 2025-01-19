@@ -23,6 +23,7 @@ void ViewManager::showCurrentView() {
 void ViewManager::hideCurrentView() {
     if (currentView && currentView->isShown()) {
         currentView->hideMenu();
+        
     }
 }
 
