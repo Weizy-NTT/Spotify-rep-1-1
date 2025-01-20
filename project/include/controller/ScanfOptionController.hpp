@@ -6,6 +6,7 @@
 #include "BaseController.hpp"
 #include <memory>
 #include "Playlist.hpp"
+#include <string>
 
 class ScanfOptionController : public BaseController {
 private:
@@ -17,6 +18,7 @@ public:
     void back();
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
     void scanPlaylistsFromTxt(const std::string& filePath);
+    std::vector<std::string> scanUSB();
 };
 
 #endif // SCANF_OPTION_CONTROLLER_H

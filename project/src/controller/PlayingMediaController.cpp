@@ -15,21 +15,21 @@ void PlayingMediaController::handleInput(const std::string& ID){
             }
             case PlayingMediaMenu::PLAY:{
                 play();
-                //ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+                ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
                 break;
             }
             case PlayingMediaMenu::PAUSE:{
                 pause();
-                //ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
+                ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
                 break;
             }
             case PlayingMediaMenu::NEXT:{
                 skipToNext();
-                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 break;
             }
             case PlayingMediaMenu::PREV:{
-                //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 skipToPrevious();
                 break;
             }
@@ -72,9 +72,8 @@ void PlayingMediaController::adjustVolume(size_t level){
 
 void PlayingMediaController::updateTime() {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    size_t current = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime();
     size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),current,total,!isPlayingMediaFile);
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime(),total,ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getVolume());
 }
 
 void PlayingMediaController::back(){
@@ -88,14 +87,9 @@ void PlayingMediaController::updateElapsedTime() {
         // Cập nhật thời gian phát nhạc
         std::this_thread::sleep_for(std::chrono::seconds(1));
         playing->setCurrentTime(playing->getCurrentTime() + 1);
-
-        // if (isPlayingView.load(std::memory_order_relaxed)) {
-        //     updateTime();  // Cập nhật giao diện nếu cần
-        // }
-
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
-            //ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
         }
     }
 }

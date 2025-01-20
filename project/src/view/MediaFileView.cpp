@@ -74,6 +74,12 @@ void MediaFileView::showMenu() {
                 return true;
             }
         }
+        if (event == Event::Return) {
+            if (menu->OnEvent(event)) {
+            screen.ExitLoopClosure()();
+            return true;
+            }
+        } 
         if (event == Event::Escape || event == Event::Character('q')) {
             screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
             return true;

@@ -34,7 +34,7 @@ public:
     ~PlayingMediaView() override = default;
     void hideMenu() override;
     void showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime,int volumeLevel);
-    void showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t initialTime, size_t totalTime, bool paused) ;
+    void showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) ;
 
 };
 

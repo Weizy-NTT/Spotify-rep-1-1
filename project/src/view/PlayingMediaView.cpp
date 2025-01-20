@@ -14,9 +14,8 @@ using namespace ftxui;
 void PlayingMediaView::showMenu() {
     std::cout << "aaaa\n";
 }
-void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t initialTime, size_t totalTime, bool paused) {
-    // Thời gian hiện tại (cập nhật liên tục)
-    std::atomic<size_t> currentTime = initialTime;
+
+void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) {
     bool running = true;
 
     // Tạo menu với các mục
@@ -37,38 +36,58 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
         int barWidth = 50;
         int pos = static_cast<int>(barWidth * progress);
 
-        // Tạo thanh tiến trình
+        // Tạo thanh tiến trình bài hát
         std::vector<Element> progress_bar_elements(barWidth, text("=")); // Ban đầu tất cả là "="
         std::fill(progress_bar_elements.begin(), progress_bar_elements.begin() + pos, text("#")); // Thay thế "#" dựa trên tiến trình
         auto progress_bar = hbox({
-            text("["),
-            hbox(progress_bar_elements),
-            text("]"),
+            text("["), 
+            hbox(progress_bar_elements), 
+            text("]")
         });
-        // Kết hợp thông tin bài hát và menu
+
+        // Tạo thanh âm lượng
+        int volumeBarWidth = 30; // Độ dài của thanh âm lượng
+        int volumePos = static_cast<int>(volumeBarWidth * (volume / 128.0));
+        std::vector<Element> volume_bar_elements(volumeBarWidth, text("="));
+        std::fill(volume_bar_elements.begin(), volume_bar_elements.begin() + volumePos, text("#"));
+        auto volume_bar = hbox({
+            text("["), 
+            hbox(volume_bar_elements), 
+            text("]")
+        });
+
+        // Hiển thị % volume
+        std::string volumePercent = std::to_string(static_cast<int>((volume / 128.0) * 100)) + "%";
+
+        // Kết hợp thông tin bài hát, thanh tiến trình, và âm lượng
         return vbox({
-                   text("===== Now Playing ====="),
-                   text("Song: " + file->getName() + " - " + file->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
-                   progress_bar | color(Color::Yellow),
-                   text(current + " / " + total) | color(Color::Blue),
-                   separator(),
-                   menu->Render(), // Hiển thị menu
-                   text("======================="),
-                   text("Use arrow keys or mouse to navigate, press Enter or click to select.") | color(Color::Red),
-               }) |
-               border;
+                text("===== Now Playing ====="),
+                text("Song: " + file->getName() + " - " + file->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
+                progress_bar | color(Color::Yellow),
+                text(current + " / " + total) | color(Color::Red),
+                separator(),
+                hbox({
+                    text("Volume: "),
+                    volume_bar,
+                    text(" " + volumePercent) | color(Color::White)
+                }) | color(Color::Cyan), // Hiển thị thanh âm lượng và phần trăm
+                menu->Render(), // Hiển thị menu
+                text("======================="),
+                text("Use arrow keys to navigate, press Enter to select.") | color(Color::Red),
+            }) |
+            border;
     });
 
-    // Luồng cập nhật thời gian hiện tại
-    std::thread update_thread([&] {
+    // Luồng cập nhật giao diện
+    std::thread refresh_thread([&] {
+        size_t lastTime = currentTime;
+        int lastVolume = volume;
         while (running) {
-            std::this_thread::sleep_for(std::chrono::seconds(1)); // Cập nhật mỗi giây
-            if (!paused && (currentTime < totalTime)) {
-                currentTime++;
-                screen.PostEvent(Event::Custom); // Kích hoạt làm mới giao diện
-            } else {
-                running = false; // Tự động dừng khi kết thúc bài hát
-                screen.Exit();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if (lastTime != currentTime || lastVolume != volume) {
+                lastTime = currentTime;
+                lastVolume = volume;
+                screen.PostEvent(Event::Custom); // Làm mới giao diện khi thời gian hoặc âm lượng thay đổi
             }
         }
     });
@@ -81,6 +100,12 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
                 return true;
             }
         }
+        if (event == Event::Return) {
+            if (menu->OnEvent(event)) {
+                screen.ExitLoopClosure()();
+                return true;
+            }
+        } 
         if (event == Event::Escape || event == Event::Character('q')) {
             running = false;
             screen.Exit(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
@@ -94,8 +119,8 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
 
     // Dừng luồng cập nhật
     running = false;
-    if (update_thread.joinable()) {
-        update_thread.join();
+    if (refresh_thread.joinable()) {
+        refresh_thread.join();
     }
 
     std::system("clear");

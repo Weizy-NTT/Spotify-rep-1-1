@@ -43,6 +43,10 @@ LDLIBS += -ltag
 ICU_FLAGS = -licuuc -licudata -licui18n
 LDLIBS += $(ICU_FLAGS)
 
+# libudev settings
+LIBUDEV_FLAGS = -ludev
+LDLIBS += $(LIBUDEV_FLAGS)
+
 # Main rule
 all: $(TARGET)
 

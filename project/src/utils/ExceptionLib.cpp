@@ -101,7 +101,7 @@ void validatePath(const std::string& path) {
 }
 
 bool isUSBDevicePresent(const std::string& device) {
-    std::ifstream file("/dev/" + device);
+    std::ifstream file(device);
     return file.good();
 }
 

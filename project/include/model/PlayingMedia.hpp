@@ -22,13 +22,10 @@ extern "C" {
 
 namespace fs = std::filesystem;
 
-void audioCallback(void* userdata, uint8_t* stream, int len);
-
 class PlayingMedia {
 private:
     std::vector<std::shared_ptr<MediaFile>> currentplaylist;
-    //Mix_Music *currentMusic = nullptr;
-    size_t volume;
+    int volume;
     size_t currentTime = 0;
     size_t totalTime = 0;
     size_t currentTrackIndex = -1;
@@ -37,15 +34,14 @@ private:
     std::thread playbackThread;
     std::recursive_mutex stateMutex; // Allow recursive locking
 public:
-    AVCodecContext* audioCodecContext = nullptr;
     PlayingMedia();
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
     void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
-    size_t getCurrentTime() const;
+    size_t& getCurrentTime();
     size_t getTotalTime() const;
     void setCurrentTime(size_t time);
     void playAudio(const char* filePath);
-    void playVideo(const char* filePath);
+    void playVideo(const char* videoFilePath, const char* wavPath);
     bool isPlaying();
     void play();
     void pauseMusic();
@@ -59,9 +55,9 @@ public:
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
     void adjustVolume(size_t newVolume);
     void setVolume(const int &value);
-    int getVolume() const;
+    int& getVolume();
     void stopPlaybackThread();
-
+    std::string extractAudio(const std::string &videoPath);
     ~PlayingMedia();
 };
 

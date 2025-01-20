@@ -17,6 +17,7 @@
 #include <unicode/utypes.h>
 #include <memory>
 #include <stdexcept>
+#include <libudev.h>
 
 namespace fs = std::filesystem;
 
@@ -36,10 +37,15 @@ void ScanfOptionController::handleInput(){
         }
            
         case ScanfMenu::SCANF_USB:{
-            std::string device;
-            Exception_Handler("Enter your usb device: ",device,validateAlphaSring);
-            if (isUSBDevicePresent(device)) {
-                scanUSBDevice(device);
+            std::vector<std::string> devices = scanUSB();
+            for (size_t i = 0; i < devices.size();i++) {
+                std::cout << i << ". " << devices[i] << std::endl;
+            }
+            size_t choice;
+            Exception_Handler("Enter your path: ",choice,validatePosInteger);
+            scanUSBDevice(devices[choice]);
+            if (!devices.empty()) {
+                scanUSBDevice(devices[choice]);
                 status = ScanStatus::SCAN_USB_SUCCESS;
             }
             else {
@@ -69,7 +75,7 @@ void ScanfOptionController::scanDirectory(const std::string& folderPath){
 }
 
 void ScanfOptionController::scanUSBDevice(const std::string& device) {
-    for (const auto& entry : fs::directory_iterator("/dev/" + device)) {
+    for (const auto& entry : fs::directory_iterator(device)) {
         auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(entry.path().filename().string());
         if (entry.is_regular_file() && !checkName) {
             std::shared_ptr<MediaFile> mediaFile = scanfFilePath(entry.path().string());
@@ -253,4 +259,35 @@ std::string ScanfOptionController::removeAccents(const std::string& input) {
         std::cerr << "Error: " << e.what() << std::endl;
         return input; // Trả về chuỗi gốc nếu có lỗi
     }
+}
+
+// Hàm quét USB và trả về vector chứa danh sách các điểm gắn kết USB
+std::vector<std::string> ScanfOptionController::scanUSB() {
+    std::vector<std::string> usbMountPoints;
+
+    // Lấy tên người dùng hiện tại
+    const char* username = getenv("USER");
+    if (!username) {
+        std::cerr << "Unable to determine username." << std::endl;
+        return usbMountPoints;
+    }
+
+    // Đường dẫn cơ sở cho các USB
+    std::string mediaPath = "/media/";
+    mediaPath += username;
+
+    // Kiểm tra nếu thư mục /media/<username> tồn tại
+    if (!fs::exists(mediaPath) || !fs::is_directory(mediaPath)) {
+        std::cerr << "No USB mount directory found at: " << mediaPath << std::endl;
+        return usbMountPoints;
+    }
+
+    // Duyệt qua các thư mục trong /media/<username>
+    for (const auto& entry : fs::directory_iterator(mediaPath)) {
+        if (fs::is_directory(entry.path())) {
+            usbMountPoints.push_back(entry.path().string());
+        }
+    }
+
+    return usbMountPoints;
 }
