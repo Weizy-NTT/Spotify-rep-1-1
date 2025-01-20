@@ -11,10 +11,16 @@
 #include <vector>
 #include <MediaFile.hpp>
 #include <cstdlib>
+#include <unicode/unistr.h>
+#include <unicode/translit.h>
+#include <unicode/ucnv.h>
+#include <unicode/utypes.h>
+#include <memory>
+#include <stdexcept>
 
 namespace fs = std::filesystem;
 
-void ScanfOptionController::handleInput() {
+void ScanfOptionController::handleInput(){
     ScanStatus status = ScanStatus::SCAN_NORMAL;
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
@@ -28,7 +34,7 @@ void ScanfOptionController::handleInput() {
             status = ScanStatus::SCAN_DIRECTORY_SUCCESS;
             break;
         }
-
+           
         case ScanfMenu::SCANF_USB:{
             std::string device;
             Exception_Handler("Enter your usb device: ",device,validateAlphaSring);
@@ -49,7 +55,6 @@ void ScanfOptionController::handleInput() {
     }
     } while(ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->getSelectedOption() != ScanfMenu::BACK_FROM_SCAN);
 }
-
 
 void ScanfOptionController::scanDirectory(const std::string& folderPath){
     for (const auto& entry : fs::directory_iterator(folderPath)) {
@@ -76,7 +81,7 @@ void ScanfOptionController::scanUSBDevice(const std::string& device) {
 }
 
 void ScanfOptionController::back(){
-    //ControllerManager::getInstance()->getMainMenuController()->handleInput();
+    ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::string& filePath) {
@@ -99,19 +104,19 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_mediafile->setName(path.filename().string());
             new_mediafile->setPath(filePath);
             new_mediafile->setType(AUDIO);
-
             Metadata new_metadata;
-            new_metadata.setValue("Title", tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true));
-            new_metadata.setValue("Artist", tag->artist().isEmpty() ? "Unknown" : tag->artist().toCString(true));
-            new_metadata.setValue("Album", tag->album().isEmpty() ? "Unknown" : tag->album().toCString(true));
+            new_metadata.setValue("Title", removeAccents(tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true)));
+            new_metadata.setValue("Artist", removeAccents(tag->artist().isEmpty() ? "Unknown" : tag->artist().toCString(true)));
+            new_metadata.setValue("Album", removeAccents(tag->album().isEmpty() ? "Unknown" : tag->album().toCString(true)));
             new_metadata.setValue("Year", tag->year() > 0 ? std::to_string(tag->year()) : "Unknown");
             new_metadata.setValue("Track", tag->track() > 0 ? std::to_string(tag->track()) : "Unknown");
-            new_metadata.setValue("Genre", tag->genre().isEmpty() ? "Unknown" : tag->genre().toCString(true));
-
+            new_metadata.setValue("Genre", removeAccents(tag->genre().isEmpty() ? "Unknown" : tag->genre().toCString(true)));
 
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
-            new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
+            std::string duration = (durationInSeconds / 60 < 10 ? "0" : "") + std::to_string(durationInSeconds / 60) + ":" +
+                                (durationInSeconds % 60 < 10 ? "0" : "") + std::to_string(durationInSeconds % 60);
+            new_metadata.setValue("Duration",duration);
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
             new_metadata.setValue("SampleRate", std::to_string(audioProperties->sampleRate()) + " Hz");
             new_metadata.setValue("Channels", std::to_string(audioProperties->channels()));
@@ -131,11 +136,13 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_mediafile->setType(VIDEO);
 
             Metadata new_metadata;
-            new_metadata.setValue("Title", tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true));
+            new_metadata.setValue("Title", removeAccents(tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true)));
             new_metadata.setValue("Size", std::to_string(fs::file_size(filePath)));
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
-            new_metadata.setValue("Duration", std::to_string(durationInSeconds / 60) + ":" + std::to_string(durationInSeconds % 60));
+            std::string duration = (durationInSeconds / 60 < 10 ? "0" : "") + std::to_string(durationInSeconds / 60) + ":" +
+                                (durationInSeconds % 60 < 10 ? "0" : "") + std::to_string(durationInSeconds % 60);
+            new_metadata.setValue("Duration",duration);
             new_metadata.setValue("Bitrate", std::to_string(audioProperties->bitrate()) + " kbps");
 
             new_mediafile->setMetadata(new_metadata);
@@ -210,5 +217,40 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     for (auto playlist : playlists) {
         ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->addPlaylist(playlist);
     }
+}
 
+std::string ScanfOptionController::removeAccents(const std::string& input) {
+    try {
+        // Khởi tạo UErrorCode
+        UErrorCode errorCode = U_ZERO_ERROR;
+
+        // Tạo Transliterator với UErrorCode
+        std::unique_ptr<icu::Transliterator> transliterator(
+            icu::Transliterator::createInstance(
+                icu::UnicodeString::fromUTF8("NFD; [:Nonspacing Mark:] Remove; NFC"),
+                UTRANS_FORWARD,
+                errorCode
+            )
+        );
+
+        // Kiểm tra lỗi
+        if (U_FAILURE(errorCode)) {
+            throw std::runtime_error("Failed to create Transliterator: " + std::string(u_errorName(errorCode)));
+        }
+
+        // Chuyển chuỗi từ UTF-8 sang ICU UnicodeString
+        icu::UnicodeString unicodeStr = icu::UnicodeString::fromUTF8(input);
+
+        // Áp dụng Transliterator
+        transliterator->transliterate(unicodeStr);
+
+        // Chuyển đổi lại UnicodeString sang UTF-8
+        std::string output;
+        unicodeStr.toUTF8String(output);
+
+        return output;
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return input; // Trả về chuỗi gốc nếu có lỗi
+    }
 }

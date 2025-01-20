@@ -1,27 +1,3 @@
-// #ifndef MAIN_MENU_VIEW_H
-// #define MAIN_MENU_VIEW_H
-
-// #include "BaseView.hpp"
-// #include <ftxui/component/component.hpp>
-// #include <vector>
-// #include <string>
-
-// enum MainMenu {
-//     EXIT,
-//     SCAN_OPTIONS,
-//     ALL_SONGS,
-//     PLAYLIST,
-//     NOW_PLAYING
-// };
-
-// class MainMenuView : public BaseView {
-// public:
-//     void showMenu() override;
-//     void hideMenu() override;
-//     ~MainMenuView() override = default;
-// };
-// #endif // MAIN_MENU_VIEW_H
-
 #ifndef MAIN_MENU_VIEW_H
 #define MAIN_MENU_VIEW_H
 

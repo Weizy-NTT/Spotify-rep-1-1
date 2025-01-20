@@ -1,3 +1,4 @@
+
 #include "PlayingMediaView.hpp"
 #include <iomanip>
 #include <mutex>

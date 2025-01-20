@@ -8,6 +8,8 @@
 #include "Playlist.hpp"
 
 class ScanfOptionController : public BaseController {
+private:
+    std::string removeAccents(const std::string& input);
 public:
     void handleInput();
     void scanDirectory(const std::string& folderPath);

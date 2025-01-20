@@ -1,37 +1,52 @@
 #include "MediaFileView.hpp"
 #include <iostream>
-#include <iomanip>
-#include <ftxui/component/screen_interactive.hpp>
+
 #include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp> // Để dùng text, vbox, border
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/dom/elements.hpp>
+#include <memory>
+#include <vector>
+#include <string>
+#include <iomanip>
 
 using namespace ftxui;
 
 void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong) {
-    constexpr int ID_WIDTH = 5;       // Width for ID column
-    constexpr int NAME_WIDTH = 30;   // Width for Name column
+    using namespace ftxui;
 
-    // Display page header
-    std::cout << "----------------------------------------\n";
-    std::cout << "              Page " << currentPage << "\n";
-    std::cout << "----------------------------------------\n";
-
-    // Display table header
-    std::cout << std::left << std::setw(ID_WIDTH) << "ID" 
-              << std::left << std::setw(NAME_WIDTH) << "Name" << "\n";
-    std::cout << "----------------------------------------\n";
-
-    // Display media file rows
-    for (size_t i = firstSong; i <= lastSong; ++i) {
-        if (i < files.size()) {
-            std::cout << std::left << std::setw(ID_WIDTH) << files[i]->getID()
-                      << std::left << std::setw(NAME_WIDTH) << files[i]->getName() << "\n";
-        }
+    // 1. Tạo danh sách file
+    Elements items;
+    for (size_t i = firstSong; i <= lastSong && i < files.size(); ++i) {
+        items.push_back(hbox({
+            text("[" + files[i]->getID() + "] ") | size(WIDTH, EQUAL, 10),
+            text(files[i]->getName()) | size(WIDTH, GREATER_THAN, 30)
+        }));
     }
 
-    // Footer
-    std::cout << "----------------------------------------\n";
+    // 2. Tạo footer
+    std::string footer = "Page " + std::to_string(currentPage);
+
+    // 3. Xây dựng giao diện
+    auto document = vbox({
+        text("Media Files") | bold | hcenter,
+        separator(),
+        vbox(std::move(items)) | border, // Tự động fit với danh sách
+        separator(),
+        text(footer) | hcenter
+    });
+
+    // 4. Điều chỉnh màn hình theo nội dung
+    auto screen = Screen::Create(
+        Dimension::Full(),         // Chiều rộng tự động chiếm hết
+        Dimension::Fit(document)   // Chiều cao tự động vừa nội dung
+    );
+    Render(screen, document);
+
+    // 5. In giao diện ra terminal
+    std::cout << screen.ToString() << std::endl;
 }
+
+
 
 void MediaFileView::showMenu() {
     // Tạo menu với các mục

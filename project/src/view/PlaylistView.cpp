@@ -58,27 +58,43 @@ void PlaylistView::hideMenu() {
 }
 
 void PlaylistView::showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists) {
-    constexpr int ID_WIDTH = 5;       // Width for ID column
-    constexpr int NAME_WIDTH = 30;   // Width for Name column
+    using namespace ftxui;
 
-    // Display header
-    std::cout << "----------------------------------------\n";
-    std::cout << "             Playlist List\n";
-    std::cout << "----------------------------------------\n";
-
-    // Display table header
-    std::cout << std::left << std::setw(ID_WIDTH) << "ID"
-              << std::left << std::setw(NAME_WIDTH) << "Name" << "\n";
-    std::cout << "----------------------------------------\n";
-
-    // Display playlist rows
-    for (size_t i = 0; i < playlists.size(); ++i) {
-        std::cout << std::left << std::setw(ID_WIDTH) << playlists[i]->getID()
-                  << std::left << std::setw(NAME_WIDTH) << playlists[i]->getName() << "\n";
+    // 1. Tạo danh sách playlist
+    Elements items;
+    for (const auto& playlist : playlists) {
+        items.push_back(hbox({
+            text("[" + playlist->getID() + "] ") | size(WIDTH, EQUAL, 10),   // Cột ID
+            text(playlist->getName()) | size(WIDTH, GREATER_THAN, 30)       // Cột Name
+        }));
     }
 
-    // Footer
-    std::cout << "----------------------------------------\n";
+    // 2. Tạo tiêu đề
+    auto header = text("============= Playlist List =============") | bold | hcenter;
+
+    // 3. Tạo footer
+    auto footer = text("Total Playlists: " + std::to_string(playlists.size())) | hcenter;
+
+    // 4. Kết hợp giao diện
+    auto document = vbox({
+        header,
+        separator(),
+        vbox(std::move(items)) | border, // Hiển thị danh sách
+        separator(),
+        footer
+    });
+
+    // 5. Điều chỉnh màn hình
+    auto screen = Screen::Create(
+        Dimension::Full(),         // Chiều rộng tự động chiếm hết
+        Dimension::Fit(document)   // Chiều cao tự động vừa nội dung
+    );
+    Render(screen, document);
+
+    // 6. Hiển thị giao diện
+    std::cout << screen.ToString() << std::endl;
+
+    
 }
 
 void PlaylistView::displayStatusMessage(PlaylistStatus& status) {

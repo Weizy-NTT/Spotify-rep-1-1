@@ -73,6 +73,7 @@ void DetailedPlaylistController::handleInput(std::string listId){
     }while(ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->getSelectedOption() != DetailedPlaylistMenu::BACK_FROM_DETAIL);
 
 }
+
 void DetailedPlaylistController::addSongToPlaylist(const std::string& PlaylistId, const std::string& songID){
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(PlaylistId)->addSong((ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(songID)));
 }

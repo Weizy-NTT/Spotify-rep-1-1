@@ -3,7 +3,6 @@
 
 void PlaylistController::handleInput() {
     PlaylistStatus status = PlaylistStatus::PLAYLIST_NORMAL;
-    
     do{
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
@@ -59,7 +58,7 @@ void PlaylistController::deletePlaylist(const std::string& Id){
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->removePlaylist(Id);
 }
 void PlaylistController::back(){
-    ControllerManager::getInstance()->getMainMenuController()->handleInput();
+
 }
 
 void PlaylistController::showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists) {

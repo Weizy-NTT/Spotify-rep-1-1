@@ -118,6 +118,3 @@ void PlayingMediaController::stopUpdateThread() {
         }
     }
 }
-
-
-

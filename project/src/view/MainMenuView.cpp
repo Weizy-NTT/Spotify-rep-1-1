@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace ftxui;
 
-void MainMenuView::showMenu() {
+void MainMenuView::showMenu() {;
     // Tạo menu với các mục đã khai báo
     auto menu = Menu(&menu_entries, &selected_option);
 

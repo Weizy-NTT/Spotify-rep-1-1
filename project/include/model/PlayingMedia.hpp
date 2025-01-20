@@ -9,6 +9,17 @@
 #include <stdint.h>
 #include <thread>
 
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+#include <libswresample/swresample.h>
+#include <libavutil/imgutils.h>
+#include <libavutil/time.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+}
+
 namespace fs = std::filesystem;
 
 void audioCallback(void* userdata, uint8_t* stream, int len);
@@ -26,6 +37,7 @@ private:
     std::thread playbackThread;
     std::recursive_mutex stateMutex; // Allow recursive locking
 public:
+    AVCodecContext* audioCodecContext = nullptr;
     PlayingMedia();
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
     void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
@@ -47,8 +59,9 @@ public:
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
     void adjustVolume(size_t newVolume);
     void setVolume(const int &value);
+    int getVolume() const;
     void stopPlaybackThread();
-    
+
     ~PlayingMedia();
 };
 

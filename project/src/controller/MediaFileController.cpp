@@ -1,6 +1,6 @@
 #include "MediaFileController.hpp"
 #include "ControllerManager.hpp"
-// #include "HardwareController.hpp"
+#include "HardwareController.hpp"
 
 void MediaFileController::handleInput(){
     
@@ -22,8 +22,8 @@ void MediaFileController::handleInput(){
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             std::string songID;
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
-            // ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
-            // ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
                 ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
@@ -70,7 +70,7 @@ void MediaFileController::handleInput(){
 }
 
 void MediaFileController::back(){
-    //ControllerManager::getInstance()->getMainMenuController()->handleInput();
+    ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {
