@@ -22,8 +22,6 @@ extern "C" {
 
 namespace fs = std::filesystem;
 
-void audioCallback(void* userdata, uint8_t* stream, int len);
-
 class PlayingMedia {
 private:
     std::vector<std::shared_ptr<MediaFile>> currentplaylist;
@@ -45,7 +43,7 @@ public:
     size_t getTotalTime() const;
     void setCurrentTime(size_t time);
     void playAudio(const char* filePath);
-    void playVideo(const char* filePath);
+    void playVideo(const char* filePath, const char* wavPath);
     bool isPlaying();
     void play();
     void pauseMusic();
@@ -61,6 +59,7 @@ public:
     void setVolume(const int &value);
     int getVolume() const;
     void stopPlaybackThread();
+    std::string extractAudio(const std::string &videoPath);
 
     ~PlayingMedia();
 };
