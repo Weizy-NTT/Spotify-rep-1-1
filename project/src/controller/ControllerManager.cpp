@@ -14,7 +14,7 @@ ControllerManager::ControllerManager(ViewManager* viewManager, ModelManager* mod
     controllers.push_back(std::make_unique<PlayingMediaController>());
     controllers.push_back(std::make_unique<DetailedPlaylistController>());
     controllers.push_back(std::make_unique<MetadataController>());
-    controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", B9600));
+    controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600));
 }
 
 // Destructor private

@@ -1,37 +1,33 @@
 #ifndef UART_HPP
 #define UART_HPP
 
-#include "UART.hpp"
-#include <iostream>
-#include <fcntl.h>
-#include <termios.h>
-#include <unistd.h>
-#include <cstring>
-#include <thread>
-#include <stdexcept>
-#include <atomic>
-#include <string>
-#include <mutex>
 
-extern std::mutex adc_mutex;  
-extern std::mutex mode_mutex;  
+#include <boost/asio.hpp>
+#include <boost/asio/serial_port.hpp>
+#include <atomic>
+#include <mutex>
+#include <string>
+
+
 
 
 class UART {
 private:
-    int uart_fd;               // File descriptor cho UART
-    struct termios tty;        // Cấu hình UART
-    bool running;  // Cờ để dừng chương trình
+    boost::asio::io_context io_context;       // IO context cho Boost.Asio
+    boost::asio::serial_port serial_port;     // Serial port object
+    std::atomic<bool> running;                // Cờ kiểm tra chương trình có đang chạy không
+    std::mutex data_mutex;                    // Mutex bảo vệ dữ liệu
+    std::string received_data;                // Dữ liệu nhận từ UART
 
 public:
-    UART(const std::string& device, int baudRate);
+    UART(const std::string& port, unsigned int baud_rate);
     ~UART();
 
-    bool isRunning() const;
-    void writeData(const std::string& data);
-    std::string readData();
-    void startReadLoop();
-    void stop();
+    void writeData(const std::string& data);     // Gửi dữ liệu qua UART
+    void readData();                            // Đọc dữ liệu từ UART
+    void startReadLoop();                       // Bắt đầu vòng lặp đọc dữ liệu
+    void stop();                                // Dừng giao tiếp UART
+    
 };
 
 #endif // UART_HPP

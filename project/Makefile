@@ -47,6 +47,11 @@ LDLIBS += $(ICU_FLAGS)
 LIBUDEV_FLAGS = -ludev
 LDLIBS += $(LIBUDEV_FLAGS)
 
+# Boost settings (ensure Boost libraries are installed)
+BOOST_FLAGS = -lboost_system -lboost_filesystem -lboost_thread
+CFLAGS += $(BOOST_FLAGS)
+LDLIBS += $(BOOST_FLAGS)
+
 # Main rule
 all: $(TARGET)
 
