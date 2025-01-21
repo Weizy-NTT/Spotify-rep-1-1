@@ -4,7 +4,7 @@
 #include "BaseView.hpp"
 #include <vector>
 #include <string>
-
+#include <functional>
 #include "MediaFile.hpp"
 #include <iostream>
 #include <memory>
@@ -33,9 +33,7 @@ public:
     int getSelectedOption() const ;
     ~PlayingMediaView() override = default;
     void hideMenu() override;
-    void showSongInfo(const std::shared_ptr<MediaFile>& file, size_t currentTime, size_t totalTime,int volumeLevel);
     void showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) ;
-
 };
 
 #endif // PLAYING_MEDIA_VIEW_H

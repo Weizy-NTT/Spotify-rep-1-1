@@ -2,7 +2,6 @@
 #include <algorithm>
 
 size_t Playlist::playlistNextID = 1;
-std::queue<int> Playlist::playlistFreeIDs;
 
 std::string Playlist::getName() const {
     return name;
@@ -49,16 +48,15 @@ std::string Playlist::getID() const {
     return ID;
 }
 
+void Playlist::setID(const std::string& ID) {
+    this->ID = ID;
+}
+
 Playlist::Playlist(const std::string& name) {
-    if (!playlistFreeIDs.empty()) {
-        ID = std::to_string(playlistFreeIDs.front());
-        playlistFreeIDs.pop();
-    } else {
-        ID = std::to_string(playlistNextID++);
-    }
+    ID = std::to_string(playlistNextID++);
     this->name = name;
 }
 
 Playlist::~Playlist() {
-    playlistFreeIDs.push(std::stoi(ID));
+    playlistNextID--;
 }

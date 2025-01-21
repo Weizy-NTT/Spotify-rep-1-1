@@ -16,8 +16,8 @@ extern std::mutex mediaMutex;
 class PlayingMediaController : public BaseController {
     std::thread updateThread;
     std::atomic<bool> isPlayingMediaFile{false};
-    std::atomic<bool> isPlayingView{false};
     void updateElapsedTime();
+    std::mutex mutex; // Allow recursive locking
 public:
     void handleInput(const std::string& ID);
     void playMediaFile(const std::shared_ptr<MediaFile>& file);

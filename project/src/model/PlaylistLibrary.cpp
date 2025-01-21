@@ -19,6 +19,9 @@ void PlaylistLibrary::removePlaylist(const std::string& ID) {
     if (it != playlists.end()) {
         playlists.erase(it, playlists.end());
     }
+    for (size_t i = std::stoi(ID) - 1;i < playlists.size();i++) {
+        playlists[i]->setID(std::to_string(i + 1));
+    }
 }
 
 std::shared_ptr<Playlist> PlaylistLibrary::getPlaylistByID(const std::string& ID) const {

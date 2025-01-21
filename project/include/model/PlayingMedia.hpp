@@ -38,6 +38,7 @@ public:
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
     void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
     size_t& getCurrentTime();
+    std::string getDurationStringType() const;
     size_t getTotalTime() const;
     void setCurrentTime(size_t time);
     void playAudio(const char* filePath);

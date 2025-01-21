@@ -2,7 +2,6 @@
 #include "PlayingMediaView.hpp"
 #include <iomanip>
 #include <mutex>
-
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
@@ -11,9 +10,6 @@
 #include <chrono>
 
 using namespace ftxui;
-void PlayingMediaView::showMenu() {
-    std::cout << "aaaa\n";
-}
 
 void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) {
     bool running = true;
@@ -37,8 +33,8 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
         int pos = static_cast<int>(barWidth * progress);
 
         // Tạo thanh tiến trình bài hát
-        std::vector<Element> progress_bar_elements(barWidth, text("=")); // Ban đầu tất cả là "="
-        std::fill(progress_bar_elements.begin(), progress_bar_elements.begin() + pos, text("#")); // Thay thế "#" dựa trên tiến trình
+        std::vector<Element> progress_bar_elements(barWidth, text("="));
+        std::fill(progress_bar_elements.begin(), progress_bar_elements.begin() + pos, text("#"));
         auto progress_bar = hbox({
             text("["), 
             hbox(progress_bar_elements), 
@@ -46,7 +42,7 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
         });
 
         // Tạo thanh âm lượng
-        int volumeBarWidth = 30; // Độ dài của thanh âm lượng
+        int volumeBarWidth = 30;
         int volumePos = static_cast<int>(volumeBarWidth * (volume / 128.0));
         std::vector<Element> volume_bar_elements(volumeBarWidth, text("="));
         std::fill(volume_bar_elements.begin(), volume_bar_elements.begin() + volumePos, text("#"));
@@ -70,8 +66,8 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
                     text("Volume: "),
                     volume_bar,
                     text(" " + volumePercent) | color(Color::White)
-                }) | color(Color::Cyan), // Hiển thị thanh âm lượng và phần trăm
-                menu->Render(), // Hiển thị menu
+                }) | color(Color::Cyan),
+                menu->Render(),
                 text("======================="),
                 text("Use arrow keys to navigate, press Enter to select.") | color(Color::Red),
             }) |
@@ -96,19 +92,18 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.Exit(); // Thoát vòng lặp khi click vào menu
+                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
                 return true;
             }
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-                screen.ExitLoopClosure()();
-                return true;
+            screen.ExitLoopClosure()();
+            return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            running = false;
-            screen.Exit(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
             return true;
         }
         return menu->OnEvent(event);
@@ -132,6 +127,12 @@ int PlayingMediaView::getSelectedOption() const {
 
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
+    std::cout << "Hiding Playing Media View...\n";
+    std::system("clear");
+}
+
+void PlayingMediaView::showMenu() {
+    BaseView::showMenu();
     std::cout << "Hiding Playing Media View...\n";
     std::system("clear");
 }

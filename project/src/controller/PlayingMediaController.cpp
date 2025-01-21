@@ -1,9 +1,7 @@
 #include "PlayingMediaController.hpp"
 #include "ControllerManager.hpp"
 
-
 void PlayingMediaController::handleInput(const std::string& ID){
-    isPlayingView.store(true, std::memory_order_relaxed);
     playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     do {
     updateTime();
@@ -77,7 +75,7 @@ void PlayingMediaController::updateTime() {
 }
 
 void PlayingMediaController::back(){
-    isPlayingView.store(false, std::memory_order_relaxed);
+    std::cout << ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption();
 }
 
 void PlayingMediaController::updateElapsedTime() {
@@ -93,7 +91,6 @@ void PlayingMediaController::updateElapsedTime() {
         }
     }
 }
-
 
 void PlayingMediaController::startUpdateThread() {
     if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {

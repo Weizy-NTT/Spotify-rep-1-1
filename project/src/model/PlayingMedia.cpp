@@ -51,6 +51,12 @@ size_t& PlayingMedia::getCurrentTime() {
     return currentTime;
 }
 
+std::string PlayingMedia::getDurationStringType() const {
+    std::string duration = (totalTime / 60 < 10 ? "0" : "") + std::to_string(totalTime / 60) +
+                            (totalTime % 60 < 10 ? "0" : "") + std::to_string(totalTime % 60);
+    return duration;
+};
+
 size_t PlayingMedia::getTotalTime() const {
     return totalTime;
 }  
@@ -258,7 +264,7 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
     }
 
     // Play the music
-    if (Mix_PlayMusic(music, -1) == -1) { // -1: loop indefinitely
+    if (Mix_PlayMusic(music, -1) == -1) {
         std::cerr << "Failed to play music: " << Mix_GetError() << "\n";
         Mix_FreeMusic(music);
         Mix_CloseAudio();
@@ -346,17 +352,27 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
     AVPacket packet;
     bool quit = false;
 
-    // Calculate frame delay
-    double frameDelay = 40.0; // Default for ~25 FPS
-    if (formatContext->streams[videoStreamIndex]->avg_frame_rate.num > 0) {
-        double fps = av_q2d(formatContext->streams[videoStreamIndex]->avg_frame_rate);
-        frameDelay = 1000.0 / fps; // Convert to milliseconds
-    }
+    AVRational timeBase = formatContext->streams[videoStreamIndex]->time_base;
+
+    // Đồng bộ hóa âm thanh và video dựa trên PTS
+    auto getCurrentTimeMs = []() {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(
+                   std::chrono::steady_clock::now().time_since_epoch())
+            .count();
+    };
+
+    int64_t startTime = getCurrentTimeMs();
 
     while (av_read_frame(formatContext, &packet) >= 0 && !quit) {
         if (packet.stream_index == videoStreamIndex) {
             if (avcodec_send_packet(videoCodecContext, &packet) == 0) {
                 while (avcodec_receive_frame(videoCodecContext, frame) == 0) {
+                    int64_t ptsMs = av_rescale_q(frame->pts, timeBase, AVRational{1, 1000});
+
+                    while (getCurrentTimeMs() < startTime + ptsMs) {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                    }
+
                     sws_scale(swsContext, frame->data, frame->linesize, 0, videoCodecContext->height,
                               frameYUV->data, frameYUV->linesize);
 
@@ -369,18 +385,12 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
                     SDL_RenderCopy(renderer, texture, nullptr, nullptr);
                     SDL_RenderPresent(renderer);
 
-                    // Delay to control frame rate
-                    //SDL_Delay(static_cast<int>(frameDelay));
-                    std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(frameDelay)));
-
-                    // Handle SDL events and playback state
                     SDL_Event event;
                     while (SDL_PollEvent(&event)) {
                         if (event.type == SDL_QUIT) {
                             quit = true;
                         }
                     }
-
                     // Check `paused` and `playing` state
                     {
                         std::unique_lock<std::recursive_mutex> lock(stateMutex);
@@ -406,7 +416,6 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
             }
         }
         av_packet_unref(&packet);
-
         // Allow early exit while reading packets
         {
             std::unique_lock<std::recursive_mutex> lock(stateMutex);
@@ -416,6 +425,7 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
             }
         }
     }
+
     av_free(buffer);
     av_frame_free(&frameYUV);
     av_frame_free(&frame);
@@ -424,7 +434,6 @@ void PlayingMedia::playVideo(const char* videoFilePath, const char* wavPath) {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
-    // Stop music and clean up
     Mix_HaltMusic();
     Mix_FreeMusic(music);
     Mix_CloseAudio();
