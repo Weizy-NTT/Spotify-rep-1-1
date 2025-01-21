@@ -71,11 +71,10 @@ void PlayingMediaController::adjustVolume(size_t level){
 void PlayingMediaController::updateTime() {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
-    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentMediaFile(),ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime(),total,ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getVolume());
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia(),ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime(),total,ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getVolume());
 }
 
 void PlayingMediaController::back(){
-    std::cout << ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption();
 }
 
 void PlayingMediaController::updateElapsedTime() {

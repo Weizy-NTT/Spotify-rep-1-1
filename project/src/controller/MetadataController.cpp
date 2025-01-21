@@ -9,14 +9,11 @@
 namespace fs = std::filesystem;
 
 void MetadataController::handleInput(const std::string& ID){
-    //size_t mainChoice;
     MediaType type = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getType();
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
-    //Exception_Handler("Enter your choice: ",mainChoice,validateMetadataMenu);
-    //ControllerManager::getInstance()->getViewManager()->getMetadataView()->showMenu();
     switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption())
         {
             case MetadataMenu::BACK_FROM_METADATA: {
@@ -24,7 +21,7 @@ void MetadataController::handleInput(const std::string& ID){
                 break;
             }
             case MetadataMenu::EDIT_METADATA:{
-                if (type == AUDIO) {
+                if (type == AUDIO) {     
                     handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
                 }
                 else {
@@ -48,19 +45,17 @@ void MetadataController::back(){
 }
 
 void MetadataController::handleEditAudio(const std::string& filepath,const std::string& ID) {
-    size_t editChoice;
     std::string newValue;
     TagLib::FileRef f(filepath.c_str());
 
     if (!f.isNull() && f.tag() && f.audioProperties()) {
     TagLib::Tag* tag = f.tag();
-    //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
         ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        system("clear");
         getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
         ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
-        Exception_Handler("Enter your choice: ",editChoice,validateEditAudioMenu);
-        switch(editChoice)
+        switch(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption())
         {
             case AudioEdit::AUDIO_BACK: {
                 back();
@@ -105,7 +100,7 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
             default:
                 std::cout << "Invalid input\n";
         }
-    } while(editChoice != AudioEdit::AUDIO_BACK);
+    } while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption() != AudioEdit::AUDIO_BACK);
     f.save();
     }
     else {
@@ -114,19 +109,16 @@ void MetadataController::handleEditAudio(const std::string& filepath,const std::
 }
 
 void MetadataController::handleEditVideo(const std::string& filepath,const std::string& ID) {
-    size_t editChoice;
     std::string newValue;
     TagLib::FileRef f(filepath.c_str());
 
     if (!f.isNull() && f.tag() && f.audioProperties()) {
     TagLib::Tag* tag = f.tag();
-    //TagLib::AudioProperties* audioProperties = f.audioProperties();
     do {
         ControllerManager::getInstance()->getViewManager()->hideCurrentView();
         getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
         ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
-        Exception_Handler("Enter your choice: ",editChoice,validateEditVideoMenu);
-        switch(editChoice)
+        switch(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption())
         {
             case VideoEdit::VIDEO_BACK: {
                 back();
@@ -141,7 +133,7 @@ void MetadataController::handleEditVideo(const std::string& filepath,const std::
             default:
                 std::cout << "Invalid input\n";
         }
-    } while(editChoice != AudioEdit::AUDIO_BACK);
+    }while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption() != VideoEdit::VIDEO_BACK);
     f.save();
     }
     else {

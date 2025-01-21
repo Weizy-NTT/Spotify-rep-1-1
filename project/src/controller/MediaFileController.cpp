@@ -21,6 +21,7 @@ void MediaFileController::handleInput(){
         }
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
             std::string songID;
+            displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
             ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
             ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
@@ -37,6 +38,7 @@ void MediaFileController::handleInput(){
            
         case MediaFileMenu::SHOW_DETAIL:{
             std::string songID;
+            displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
             Exception_Handler("Enter song ID for looking details: ",songID,validateID);
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {
@@ -70,12 +72,10 @@ void MediaFileController::handleInput(){
 }
 
 void MediaFileController::back(){
-    ControllerManager::getInstance()->getMainMenuController()->handleInput();
 }
 
 void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {
     size_t totalSongs = files.size();
-    //int totalPages = (totalSongs + pageSize - 1) / pageSize;  // Tính số trang cần thiết
 
     size_t firstSong = (currentPage - 1) * pageSize;
     size_t lastSong = std::min(currentPage * pageSize - 1, totalSongs - 1);

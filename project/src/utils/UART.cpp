@@ -20,7 +20,7 @@ UART::UART(const std::string& port, unsigned int baud_rate)
         serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
         serial_port.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
-        std::cout << "Serial port opened successfully on " << port << " with baud rate " << baud_rate << ".\n";
+        //std::cout << "Serial port opened successfully on " << port << " with baud rate " << baud_rate << ".\n";
     } catch (const boost::system::system_error& e) {
         std::cerr << "Error opening serial port: " << e.what() << std::endl;
         throw;

@@ -5,7 +5,8 @@
 #include <iostream>
 using namespace ftxui;
 
-void MainMenuView::showMenu() {;
+void MainMenuView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu với các mục đã khai báo
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -46,7 +47,7 @@ void MainMenuView::showMenu() {;
 
     // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    std::system("clear");
+    //std::system("clear");
 }
 
 int MainMenuView::getSelectedOption() const {
@@ -55,7 +56,6 @@ int MainMenuView::getSelectedOption() const {
 
 void MainMenuView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Main Menu..." << std::endl;
     std::system("clear");
 }
 

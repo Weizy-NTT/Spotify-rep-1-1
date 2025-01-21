@@ -8,6 +8,7 @@
 #include "MediaFile.hpp"
 #include <iostream>
 #include <memory>
+#include <PlayingMedia.hpp>
 
 enum PlayingMediaMenu {
     PLAY,
@@ -33,7 +34,7 @@ public:
     int getSelectedOption() const ;
     ~PlayingMediaView() override = default;
     void hideMenu() override;
-    void showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) ;
+    void showPlayingMedia(PlayingMedia* player, size_t& currentTime, size_t totalTime, int& volume) ;
 };
 
 #endif // PLAYING_MEDIA_VIEW_H

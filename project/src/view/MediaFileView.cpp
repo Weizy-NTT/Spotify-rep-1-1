@@ -49,6 +49,7 @@ void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFi
 
 
 void MediaFileView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu với các mục
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -98,7 +99,6 @@ int MediaFileView::getSelectedOption() const {
 
 void MediaFileView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Media File View...\n";
     std::system("clear");
 }
 

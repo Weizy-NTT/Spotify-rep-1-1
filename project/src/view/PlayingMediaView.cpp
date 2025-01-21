@@ -11,7 +11,9 @@
 
 using namespace ftxui;
 
-void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, size_t& currentTime, size_t totalTime, int& volume) {
+void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTime, size_t totalTime, int& volume) {
+    BaseView::showMenu();
+    
     bool running = true;
 
     // Tạo menu với các mục
@@ -25,10 +27,10 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
         // Hiển thị thông tin bài hát
         std::string current = (currentTime / 60 < 10 ? "0" : "") + std::to_string(currentTime / 60) + ":" +
                               (currentTime % 60 < 10 ? "0" : "") + std::to_string(currentTime % 60);
-        std::string total = (totalTime / 60 < 10 ? "0" : "") + std::to_string(totalTime / 60) + ":" +
-                            (totalTime % 60 < 10 ? "0" : "") + std::to_string(totalTime % 60);
+        std::string total = (player->getTotalTime() / 60 < 10 ? "0" : "") + std::to_string(player->getTotalTime() / 60) + ":" +
+                            (player->getTotalTime() % 60 < 10 ? "0" : "") + std::to_string(player->getTotalTime() % 60);
 
-        float progress = static_cast<float>(currentTime) / totalTime;
+        float progress = static_cast<float>(currentTime) / player->getTotalTime();
         int barWidth = 50;
         int pos = static_cast<int>(barWidth * progress);
 
@@ -58,7 +60,7 @@ void PlayingMediaView::showPlayingMedia(const std::shared_ptr<MediaFile>& file, 
         // Kết hợp thông tin bài hát, thanh tiến trình, và âm lượng
         return vbox({
                 text("===== Now Playing ====="),
-                text("Song: " + file->getName() + " - " + file->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
+                text("Song: " + player->getCurrentMediaFile()->getName() + " - " + player->getCurrentMediaFile()->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
                 progress_bar | color(Color::Yellow),
                 text(current + " / " + total) | color(Color::Red),
                 separator(),
@@ -127,12 +129,9 @@ int PlayingMediaView::getSelectedOption() const {
 
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Playing Media View...\n";
     std::system("clear");
 }
 
 void PlayingMediaView::showMenu() {
     BaseView::showMenu();
-    std::cout << "Hiding Playing Media View...\n";
-    std::system("clear");
 }

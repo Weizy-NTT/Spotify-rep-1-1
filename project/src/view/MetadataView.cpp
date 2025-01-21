@@ -7,6 +7,7 @@
 
 using namespace ftxui;
 void MetadataView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu với các mục
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -32,12 +33,15 @@ void MetadataView::showMenu() {
                 return true;
             }
         }
+
+        // Sự kiện nhấn Enter (tương tự chuột trái)
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-            screen.ExitLoopClosure()();
-            return true;
+                screen.ExitLoopClosure()();
+                return true;
             }
-        } 
+        }
+
         if (event == Event::Escape || event == Event::Character('q')) {
             screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
             return true;
@@ -51,7 +55,6 @@ void MetadataView::showMenu() {
 }
 void MetadataView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Metadata View...\n";
     std::system("clear");
 }
 
@@ -87,7 +90,7 @@ void MetadataView::showFileMetadata(const std::shared_ptr<MediaFile>& file) {
         separator(),
         content,
         separator(),
-        text("Press any key to continue...") | dim | hcenter
+        text("Metadata Editing") | dim | hcenter
     });
 
     // 4. Điều chỉnh màn hình theo nội dung
@@ -103,71 +106,136 @@ void MetadataView::showFileMetadata(const std::shared_ptr<MediaFile>& file) {
 }
 
 void MetadataView::menuEditAudio() {
-    using namespace ftxui;
+    BaseView::showMenu();
+    
+    std::vector<std::string> audio_edit_entries = {
+        "Edit Title",
+        "Edit Artist",
+        "Edit Album",
+        "Edit Year",
+        "Edit Track",
+        "Edit Genre",
+        "Back"
+    };
+    
+    // Tạo menu cho Audio Edit
+    auto menu_audio = Menu(&audio_edit_entries, &selected_option_audio);
 
-    // 1. Tạo danh sách menu
-    auto menu_items = vbox({
-        hbox({text(std::to_string(AUDIO_TITLE) + ". Title") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_ARTIST) + ". Artist") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_ALBUM) + ". Album") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_YEAR) + ". Year") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_TRACK) + ". Track") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_GENRE) + ". Genre") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(AUDIO_BACK) + ". Go Back") | size(WIDTH, EQUAL, 20)})
-    }) | border;
-
-    // 2. Tạo tiêu đề
-    auto header = text("================ Audio Edit ================") | bold | hcenter;
-
-    // 3. Kết hợp giao diện
-    auto document = vbox({
-        header,
-        separator(),
-        menu_items,
-        separator(),
-        text("Use arrow keys or enter a number to select.") | dim | hcenter
+    // Tạo renderer để hiển thị menu Audio Edit
+    auto renderer_audio = Renderer(menu_audio, [&] {
+        return vbox({
+            text("===== Audio Edit Menu =====") | bold | center,
+            menu_audio->Render(),
+            text("==========================="),
+            text("Use arrow keys or mouse to navigate, press Enter or click to select."),
+        }) |
+        border;
     });
 
-    // 4. Điều chỉnh màn hình
-    auto screen = Screen::Create(
-        Dimension::Full(),        // Chiều rộng tự động chiếm hết
-        Dimension::Fit(document)  // Chiều cao tự động vừa nội dung
-    );
-    Render(screen, document);
+    // Tạo đối tượng ScreenInteractive để xử lý sự kiện
+    auto screen = ScreenInteractive::TerminalOutput();
 
-    // 5. Hiển thị giao diện
-    std::cout << screen.ToString() << std::endl;
+    auto event_handler = CatchEvent(renderer_audio, [&](Event event) {
+    // Xử lý sự kiện chuột cho Audio Edit
+    if (event.is_mouse()) {
+        if (event.mouse().button == Mouse::Left && menu_audio->OnEvent(event)) {
+            std::cout << "Audio Option " << selected_option_audio << " selected via mouse!" << std::endl;
+            screen.ExitLoopClosure()();  // Thoát vòng lặp khi click vào menu
+            return true;
+        }
+    }
+
+    // Sự kiện nhấn Enter (tương tự chuột trái)
+    if (event == Event::Return) {
+        if (menu_audio->OnEvent(event)) {
+            screen.ExitLoopClosure()();
+            return true;
+        }
+    }
+
+    // Xử lý sự kiện bàn phím (ESC hoặc q để thoát)
+    if (event == Event::Escape || event == Event::Character('q')) {
+        std::cout << "Exiting Audio Edit menu..." << std::endl;
+        screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+        return true;
+    }
+
+    // Tiếp tục xử lý sự kiện khác, nếu không phải chuột hoặc phím ESC/q
+    return menu_audio->OnEvent(event);  // Tiếp tục xử lý sự kiện của menu
+});
+
+    // Chạy vòng lặp giao diện
+    screen.Loop(event_handler);
+    // std::system("clear");  // Làm sạch màn hình sau khi thoát vòng lặp
 }
+
 
 void MetadataView::menuEditVideo() {
-    using namespace ftxui;
+    BaseView::showMenu();
+    
+    // Menu cho Video Edit
+    std::vector<std::string> video_edit_entries = {
+        "Edit Title",
+        "Back"
+    };
 
-    // 1. Tạo danh sách menu
-    auto menu_items = vbox({
-        hbox({text(std::to_string(VIDEO_TITLE) + ". Title") | size(WIDTH, EQUAL, 20)}),
-        hbox({text(std::to_string(VIDEO_BACK) + ". Go Back") | size(WIDTH, EQUAL, 20)})
-    }) | border;
+    // Tạo menu cho Video Edit
+    auto menu_video = Menu(&video_edit_entries, &selected_option_video);
 
-    // 2. Tạo tiêu đề
-    auto header = text("=========== Video Edit ===========") | bold | hcenter;
-
-    // 3. Kết hợp giao diện
-    auto document = vbox({
-        header,
-        separator(),
-        menu_items,
-        separator(),
-        text("Use arrow keys or enter a number to select.") | dim | hcenter
+    // Tạo renderer để hiển thị menu Video Edit
+    auto renderer_video = Renderer(menu_video, [&] {
+        return vbox({
+            text("===== Video Edit Menu =====") | bold | hcenter,
+            menu_video->Render(),
+            text("==========================="),
+            text("Use arrow keys or mouse to navigate, press Enter or click to select."),
+        }) |
+        border;
     });
 
-    // 4. Điều chỉnh màn hình
-    auto screen = Screen::Create(
-        Dimension::Full(),        // Chiều rộng tự động chiếm hết
-        Dimension::Fit(document)  // Chiều cao tự động vừa nội dung
-    );
-    Render(screen, document);
+    // Tạo đối tượng ScreenInteractive để xử lý sự kiện
+    auto screen = ScreenInteractive::TerminalOutput();
 
-    // 5. Hiển thị giao diện
-    std::cout << screen.ToString() << std::endl;
+    // Xử lý sự kiện chuột và bàn phím
+    auto event_handler = CatchEvent(renderer_video,[&](Event event) {
+        // Xử lý sự kiện chuột cho Video Edit
+        if (event.is_mouse()) {
+            if (event.mouse().button == Mouse::Left&& menu_video->OnEvent(event)) {
+                std::cout << "Video Option " << selected_option_video << " selected via mouse!" << std::endl;
+                screen.ExitLoopClosure()();  // Thoát vòng lặp khi click vào menu
+                return true;
+            }
+        }
+
+        // Sự kiện nhấn Enter (tương tự chuột trái)
+        if (event == Event::Return) {
+            if (menu_video->OnEvent(event)) {
+                screen.ExitLoopClosure()();
+                return true;
+            }
+        }
+
+        // Xử lý sự kiện bàn phím (ESC hoặc q để thoát)
+        if (event == Event::Escape || event == Event::Character('q')) {
+            std::cout << "Exiting Video Edit menu..." << std::endl;
+            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            return true;
+        }
+
+        return menu_video->OnEvent(event);  // Tiếp tục xử lý sự kiện khác
+    });
+
+    // Chạy vòng lặp giao diện
+    screen.Loop(event_handler);
+    // std::system("clear");  // Làm sạch màn hình sau khi thoát vòng lặp
 }
+
+int MetadataView::getAuditoOption() const{
+    return selected_option_audio;
+}
+
+int MetadataView::getVideoOption() const{
+    return selected_option_video;
+}
+
 

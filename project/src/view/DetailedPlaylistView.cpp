@@ -10,6 +10,7 @@
 using namespace ftxui;
 
 void DetailedPlaylistView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -51,7 +52,7 @@ void DetailedPlaylistView::showMenu() {
 
     // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    std::system("clear");
+    // std::system("clear");
 }
 
 int DetailedPlaylistView::getSelectedOption() const {
@@ -60,8 +61,7 @@ int DetailedPlaylistView::getSelectedOption() const {
 
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Detailed Playlist View...\n";
-    std::system("clear");
+    // std::system("clear");
 }
 
 void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& playlist) {

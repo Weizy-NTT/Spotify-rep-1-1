@@ -6,6 +6,7 @@
 using namespace ftxui;
 
 void ScanfOptionView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -46,7 +47,6 @@ void ScanfOptionView::showMenu() {
 
     // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    std::system("clear");
 }
 
 int ScanfOptionView::getSelectedOption() const {
@@ -55,7 +55,6 @@ int ScanfOptionView::getSelectedOption() const {
 
 void ScanfOptionView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Scanf Option View...\n";
     std::system("clear");
 }
 

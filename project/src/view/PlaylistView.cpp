@@ -9,6 +9,7 @@
 using namespace ftxui;
 
 void PlaylistView::showMenu() {
+    BaseView::showMenu();
     // Tạo menu
     auto menu = Menu(&menu_entries, &selected_option);
 
@@ -49,7 +50,7 @@ void PlaylistView::showMenu() {
 
     // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    std::system("clear");
+    // std::system("clear");
 }
 
 int PlaylistView::getSelectedOption() const {
@@ -59,7 +60,6 @@ int PlaylistView::getSelectedOption() const {
 
 void PlaylistView::hideMenu() {
     BaseView::hideMenu();
-    std::cout << "Hiding Media File View...\n";
     std::system("clear");
 }
 

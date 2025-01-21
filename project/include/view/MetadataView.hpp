@@ -13,18 +13,18 @@ enum MetadataMenu {
 };
 
 enum AudioEdit {
-    AUDIO_BACK,
     AUDIO_TITLE,
     AUDIO_ARTIST,
     AUDIO_ALBUM,
     AUDIO_YEAR,
     AUDIO_TRACK,
     AUDIO_GENRE,
+    AUDIO_BACK
 };
 
 enum VideoEdit {
-    VIDEO_BACK,
-    VIDEO_TITLE
+    VIDEO_TITLE,
+    VIDEO_BACK
 };
 
 class MetadataView : public BaseView {
@@ -34,10 +34,13 @@ private:
         "Go Back"
     };
     int selected_option = 0;
-
+    int selected_option_audio = 0;        
+    int selected_option_video = 0;
 public:
     void showMenu() override;
     int getSelectedOption() const;
+    int getAuditoOption() const;
+    int getVideoOption() const;
     ~MetadataView() override = default;
     void hideMenu() override;
     void showFileMetadata(const std::shared_ptr<MediaFile>& file);

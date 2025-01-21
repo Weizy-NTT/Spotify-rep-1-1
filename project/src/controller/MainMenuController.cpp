@@ -8,7 +8,6 @@ void MainMenuController::handleInput(){
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getScanfOptionController()->scanPlaylistsFromTxt(filePath);
     do {
-    system("clear");
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MAIN_VIEW);
     if (status) {
