@@ -1,0 +1,16 @@
+../drivers/fsl_slcd.h:376:20:SLCD_StartDisplay	16	static
+../drivers/fsl_slcd.h:387:20:SLCD_StopDisplay	16	static
+../drivers/fsl_slcd.h:406:20:SLCD_StopBlinkMode	16	static
+../drivers/fsl_slcd.h:426:20:SLCD_SetBackPlanePhase	24	static
+../drivers/fsl_slcd.h:448:20:SLCD_SetFrontPlaneSegments	24	static
+../drivers/lcd.c:8:6:LCD_Init	56	static
+../drivers/lcd.c:35:6:LCD_DisplayAll	8	static
+../drivers/lcd.c:56:6:LCD_SetNum	40	static
+../drivers/lcd.c:138:6:LCD_DisplayDemical	40	static
+../drivers/lcd.c:164:6:LCD_DisplayError	8	static
+../drivers/lcd.c:182:6:LCD_DisplayTime	40	static
+../drivers/lcd.c:208:6:LCD_StopDisplay	8	static
+../drivers/lcd.c:212:6:LCD_StartBlinkMode	8	static
+../drivers/lcd.c:216:6:LCD_StopBlinkMode	8	static
+../drivers/lcd.c:220:6:LCD_StartDisplay	8	static
+../drivers/lcd.c:224:6:delay	16	static
