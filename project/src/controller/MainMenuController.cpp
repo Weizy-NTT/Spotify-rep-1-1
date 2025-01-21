@@ -5,9 +5,6 @@ void MainMenuController::handleInput() {
     // Start the thread for reading data from the hardware controller
     ControllerManager::getInstance()->getHardwareController()->threadReading();
 
-    // Send the initialization signal to the hardware controller
-    ControllerManager::getInstance()->getHardwareController()->sendSignal("S");
-
     bool status = false;
     std::string filePath = "resources/playlists.txt";
 
@@ -65,9 +62,6 @@ void MainMenuController::back() {
 
     // Stop reading data from the hardware controller
     ControllerManager::getInstance()->getHardwareController()->stopReading();
-
-    // Send the exit signal to the hardware controller
-    ControllerManager::getInstance()->getHardwareController()->sendSignal("E");
 
     // Exit the application
     std::exit(0);

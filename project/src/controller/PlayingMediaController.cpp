@@ -23,11 +23,11 @@ void PlayingMediaController::handleInput(const std::string& ID){
             }
             case PlayingMediaMenu::NEXT: {
                 skipToNext();
-                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
                 break;
             }
             case PlayingMediaMenu::PREV: {
-                ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+                ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
                 skipToPrevious();
                 break;
             }
@@ -96,7 +96,7 @@ void PlayingMediaController::updateElapsedTime() {
         // Move to the next track if the current one is finished
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
-            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
         }
     }
 }

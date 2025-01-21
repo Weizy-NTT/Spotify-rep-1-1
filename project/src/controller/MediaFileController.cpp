@@ -29,7 +29,7 @@ void MediaFileController::handleInput() {
             std::string songID;
             displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
             Exception_Handler("Enter song ID for playing: ",songID,validateID);
-            ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
+            ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
             ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
             if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
             {

@@ -7,6 +7,11 @@
 #include <mutex>
 #include <string>
 
+#define PLAY_MODE_RECEIVE       "C"
+#define PAUSE_MODE_RECEIVE      "D"
+#define NEXT_MODE_RECEIVE       "A"
+#define PREV_MODE_RECEIVE       "B"
+
 /**
  * UART communication class
  */

@@ -9,19 +9,19 @@ HardwareController::HardwareController(const std::string& device, int baudRate)
 // Send the "Play" command
 // Sends a "PL" signal through the UART connection to trigger the Play action on the hardware.
 void HardwareController::sendPlayCommand() {
-    uart.writeData("PL");
+    uart.writeData(PLAY_MODE);
 }
 
 // Send the "Pause" command
 // Sends a "PA" signal through the UART connection to trigger the Pause action on the hardware.
 void HardwareController::sendPauseCommand() {
-    uart.writeData("PA");
+    uart.writeData(PAUSE_MODE);
 }
 
 // Send the "Stop" command
 // Sends a "ST" signal through the UART connection to trigger the Stop action on the hardware.
 void HardwareController::sendStopCommand() {
-    uart.writeData("ST");
+    uart.writeData(STOP_MODE);
 }
 
 // Start reading data in a separate thread

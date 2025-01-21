@@ -63,14 +63,14 @@ void UART::readData() {
 
                     if (!data.empty()) {
                         // Nếu là ký tự đơn (A, B, C, D)
-                        if (data.length() == 1 && (data == "A" || data == "B" || data == "C" || data == "D")) {
-                            if (data == "C") {
+                        if (data.length() == 1 && (data == PLAY_MODE_RECEIVE || data == PAUSE_MODE_RECEIVE || data == NEXT_MODE_RECEIVE || data == PREV_MODE_RECEIVE)) {
+                            if (data == PLAY_MODE_RECEIVE) {
                                 ControllerManager::getInstance()->getPlayingMediaController()->play();
-                            } else if (data == "D") {
+                            } else if (data == PAUSE_MODE_RECEIVE) {
                                 ControllerManager::getInstance()->getPlayingMediaController()->pause();
-                            } else if (data == "A") {
+                            } else if (data == NEXT_MODE_RECEIVE) {
                                 ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
-                            } else if (data == "B") {
+                            } else if (data == PREV_MODE_RECEIVE) {
                                 ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
                             }
                         }

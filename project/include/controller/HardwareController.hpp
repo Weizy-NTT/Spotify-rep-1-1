@@ -5,6 +5,10 @@
 #include "UART.hpp" // Include the UART class you have implemented
 #include "BaseController.hpp"
 
+#define PAUSE_MODE      "PA"
+#define PLAY_MODE       "PL"
+#define STOP_MODE       "ST"
+
 class HardwareController : public BaseController {
 private:
     UART uart; // Use the UART class for communication
@@ -15,8 +19,6 @@ public:
     void sendPauseCommand();   // Send a pause command
     void sendStopCommand();    // Send a stop command
     void threadReading();      // Start a thread for reading data
-    int getVolume();           // Get the current volume
-    std::string receiveData(); // Receive data from the hardware
     void stopReading();        // Stop the reading thread
     void sendSignal(const std::string& signal); // Send a signal to the hardware
 };
