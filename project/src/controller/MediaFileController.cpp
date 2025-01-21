@@ -1,30 +1,58 @@
 #include "MediaFileController.hpp"
 #include "ControllerManager.hpp"
+#include "HardwareController.hpp"
 
-void MediaFileController::handleInput(){
-    size_t mainChoice;
+// Handle user input for the media file view
+void MediaFileController::handleInput() {
+    MediaFileStatus status = MediaFileStatus::MEDIAFILE_NORMAL;
     size_t totalPage = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles().size();
-    totalPage = (size_t)(totalPage/25) + 1;
+    totalPage = (size_t)(totalPage / 25) + 1; // Calculate the total number of pages (25 files per page)
+
     do {
-    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-    switch (mainChoice)
+        // Hide the current view and display media files with pagination
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+
+        // Display the current status message
+        ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
+
+        // Switch to the media file view
+        ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
+
+    switch (ControllerManager::getInstance()->getViewManager()->getMediaFileView()->getSelectedOption())
         {
         case MediaFileMenu::BACK_FROM_MEDIA: {
             back();
             break;
         }
         case MediaFileMenu::PLAY_SONG_FROM_FILES:{
+            std::string songID;
+            displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+            Exception_Handler("Enter song ID for playing: ",songID,validateID);
+            ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
+            ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+            if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
+            {
+                ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setPlaylist(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+                ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
+            }
+            else {
+                status = MediaFileStatus::MEDIAFILE_PLAY_STATUS;
+            }
             break;
         }
            
         case MediaFileMenu::SHOW_DETAIL:{
             std::string songID;
-            std::cout <<"Enter play song ID for looking details: ";
-            std::getline(std::cin, songID);
-            ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
+            displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+            Exception_Handler("Enter song ID for looking details: ",songID,validateID);
+            if (ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileIDInLibrary(songID))
+            {
+                ControllerManager::getInstance()->getMetadataController()->handleInput(songID);
+            }
+            else {
+                status = MediaFileStatus::MEDIAFILE_DETAIL_STATUS;
+            }
             break;
         }
         case MediaFileMenu::NEXT_PAGE:{
@@ -32,7 +60,7 @@ void MediaFileController::handleInput(){
                 currentPage++;
             }
             else {
-                std::cout << "This is the last page\n";
+                status = MediaFileStatus::MEDIAFILE_NEXT_PAGE_STATUS;
             }
             break;
         }
@@ -41,30 +69,26 @@ void MediaFileController::handleInput(){
                 currentPage--;
             }
             else {
-                std::cout << "This is the first page\n";
+                status = MediaFileStatus::MEDIAFILE_PREV_PAGE_STATUS;
             }
             break;
         }   
-        default:
-            std::cout << "Your choice is not valid\n";
-            break;
         }
-    } while(mainChoice != MediaFileMenu::BACK_FROM_MEDIA);
+    } while(ControllerManager::getInstance()->getViewManager()->getMediaFileView()->getSelectedOption() != MediaFileMenu::BACK_FROM_MEDIA);
 }
 
-// std::vector<MediaFile> MediaFileController::getAllMediaFiles() const{
+void MediaFileController::back(){
+}
 
-// }
-
-void MediaFileController::back(){}
-
+// Display media files with pagination
 void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {
     size_t totalSongs = files.size();
-    //int totalPages = (totalSongs + pageSize - 1) / pageSize;  // Tính số trang cần thiết
 
+    // Calculate the range of files to display for the current page
     size_t firstSong = (currentPage - 1) * pageSize;
     size_t lastSong = std::min(currentPage * pageSize - 1, totalSongs - 1);
 
+    // Show the media files for the current page
     ControllerManager::getInstance()->getViewManager()->getMediaFileView()->showMediaFilesPage(files, currentPage, firstSong, lastSong);
 
 }

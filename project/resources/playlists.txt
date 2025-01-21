@@ -1,0 +1,36 @@
+long
+./resources/playlists/07 Nhac thien.mp3
+./resources/playlists/08 Nhac thien.mp3
+./resources/playlists/13 Nhac thien.mp3
+./resources/playlists/AAA-WEANThisisVietnameseartistQueenB-35024694.mp3
+./resources/playlists/CaiDep-tlinhPhaoPhapKieu-35024697.mp3
+./resources/playlists/ComDoanVien-NgocMai-13538708.mp3
+./resources/playlists/CoViNaoHonViTetNha-TrucNhan-6183655.mp3
+./resources/playlists/DenLaDon-TageRHYDERLOPEPHAM-35024695.mp3
+./resources/playlists/DiDeTroVe-SoobinHoangSon-4726882.mp3
+./resources/playlists/DuongVeNha-AiPhuong-5842491.mp3
+
+ninh
+./resources/playlists/DuongVeQue-Jun365-4305037.mp3
+./resources/playlists/DuongVeQue-OlewLorLukeD-13291723.mp3
+./resources/playlists/EXID - Up & Down (Chinese Version) Official Music Video.mp4
+./resources/playlists/EXO-M 엑소엠 _History_ MV (Chinese Ver.).mp4
+./resources/playlists/f0onwhixt1.mp3
+./resources/playlists/GiauNhatKhuPhuHoa-JustateeWxrdieGillDangrangtoHustlangRobber-35024693.mp3
+./resources/playlists/Hello Song (你好歌) _ Chinese Greeting & Numbers _ Chinese song _ By Little Fox.mp4
+./resources/playlists/k9tl69fy3b.mp3
+./resources/playlists/KhuatLoiVinahouseRemix-HKrayH2ORemix-9525276.mp3
+./resources/playlists/LamLemEmAmMaiMaVe-HoaMinzyHuaKimTuyen-13284937.mp3
+
+trung
+./resources/playlists/LeTinhVinahouseRemix-DICKSONVietNamH2ORemix-9789206.mp3
+./resources/playlists/MangTetVeNha-Double2T-13064325.mp3
+./resources/playlists/MienDatKyDieu-HoangDungKimmese52Hz-35024696.mp3
+./resources/playlists/MinhCungVeQueAnTet-TruongThaoNhi-5835278.mp3
+./resources/playlists/NhaMinhVuiTet-PhamDinhThaiNganIsaacThaiGabriel-6931453.mp3
+./resources/playlists/NhinEmLanCuoiH2OVinahouseRemix-YukiHuyNamH2ORemix-11863054.mp3
+./resources/playlists/Short song ( English song) 🎵 [W Lyrics] 30 seconds song - Memories ~ Maroon 5.mp4
+./resources/playlists/Short Song (English Song)🎵 [W Lyrics] 30 seconds - LEVIOS LS (720p, h264).mp4
+./resources/playlists/TetDeVeNha-DoPhuQui-3754632.mp3
+./resources/playlists/TetDongDay-KHOANguyenKhoa-5850771 (1).mp3
+

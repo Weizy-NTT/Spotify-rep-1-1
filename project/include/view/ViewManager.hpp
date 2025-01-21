@@ -10,33 +10,55 @@
 #include "ScanfOptionView.hpp"
 #include <memory>
 
+// Enum for switching between different views
 enum SwitchView {
-    SW_MAIN_VIEW,
-    SW_SCANF_VIEW,
-    SW_PLAYLIST_VIEW,
-    SW_MEDIAFILE_VIEW,
-    SW_PLAYING_VIEW,
-    SW_DETAILED_VIEW,
-    SW_METADATA_VIEW
+    SW_MAIN_VIEW,         // Switch to the main menu view
+    SW_SCANF_VIEW,        // Switch to the scan option view
+    SW_PLAYLIST_VIEW,     // Switch to the playlist view
+    SW_MEDIAFILE_VIEW,    // Switch to the media file view
+    SW_PLAYING_VIEW,      // Switch to the currently playing media view
+    SW_DETAILED_VIEW,     // Switch to the detailed playlist view
+    SW_METADATA_VIEW      // Switch to the metadata view
 };
 
 class ViewManager {
 private:
-    BaseView* currentView;
-    std::vector<std::unique_ptr<BaseView>> views;
+    BaseView* currentView;                               // Pointer to the currently active view
+    std::vector<std::unique_ptr<BaseView>> views;       // Collection of all available views
 
 public:
+    // Constructor to initialize the view manager
     ViewManager();
+
+    // Display the currently active view
     void showCurrentView();
+
+    // Hide the currently active view
     void hideCurrentView();
+
+    // Switch to a specific view based on the view index
     void switchView(SwitchView viewIndex);
-    
+
+    // Get the scan option view
     ScanfOptionView* getScanfOptionView() const;
+
+    // Get the playlist view
     PlaylistView* getPlaylistView() const;
+
+    // Get the media file view
     MediaFileView* getMediaFileView() const;
+
+    // Get the currently playing media view
     PlayingMediaView* getPlayingMediaView() const;
+
+    // Get the detailed playlist view
     DetailedPlaylistView* getDetailedPlaylistView() const;
+
+    // Get the metadata view
     MetadataView* getMetadataView() const;
+
+    // Get the main menu view
     MainMenuView* getMainMenuView() const;
 };
-#endif
+
+#endif // VIEW_MANAGER_H

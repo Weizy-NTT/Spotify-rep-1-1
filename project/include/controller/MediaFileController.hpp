@@ -9,11 +9,19 @@
 
 class MediaFileController : public BaseController {
 private:
-    size_t currentPage = 1;
+    size_t currentPage = 1; // The current page being displayed
+
 public:
+    // Handle user input for media file operations
     void handleInput();
-    std::vector<MediaFile> getAllMediaFiles() const;
+
+    // Navigate back to the previous menu or screen
     void back();
+
+    // Display media files with pagination
+    // Parameters:
+    // - files: A vector of shared pointers to MediaFile objects
+    // - pageSize: The number of items to display per page (default is 25)
     void displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize = 25);
 };
 

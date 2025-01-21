@@ -11,11 +11,20 @@
 
 class PlaylistController : public BaseController {
 public:
+    // Handle user input for playlist operations
     void handleInput();
-    void createPlaylist(const std::string& id, const std::string& name);
+
+    // Create a new playlist with the specified name
+    void createPlaylist(const std::string& name);
+
+    // Navigate back to the previous menu or screen
     void back();
+
+    // Delete a playlist by its ID
     void deletePlaylist(const std::string& Id);
-    void showMediafileInList(const std::string& listId);
+
+    // Display all playlists from the provided list
     void showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists);
 };
+
 #endif // PLAYLIST_CONTROLLER

@@ -1,69 +1,82 @@
-#include"PlaylistController.hpp"
+#include "PlaylistController.hpp"
 #include "ControllerManager.hpp"
 
-void PlaylistController::handleInput(){
-    size_t mainChoice;
-    do{
-    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
-    Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-    switch (mainChoice)
-        {
-            case PlaylistMenu::SELECT_PLAYLIST:{
-                std::string PlaylistID;
-                std::cout <<"Enter play list ID for looking: ";
-                std::getline(std::cin, PlaylistID);
-                ControllerManager::getInstance()->getDetailedPlaylistController()->handleInput(PlaylistID);
-                break;
-            }
-            case PlaylistMenu::ADD_PLAYLIST:{
-                std::string playlistID, playlistName;
-                std::cout <<"Enter playlist ID for adding: ";
-                std::getline(std::cin, playlistID);
-                std::cout <<"Enter playlist name for adding: ";
-                std::getline(std::cin, playlistName);
-                createPlaylist(playlistID, playlistName);
-                break;
-            }
-        
-            case PlaylistMenu::REMOVE_PLAYLIST:{
-                std::string PlaylistName;
-                std::cout <<"Enter playlist ID for removing: ";
-                std::getline(std::cin, PlaylistName);
-                deletePlaylist(PlaylistName);
-                break;
-            }
+// Handle user input for playlist operations
+void PlaylistController::handleInput() {
+    PlaylistStatus status = PlaylistStatus::PLAYLIST_NORMAL;
 
-            case PlaylistMenu::BACK_FROM_PLAYLIST:{
+    do {
+        // Hide the current view and display all playlists
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        showAllPlaylists(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists());
+
+        // Display the current status message
+        ControllerManager::getInstance()->getViewManager()->getPlaylistView()->displayStatusMessage(status);
+
+        // Switch to the playlist view
+        ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYLIST_VIEW);
+
+        // Handle user input based on the selected playlist menu option
+        switch (ControllerManager::getInstance()->getViewManager()->getPlaylistView()->getSelectedOption()) {
+            case PlaylistMenu::SELECT_PLAYLIST: {
+                // Handle selecting a playlist
+                std::string PlaylistID;
+                Exception_Handler("Enter playlist ID for looking: ",PlaylistID,validateID);
+                if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(PlaylistID))
+                {
+                    ControllerManager::getInstance()->getDetailedPlaylistController()->handleInput(PlaylistID);
+                }
+                else {
+                    status = PlaylistStatus::PLAYLIST_SELECT_STATUS;
+                }
+                break;
+            }
+            case PlaylistMenu::ADD_PLAYLIST: {
+                // Handle adding a new playlist
+                std::string playlistName;
+                Exception_Handler("Enter playlist name for adding: ", playlistName, validateAlphaSring);
+                createPlaylist(playlistName);
+                break;
+            }
+            case PlaylistMenu::REMOVE_PLAYLIST: {
+                // Handle removing an existing playlist
+                std::string playlistID;
+                Exception_Handler("Enter playlist ID for removing: ",playlistID,validateID);
+                if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(playlistID))
+                {
+                    deletePlaylist(playlistID);
+                }
+                else {
+                    status = PlaylistStatus::PLAYLIST_REMOVE_STATUS;
+                }
+                break;
+            }
+            case PlaylistMenu::BACK_FROM_PLAYLIST: {
+                // Handle going back to the previous menu
                 back();
                 break;
             }
-            default:
-                std::cout << "Your choice is not valid\n";
-                break;
-
         }
-    }while (mainChoice != PlaylistMenu::BACK_FROM_PLAYLIST);
-    
+    } while (ControllerManager::getInstance()->getViewManager()->getPlaylistView()->getSelectedOption() != PlaylistMenu::BACK_FROM_PLAYLIST);
 }
 
-void PlaylistController::createPlaylist(const std::string& id, const std::string& name ){
-    std::shared_ptr<Playlist> ptr = std::make_shared<Playlist>(id, name);
+// Create a new playlist and add it to the library
+void PlaylistController::createPlaylist(const std::string& name) {
+    std::shared_ptr<Playlist> ptr = std::make_shared<Playlist>(name);
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->addPlaylist(ptr);
 }
 
-void PlaylistController::deletePlaylist(const std::string& Id){
+// Delete a playlist from the library
+void PlaylistController::deletePlaylist(const std::string& Id) {
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->removePlaylist(Id);
 }
-void PlaylistController::back(){
 
+// Handle the back navigation logic
+void PlaylistController::back() {
+    // Placeholder for back navigation logic
 }
 
-void PlaylistController::showMediafileInList(const std::string& listId){
-    ControllerManager::getInstance()->getViewManager()->getDetailedPlaylistView()->showListOfSongs(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getPlaylistByID(listId));
-}
-
+// Display all playlists in the playlist view
 void PlaylistController::showAllPlaylists(const std::vector<std::shared_ptr<Playlist>>& lists) {
     ControllerManager::getInstance()->getViewManager()->getPlaylistView()->showPlaylistList(lists);
 }

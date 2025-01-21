@@ -1,76 +1,122 @@
-// #include "PlayingMediaController.hpp"
-// #include "ControllerManager.hpp"
+#include "PlayingMediaController.hpp"
+#include "ControllerManager.hpp"
 
-// void PlayingMediaController::handleInput(const std::string& ID){
-//     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
-//     size_t mainChoice;
-//     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-//     switch (mainChoice)
-//         {
-//         case PlayingMediaMenu::BACK_FROM_PLAYING: {
-//             break;
-//         }
-//         case PlayingMediaMenu::PLAY_PAUSE:{
-//             break;
-//         }
-//         case PlayingMediaMenu::NEXT:{
-//             break;
-//         }
-//         case PlayingMediaMenu::PREV:{
-//             break;
-//         }
-//         default:
-//             std::cout << "Your choice is not valid\n";
-//             break;
-//         }
-// }
-// void PlayingMediaController::playMediaFile(MediaFile file){
-// }
-// // void PlayingMediaController::inputFromKeyboard(){
-// //     ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_PLAYING_VIEW);
-// //     size_t mainChoice;
-// //     Exception_Handler("Enter your choice: ",mainChoice,validatePosInteger);
-// //     handleInput(mainChoice);
-// // }
+void PlayingMediaController::handleInput(const std::string& ID){
+    playMediaFile(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+    do {
+    updateTime();
+    switch (ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption())
+        {
+            case PlayingMediaMenu::BACK_FROM_PLAYING: {
+                back();
+                break;
+            }
+            case PlayingMediaMenu::PLAY: {
+                play();
+                ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
+                break;
+            }
+            case PlayingMediaMenu::PAUSE: {
+                pause();
+                ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
+                break;
+            }
+            case PlayingMediaMenu::NEXT: {
+                skipToNext();
+                ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
+                break;
+            }
+            case PlayingMediaMenu::PREV: {
+                ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
+                skipToPrevious();
+                break;
+            }
+        }
+    } while (ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption() != PlayingMediaMenu::BACK_FROM_PLAYING);
+}
 
+// Play the specified media file
+void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
+    startUpdateThread();
+}
 
-// // void PlayingMediaController::handleInput(const size_t& input){
-// //     switch (input)
-// //         {
-// //         case PlayingMediaMenu::BACK_FROM_PLAYING: {
-// //             break;
-// //         }
-// //         case PlayingMediaMenu::PLAY_PAUSE:{
-// //             break;
-// //         }
-// //         case PlayingMediaMenu::NEXT:{
-// //             break;
-// //         }
-// //         case PlayingMediaMenu::PREV:{
-// //             break;
-// //         }
-// //         default:
-// //             std::cout << "Your choice is not valid\n";
-// //             break;
-// //         }
-// // }
-// // void PlayingMediaController::playMediaFile(MediaFile file){
+// Resume playback
+void PlayingMediaController::play() {
+    startUpdateThread();
+    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+    playingMedia->resumeMusic();
+}
 
+// Pause playback
+void PlayingMediaController::pause() {
+    stopUpdateThread();
+    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+    playingMedia->pauseMusic();
+}
 
-// // }
-// // void PlayingMediaController::play(){
+// Skip to the next track
+void PlayingMediaController::skipToNext() {
+    stopUpdateThread();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
+    startUpdateThread();
+}
 
-// // }
-// // void PlayingMediaController::pause(){
+// Skip to the previous track
+void PlayingMediaController::skipToPrevious() {
+    stopUpdateThread();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
+    startUpdateThread();
+}
 
-// // }
-// // void PlayingMediaController::skipToNext(){
+// Adjust the volume level
+void PlayingMediaController::adjustVolume(size_t level) {
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->adjustVolume(level);
+}
 
-// // }
-// // void PlayingMediaController::skipToPrevious(){
+// Update playback time and display the current status
+void PlayingMediaController::updateTime() {
+    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+    size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
+    ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->showPlayingMedia(ControllerManager::getInstance()->getModelManager()->getPlayingMedia(),ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getCurrentTime(),total,ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getVolume());
+}
 
-// // }
-// // void PlayingMediaController::adjustVolume(int level){
+void PlayingMediaController::back(){
+}
 
-// // }
-// // void PlayingMediaController::back(){}
+// Update the elapsed playback time in a separate thread
+void PlayingMediaController::updateElapsedTime() {
+    auto playing = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
+
+    while (isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        // Increment playback time every second
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        playing->setCurrentTime(playing->getCurrentTime() + 1);
+
+        // Move to the next track if the current one is finished
+        if (playing->getCurrentTime() >= playing->getTotalTime()) {
+            playing->nextTrack();
+            ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
+        }
+    }
+}
+
+// Start the thread for updating playback time
+void PlayingMediaController::startUpdateThread() {
+    if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        isPlayingMediaFile.store(true, std::memory_order_relaxed);
+        if (!updateThread.joinable()) { // Start the thread if not already running
+            updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
+        }
+    }
+}
+
+// Stop the thread for updating playback time
+void PlayingMediaController::stopUpdateThread() {
+    if (isPlayingMediaFile.load(std::memory_order_relaxed)) {
+        isPlayingMediaFile.store(false, std::memory_order_relaxed);
+        if (updateThread.joinable()) {
+            updateThread.join();
+        }
+    }
+}

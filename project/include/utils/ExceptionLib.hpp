@@ -1,74 +1,95 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
+// Exception for invalid alpha string input
+class InvalidAlphaSringException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid input. Only alpha characters are allowed.";
+    }
+};
+
+// Exception for invalid year input
+class InvalidYearException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Year must have 4 numeric characters.";
+    }
+};
+
+// Exception for invalid integer input
+class InvalidInputIntegerException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid input. Input must be a positive integer value.";
+    }
+};
+
+// Exception for invalid menu choice
+class InvalidMenuChoiceException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Invalid choice. Please enter a valid option from the menu.";
+    }
+};
+
+// Exception for invalid ID input
 class InvalidIDException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "Invalid ID number. The ID student has 6 numeric characters.";
+        return "Invalid ID. ID must contain only digits.";
     }
 };
 
-class InvalidFullNameException : public std::exception {
+// Exception for invalid track number
+class InvalidTrackException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "The full name has a length of 10 to 50 characters. Only alpha characters are allowed.";
+        return "Invalid track number. Track number must contain only digits.";
     }
 };
 
-class InvalidDOBException  : public std::exception {
+// Exception for invalid path
+class InvalidPathException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "Invalid birthday. Date of birth must be in dd/MM/YYYY format.";
+        return "Invalid path. The path does not exist or is not a valid directory.";
     }
 };
 
-class InvalidEntryYearException  : public std::exception {
+// Exception for invalid volume input
+class InvalidVolumeException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "Entry year must be between 2017 and 2025.";
+        return "Invalid volume. The volume must be between 0 and 128.";
     }
 };
 
-class InvalidScoreException  : public std::exception {
-public:
-    const char* what() const noexcept override {
-        return "Entry score must be between 0 and 10 and is a numeric value.";
-    }
-};
-
-class InvalidTrainningCeterException  : public std::exception {
-public:
-    const char* what() const noexcept override {
-        return "Trainning center has only alpha characters(Dong Nai, Ca Mau, …).";
-    }
-};
-
-class InvalidSemesterNameException  : public std::exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid semester name. The format should be HKxx, where xx are two numeric characters";
-    }
-};
-
-class InvalidInputIntegerException  : public std::exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid input. Input must be an integer value";
-    }
-};
-
+// Validation functions
+void validateVolume(const size_t& value);
 void validateScanfMenu(const size_t& value);
-void validateIDNumber(const std::string& ID);
-void validateFullName(const std::string& fullName);
-void validateDoB(const std::string& dob);
-void validateEntryYear(const std::string& entry_year);
-void validateScore(const double& score);
-void validateTrainningCenter(const std::string& trainning_center);
-void validateSemesterName(const std::string& semester_name);
-void validatePosInteger(const size_t& value);
-void Exception_Handler(const std::string& str,std::string& variable, void(*func)(const std::string&));
-void Exception_Handler(const std::string& str,size_t& variable, void(*func)(const size_t&));
-void Exception_Handler(const std::string& str,double& variable, void(*func)(const double&));
+void validateMainMenu(const size_t& value);
+void validateMediaFilesMenu(const size_t& value);
+void validateMetadataMenu(const size_t& value);
+void validateEditVideoMenu(const size_t& value);
+void validateEditAudioMenu(const size_t& value);
+void validatePlaylistsMenu(const size_t& value);
+void validateDetailedPlaylistMenu(const size_t& value);
+void validatePlayingMediaMenu(const size_t& value);
+
+void validateID(const std::string& ID); // Validate ID format
+void validateTrack(const std::string& value); // Validate track number format
+void validatePath(const std::string& path); // Validate file or directory path
+bool isUSBDevicePresent(const std::string& device); // Check if a USB device is present
+
+void validateAlphaSring(const std::string& alString); // Validate string with alpha characters
+void validateYear(const std::string& year); // Validate year format
+void validatePosInteger(const size_t& value); // Validate positive integer input
+
+// Exception handlers for strings and integers
+void Exception_Handler(const std::string& str, std::string& variable, void(*func)(const std::string&));
+void Exception_Handler(const std::string& str, size_t& variable, void(*func)(const size_t&));
+
 #endif // EXCEPTION_H
