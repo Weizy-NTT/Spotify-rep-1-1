@@ -50,7 +50,7 @@ void PlaylistView::showMenu() {
 
     // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    // std::system("clear");
+    //std::system("clear");
 }
 
 int PlaylistView::getSelectedOption() const {

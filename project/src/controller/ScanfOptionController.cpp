@@ -21,8 +21,10 @@
 
 namespace fs = std::filesystem;
 
-void ScanfOptionController::handleInput(){
+// Handle user input for scanning options
+void ScanfOptionController::handleInput() {
     ScanStatus status = ScanStatus::SCAN_NORMAL;
+
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->displayStatusMessage(status);
@@ -62,7 +64,8 @@ void ScanfOptionController::handleInput(){
     } while(ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->getSelectedOption() != ScanfMenu::BACK_FROM_SCAN);
 }
 
-void ScanfOptionController::scanDirectory(const std::string& folderPath){
+// Scan a directory for media files and add them to the library
+void ScanfOptionController::scanDirectory(const std::string& folderPath) {
     for (const auto& entry : fs::directory_iterator(folderPath)) {
         auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(entry.path().filename().string());
         if (entry.is_regular_file() && !checkName) {
@@ -70,10 +73,11 @@ void ScanfOptionController::scanDirectory(const std::string& folderPath){
             if (mediaFile) {
                 ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(mediaFile);
             }
-        }            
+        }
     }
 }
 
+// Scan a USB device for media files and add them to the library
 void ScanfOptionController::scanUSBDevice(const std::string& device) {
     for (const auto& entry : fs::directory_iterator(device)) {
         auto checkName = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->isValidMediaFileNameInLibrary(entry.path().filename().string());
@@ -82,13 +86,14 @@ void ScanfOptionController::scanUSBDevice(const std::string& device) {
             if (mediaFile) {
                 ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->addMediaFile(mediaFile);
             }
-        }            
+        }
     }
 }
 
 void ScanfOptionController::back(){
 }
 
+// Parse metadata from a file path and return a MediaFile object
 std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::string& filePath) {
     namespace fs = std::filesystem;
 
@@ -100,8 +105,8 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
     fs::path path(filePath);
 
     if (path.extension() == ".mp3") {
+        // Extract metadata from an MP3 file
         TagLib::FileRef f(filePath.c_str());
-
         if (!f.isNull() && f.tag() && f.audioProperties()) {
             TagLib::Tag* tag = f.tag();
             TagLib::AudioProperties* audioProperties = f.audioProperties();
@@ -109,6 +114,7 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_mediafile->setName(path.filename().string());
             new_mediafile->setPath(filePath);
             new_mediafile->setType(AUDIO);
+
             Metadata new_metadata;
             new_metadata.setValue("Title", removeAccents(tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true)));
             new_metadata.setValue("Artist", removeAccents(tag->artist().isEmpty() ? "Unknown" : tag->artist().toCString(true)));
@@ -159,6 +165,7 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
     return new_mediafile;
 } 
 
+// Load playlists from a text file
 void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     if (!ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->getAllPlaylists().empty()) {
         return;
@@ -176,6 +183,7 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     std::shared_ptr<Playlist> currentPlaylist = nullptr;
 
     while (std::getline(inFile, line)) {
+        // Trim whitespace
         line.erase(0, line.find_first_not_of(" \t"));
         line.erase(line.find_last_not_of(" \t") + 1);
 
@@ -224,6 +232,7 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     }
 }
 
+// Remove accents from a string
 std::string ScanfOptionController::removeAccents(const std::string& input) {
     try {
         // Khởi tạo UErrorCode

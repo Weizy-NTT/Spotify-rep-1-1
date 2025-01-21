@@ -1,32 +1,31 @@
 #ifndef UART_HPP
 #define UART_HPP
 
-
 #include <boost/asio.hpp>
 #include <boost/asio/serial_port.hpp>
 #include <atomic>
 #include <mutex>
 #include <string>
 
-
-
-
+/**
+ * UART communication class
+ */
 class UART {
 private:
-    boost::asio::io_context io_context;       // IO context cho Boost.Asio
+    boost::asio::io_context io_context;       // IO context for Boost.Asio
     boost::asio::serial_port serial_port;     // Serial port object
-    std::atomic<bool> running;                // Cờ kiểm tra chương trình có đang chạy không
-    std::mutex data_mutex;                    // Mutex bảo vệ dữ liệu
-    std::string received_data;                // Dữ liệu nhận từ UART
+    std::atomic<bool> running;                // Flag to check if the program is running
+    std::mutex data_mutex;                    // Mutex to protect shared data
+    std::string received_data;                // Data received from UART
 
 public:
-    UART(const std::string& port, unsigned int baud_rate);
-    ~UART();
+    UART(const std::string& port, unsigned int baud_rate); // Constructor
+    ~UART();                                              // Destructor
 
-    void writeData(const std::string& data);     // Gửi dữ liệu qua UART
-    void readData();                            // Đọc dữ liệu từ UART
-    void startReadLoop();                       // Bắt đầu vòng lặp đọc dữ liệu
-    void stop();                                // Dừng giao tiếp UART
+    void writeData(const std::string& data);     // Send data via UART
+    void readData();                            // Read data from UART
+    void startReadLoop();                       // Start the read data loop
+    void stop();                                // Stop UART communication
     
 };
 

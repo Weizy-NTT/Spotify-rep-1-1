@@ -2,16 +2,22 @@
 #include "ControllerManager.hpp"
 #include "HardwareController.hpp"
 
-void MediaFileController::handleInput(){
-    
+// Handle user input for the media file view
+void MediaFileController::handleInput() {
     MediaFileStatus status = MediaFileStatus::MEDIAFILE_NORMAL;
     size_t totalPage = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles().size();
-    totalPage = (size_t)(totalPage/25) + 1;
+    totalPage = (size_t)(totalPage / 25) + 1; // Calculate the total number of pages (25 files per page)
+
     do {
-    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
-    ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
+        // Hide the current view and display media files with pagination
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        displayMediaFilesWithPagination(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getAllMediaFiles());
+
+        // Display the current status message
+        ControllerManager::getInstance()->getViewManager()->getMediaFileView()->displayStatusMessage(status);
+
+        // Switch to the media file view
+        ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_MEDIAFILE_VIEW);
 
     switch (ControllerManager::getInstance()->getViewManager()->getMediaFileView()->getSelectedOption())
         {
@@ -74,12 +80,15 @@ void MediaFileController::handleInput(){
 void MediaFileController::back(){
 }
 
+// Display media files with pagination
 void MediaFileController::displayMediaFilesWithPagination(const std::vector<std::shared_ptr<MediaFile>>& files, size_t pageSize) {
     size_t totalSongs = files.size();
 
+    // Calculate the range of files to display for the current page
     size_t firstSong = (currentPage - 1) * pageSize;
     size_t lastSong = std::min(currentPage * pageSize - 1, totalSongs - 1);
 
+    // Show the media files for the current page
     ControllerManager::getInstance()->getViewManager()->getMediaFileView()->showMediaFilesPage(files, currentPage, firstSong, lastSong);
 
 }

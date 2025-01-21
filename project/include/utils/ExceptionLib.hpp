@@ -1,8 +1,9 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
+// Exception for invalid alpha string input
 class InvalidAlphaSringException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -10,20 +11,23 @@ public:
     }
 };
 
-class InvalidYearException  : public std::exception {
+// Exception for invalid year input
+class InvalidYearException : public std::exception {
 public:
     const char* what() const noexcept override {
         return "Year must have 4 numeric characters.";
     }
 };
 
-class InvalidInputIntegerException  : public std::exception {
+// Exception for invalid integer input
+class InvalidInputIntegerException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "Invalid input. Input must be an positive integer value";
+        return "Invalid input. Input must be a positive integer value.";
     }
 };
 
+// Exception for invalid menu choice
 class InvalidMenuChoiceException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -31,6 +35,7 @@ public:
     }
 };
 
+// Exception for invalid ID input
 class InvalidIDException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -38,6 +43,7 @@ public:
     }
 };
 
+// Exception for invalid track number
 class InvalidTrackException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -45,6 +51,7 @@ public:
     }
 };
 
+// Exception for invalid path
 class InvalidPathException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -52,6 +59,7 @@ public:
     }
 };
 
+// Exception for invalid volume input
 class InvalidVolumeException : public std::exception {
 public:
     const char* what() const noexcept override {
@@ -59,6 +67,7 @@ public:
     }
 };
 
+// Validation functions
 void validateVolume(const size_t& value);
 void validateScanfMenu(const size_t& value);
 void validateMainMenu(const size_t& value);
@@ -70,14 +79,17 @@ void validatePlaylistsMenu(const size_t& value);
 void validateDetailedPlaylistMenu(const size_t& value);
 void validatePlayingMediaMenu(const size_t& value);
 
-void validateID(const std::string& ID);
-void validateTrack(const std::string& value);
-void validatePath(const std::string& path);
-bool isUSBDevicePresent(const std::string& device);
+void validateID(const std::string& ID); // Validate ID format
+void validateTrack(const std::string& value); // Validate track number format
+void validatePath(const std::string& path); // Validate file or directory path
+bool isUSBDevicePresent(const std::string& device); // Check if a USB device is present
 
-void validateAlphaSring(const std::string& alString);
-void validateYear(const std::string& year);
-void validatePosInteger(const size_t& value);
-void Exception_Handler(const std::string& str,std::string& variable, void(*func)(const std::string&));
-void Exception_Handler(const std::string& str,size_t& variable, void(*func)(const size_t&));
+void validateAlphaSring(const std::string& alString); // Validate string with alpha characters
+void validateYear(const std::string& year); // Validate year format
+void validatePosInteger(const size_t& value); // Validate positive integer input
+
+// Exception handlers for strings and integers
+void Exception_Handler(const std::string& str, std::string& variable, void(*func)(const std::string&));
+void Exception_Handler(const std::string& str, size_t& variable, void(*func)(const size_t&));
+
 #endif // EXCEPTION_H

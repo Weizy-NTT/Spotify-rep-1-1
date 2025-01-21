@@ -84,10 +84,6 @@ The user can play media files with basic playback functionalities.
 The user adjusts the playback volume using both software and hardware.
 
 ### **Features:**
-- **Increase/Decrease Volume ([UC12](#uc12-change-volume), [UC13](#uc13-control-volume-via-s32k144)):**  
-  The user adjusts the volume through keyboard commands:  
-  - `i` to **increase**  
-  - `d` to **decrease**
 
 - **Hardware Volume Control ([UC13](#uc13-control-volume-via-s32k144)):**  
   The user adjusts the volume using the **ADC on the S32K144 board**.
@@ -99,8 +95,8 @@ The user adjusts the playback volume using both software and hardware.
 The system communicates with the **S32K144** board to display song information and control playback.
 
 ### **Features:**
-- **Display Song Information ([UC15](#uc15-display-song-information-on-s32k144)):**  
-  When a song is playing, its name, duration, and playback status are displayed on the S32K144 screen.
+- **Display Song Duration ([UC15](#uc15-display-song-information-on-s32k144)):**  
+  When a song is playing, duration is displayed on the S32K144 screen.
 
 - **Hardware Control ([UC14](#uc14-control-playback-via-s32k144-buttons)):**  
   The user uses buttons on the S32K144 board to:  

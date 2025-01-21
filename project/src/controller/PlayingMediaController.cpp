@@ -11,63 +11,70 @@ void PlayingMediaController::handleInput(const std::string& ID){
                 back();
                 break;
             }
-            case PlayingMediaMenu::PLAY:{
+            case PlayingMediaMenu::PLAY: {
                 play();
                 ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
                 break;
             }
-            case PlayingMediaMenu::PAUSE:{
+            case PlayingMediaMenu::PAUSE: {
                 pause();
                 ControllerManager::getInstance()->getHardwareController()->sendPauseCommand();
                 break;
             }
-            case PlayingMediaMenu::NEXT:{
+            case PlayingMediaMenu::NEXT: {
                 skipToNext();
                 ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 break;
             }
-            case PlayingMediaMenu::PREV:{
+            case PlayingMediaMenu::PREV: {
                 ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
                 skipToPrevious();
                 break;
             }
         }
-    } while(ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption() != PlayingMediaMenu::BACK_FROM_PLAYING);
+    } while (ControllerManager::getInstance()->getViewManager()->getPlayingMediaView()->getSelectedOption() != PlayingMediaMenu::BACK_FROM_PLAYING);
 }
 
+// Play the specified media file
 void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& file) {
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setCurrentMediaFile(file);
     startUpdateThread();
 }
 
+// Resume playback
 void PlayingMediaController::play() {
     startUpdateThread();
     auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
     playingMedia->resumeMusic();
 }
 
+// Pause playback
 void PlayingMediaController::pause() {
     stopUpdateThread();
     auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
     playingMedia->pauseMusic();
 }
 
-void PlayingMediaController::skipToNext(){
+// Skip to the next track
+void PlayingMediaController::skipToNext() {
     stopUpdateThread();
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->nextTrack();
     startUpdateThread();
 }
 
-void PlayingMediaController::skipToPrevious(){
+// Skip to the previous track
+void PlayingMediaController::skipToPrevious() {
     stopUpdateThread();
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->previousTrack();
     startUpdateThread();
 }
 
-void PlayingMediaController::adjustVolume(size_t level){
+// Adjust the volume level
+void PlayingMediaController::adjustVolume(size_t level) {
     ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->adjustVolume(level);
 }
 
+// Update playback time and display the current status
 void PlayingMediaController::updateTime() {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     size_t total = ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getTotalTime();
@@ -77,13 +84,16 @@ void PlayingMediaController::updateTime() {
 void PlayingMediaController::back(){
 }
 
+// Update the elapsed playback time in a separate thread
 void PlayingMediaController::updateElapsedTime() {
     auto playing = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
 
     while (isPlayingMediaFile.load(std::memory_order_relaxed)) {
-        // Cập nhật thời gian phát nhạc
+        // Increment playback time every second
         std::this_thread::sleep_for(std::chrono::seconds(1));
         playing->setCurrentTime(playing->getCurrentTime() + 1);
+
+        // Move to the next track if the current one is finished
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
             ControllerManager::getInstance()->getHardwareController()->sendSignal("1212");
@@ -91,15 +101,17 @@ void PlayingMediaController::updateElapsedTime() {
     }
 }
 
+// Start the thread for updating playback time
 void PlayingMediaController::startUpdateThread() {
     if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {
         isPlayingMediaFile.store(true, std::memory_order_relaxed);
-        if (!updateThread.joinable()) {  // Nếu thread chưa chạy, khởi động
+        if (!updateThread.joinable()) { // Start the thread if not already running
             updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
         }
     }
 }
 
+// Stop the thread for updating playback time
 void PlayingMediaController::stopUpdateThread() {
     if (isPlayingMediaFile.load(std::memory_order_relaxed)) {
         isPlayingMediaFile.store(false, std::memory_order_relaxed);

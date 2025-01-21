@@ -11,13 +11,15 @@ int audio_out_channels = av_get_channel_layout_nb_channels(audio_out_channel_lay
 int audio_out_sample_rate = 44100;
 AVSampleFormat audio_out_sample_fmt = AV_SAMPLE_FMT_S16;
 
+// Get the currently playing media file
 std::shared_ptr<MediaFile> PlayingMedia::getCurrentMediaFile() const {
-    if (currentplaylist.empty() || currentTrackIndex < 0 || currentTrackIndex >= currentplaylist.size()){
-        return nullptr;
-    } 
+    if (currentplaylist.empty() || currentTrackIndex < 0 || currentTrackIndex >= currentplaylist.size()) {
+        return nullptr; // Return nullptr if no valid track is available
+    }
     return currentplaylist[currentTrackIndex];
 }
 
+// Set the current media file for playback
 void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile) {
     if (!mediaFile) {
         std::cerr << "Error: Invalid media file." << std::endl;
@@ -26,7 +28,7 @@ void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFi
     if (!getCurrentMediaFile() || (mediaFile->getID() != getCurrentMediaFile()->getID())) {
         for (size_t i = 0; i < currentplaylist.size(); ++i) {
             if (currentplaylist[i]->getID() == mediaFile->getID()) {
-                stop();
+                stop(); // Stop the current playback
                 {
                     std::unique_lock<std::recursive_mutex> lock(stateMutex);
                     currentTrackIndex = i;
@@ -38,41 +40,46 @@ void PlayingMedia::setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFi
     }
 }
 
-void PlayingMedia::setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist) 
-{
+// Set a new playlist for playback
+void PlayingMedia::setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist) {
     if (newPlaylist != currentplaylist) {
-        stop();
+        stop(); // Stop any current playback
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
-        currentplaylist = newPlaylist;
+        currentplaylist = newPlaylist; // Set the new playlist
     }
 }
-
+// Get the current playback time
 size_t& PlayingMedia::getCurrentTime() {
     return currentTime;
 }
-
+// Get duration of the current mediafile with string type
 std::string PlayingMedia::getDurationStringType() const {
     std::string duration = (totalTime / 60 < 10 ? "0" : "") + std::to_string(totalTime / 60) +
                             (totalTime % 60 < 10 ? "0" : "") + std::to_string(totalTime % 60);
     return duration;
 };
 
+// Get duration of the current mediafile
 size_t PlayingMedia::getTotalTime() const {
     return totalTime;
-}  
+}
 
+// Set the current playback time
 void PlayingMedia::setCurrentTime(size_t time) {
     currentTime = time;
 }
 
+// Constructor: Initialize the volume and playback settings
 PlayingMedia::PlayingMedia() : volume(50) {
     Mix_VolumeMusic(volume);
 }
 
-PlayingMedia::~PlayingMedia(){
+// Destructor: Stop playback and clean up resources
+PlayingMedia::~PlayingMedia() {
     stopPlaybackThread();
 }
 
+// Play an audio file
 void PlayingMedia::playAudio(const char* filePath) {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         throw std::runtime_error("Failed to initialize SDL_mixer: " + std::string(Mix_GetError()));
@@ -113,108 +120,127 @@ void PlayingMedia::playAudio(const char* filePath) {
 }
 
 void PlayingMedia::play() {
+    // Check if the playlist is empty
     if (currentplaylist.empty()) {
         return;
     }
 
     stopPlaybackThread(); // Stop any existing playback thread
+
     {
+        // Lock the state and initialize playback variables
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
         currentTime = 0;
         totalTime = currentplaylist[currentTrackIndex]->getDuration();
     }
+
+    // Start the playback thread
     playbackThread = std::thread(&PlayingMedia::playCurrentTrack, this);
 }
 
 void PlayingMedia::pauseMusic() {
+    // Lock the state and check if playback can be paused
     std::unique_lock<std::recursive_mutex> lock(stateMutex);
     if (!playing || paused) {
         return;
     }
     paused = true;
-    Mix_PauseMusic();
+    Mix_PauseMusic(); // Pause SDL_mixer playback
 }
 
 void PlayingMedia::resumeMusic() {
+    // Lock the state and check if playback can be resumed
     std::unique_lock<std::recursive_mutex> lock(stateMutex);
     if (!playing || !paused) {
         return;
     }
     paused = false;
-    Mix_ResumeMusic();
+    Mix_ResumeMusic(); // Resume SDL_mixer playback
 }
 
-void PlayingMedia::stop(){  
+void PlayingMedia::stop() {
+    // Stop the playback thread and reset the state
     stopPlaybackThread();
 }
 
 bool PlayingMedia::isPlaying() {
+    // Check if SDL_mixer is currently playing music
     return Mix_PlayingMusic();
 }
 
-void PlayingMedia::adjustVolume(size_t newVolume){
+void PlayingMedia::adjustVolume(size_t newVolume) {
+    // Adjust the playback volume and apply it to SDL_mixer
     volume = newVolume;
     Mix_VolumeMusic(volume);
 }
 
 void PlayingMedia::stopPlaybackThread() {
+    // Check if the playback thread is running and join it
     if (playbackThread.joinable()) {
         {
+            // Lock the state and mark playback as stopped
             std::unique_lock<std::recursive_mutex> lock(stateMutex);
             playing = false;
         }
-        playbackThread.join();
+        playbackThread.join(); // Wait for the thread to finish
     }
 }
 
-void PlayingMedia::playCurrentTrack(){
+void PlayingMedia::playCurrentTrack() {
     {
+        // Lock the state and mark playback as active
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
         playing = true;
         paused = false;
     }
-    if(!currentplaylist.empty()){
+
+    // Check if there are tracks to play
+    if (!currentplaylist.empty()) {
         std::string currentTrackPath = currentplaylist[currentTrackIndex]->getPath();
         if (currentplaylist[currentTrackIndex]->getType() == MediaType::AUDIO) {
-            playAudio(currentTrackPath.c_str());
-        }
-        else {
-            std::string wavpath = extractAudio(currentTrackPath);
-            playVideo(currentTrackPath.c_str(),wavpath.c_str());
+            playAudio(currentTrackPath.c_str()); // Play audio file
+        } else {
+            std::string wavPath = extractAudio(currentTrackPath);
+            playVideo(currentTrackPath.c_str(),wavPath.c_str()); // Play video file
         }
     } else {
-        std::cerr <<"No tracks available to play.\n";
+        std::cerr << "No tracks available to play.\n";
     }
 
     {
+        // Lock the state and mark playback as stopped
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
         playing = false;
     }
 }
 
 void PlayingMedia::nextTrack() {
+    // Stop current playback and move to the next track
     stop();
     {
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
         currentTrackIndex = (currentTrackIndex + 1) % currentplaylist.size();
     }
-    play();
+    play(); // Start playback for the next track
 }
 
 void PlayingMedia::previousTrack() {
+    // Stop current playback and move to the previous track
     stop();
     {
         std::unique_lock<std::recursive_mutex> lock(stateMutex);
         currentTrackIndex = (currentTrackIndex == 0) ? currentplaylist.size() - 1 : currentTrackIndex - 1;
     }
-    play();
+    play(); // Start playback for the previous track
 }
 
 bool PlayingMedia::hasNextTrack() const {
+    // Check if there is a next track available in the playlist
     return currentTrackIndex >= 0 && currentTrackIndex < currentplaylist.size() - 1;
 }
 
 bool PlayingMedia::hasPrevTrack() const {
+    // Check if there is a previous track available in the playlist
     return currentTrackIndex > 0 && currentTrackIndex < currentplaylist.size();
 }
 

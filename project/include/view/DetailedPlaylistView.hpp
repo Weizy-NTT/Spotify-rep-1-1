@@ -7,26 +7,27 @@
 #include <memory>
 #include "Playlist.hpp"
 
-
+// Enum for detailed playlist menu options
 enum DetailedPlaylistMenu {
-    PLAY_SONG_FROM_PLAYLIST,
-    ADD_SONG,
-    DELETE_SONG,
-    SHOW_DETAIL_SONG,
-    BACK_FROM_DETAIL
+    PLAY_SONG_FROM_PLAYLIST,       // Option to play a song from the playlist
+    ADD_SONG,                      // Option to add a song to the playlist
+    DELETE_SONG,                   // Option to delete a song from the playlist
+    SHOW_DETAIL_SONG,              // Option to show details of a song
+    BACK_FROM_DETAIL               // Option to go back to the previous menu
 };
 
+// Enum for detailed playlist statuses
 enum DetailedPlaylistStatus {
-    DETAILED_NORMAL,
-    DETAILED_ADD_STATUS,
-    DETAILED_PLAY_STATUS,
-    DETAILED_DELETE_STATUS,
-    DETAILED_SHOW_STATUS,
+    DETAILED_NORMAL,               // Normal status
+    DETAILED_ADD_STATUS,           // Status for adding a song
+    DETAILED_PLAY_STATUS,          // Status for playing a song
+    DETAILED_DELETE_STATUS,        // Status for deleting a song
+    DETAILED_SHOW_STATUS           // Status for showing song details
 };
-
 
 class DetailedPlaylistView : public BaseView {
 private:
+    // Menu entries for the detailed playlist view
     std::vector<std::string> menu_entries = {
         "Play a song",
         "Add a song to playlist",
@@ -34,15 +35,28 @@ private:
         "Show details of a song",
         "Go Back"
     };
-    int selected_option = 0;
+    int selected_option = 0; // Stores the user's selected option
 
 public:
+    // Override to display the menu
     void showMenu() override;
+
+    // Override to hide the menu
     void hideMenu() override;
+
+    // Display the details of the playlist
     void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist);
+
+    // Display the list of songs in the playlist
     void showListOfSongs(const std::shared_ptr<Playlist>& playlist);
+
+    // Display a status message based on the current detailed playlist status
     void displayStatusMessage(DetailedPlaylistStatus& status);
-    int getSelectedOption() const; // Hàm trả về lựa chọn của người dùng
+
+    // Return the user's selected option
+    int getSelectedOption() const;
+
+    // Destructor
     ~DetailedPlaylistView() override = default;
 };
 

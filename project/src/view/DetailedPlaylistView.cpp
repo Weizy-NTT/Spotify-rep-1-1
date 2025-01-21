@@ -61,7 +61,7 @@ int DetailedPlaylistView::getSelectedOption() const {
 
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
-    // std::system("clear");
+    std::system("clear");
 }
 
 void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& playlist) {

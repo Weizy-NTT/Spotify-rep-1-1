@@ -8,11 +8,23 @@
 
 class MetadataController : public BaseController {
 public:
+    // Handle user input for a specific media file by its ID
     void handleInput(const std::string& ID);
+
+    // Retrieve and display metadata of a given media file
     void getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const;
-    void updateMediaFileMetadata(const std::string& key, const std::string& value,const std::string& ID);
+
+    // Update metadata of a media file based on key-value pairs and its ID
+    void updateMediaFileMetadata(const std::string& key, const std::string& value, const std::string& ID);
+
+    // Navigate back to the previous menu or screen
     void back();
-    void handleEditAudio(const std::string& filepath,const std::string& ID);
-    void handleEditVideo(const std::string& filepath,const std::string& ID);
+
+    // Handle editing audio metadata for the given file path and ID
+    void handleEditAudio(const std::string& filepath, const std::string& ID);
+
+    // Handle editing video metadata for the given file path and ID
+    void handleEditVideo(const std::string& filepath, const std::string& ID);
 };
+
 #endif // METADATA_CONTROLLER_H

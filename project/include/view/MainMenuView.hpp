@@ -5,24 +5,32 @@
 #include <vector>
 #include <string>
 
+// Enum for main menu options
 enum MainMenu {
-    SCAN_OPTIONS,
-    ALL_SONGS,
-    PLAYLIST,
-    NOW_PLAYING,
-    EXIT
+    SCAN_OPTIONS,   // Option for scanning files
+    ALL_SONGS,      // Option to view all songs
+    PLAYLIST,       // Option to view playlists
+    NOW_PLAYING,    // Option to view the now playing screen
+    EXIT            // Option to exit the application
 };
 
 class MainMenuView : public BaseView {
 public:
+    // Override to display the main menu
     void showMenu() override;
+
+    // Override to hide the main menu
     void hideMenu() override;
-    int getSelectedOption() const; // Thêm hàm getter để lấy option được chọn
+
+    // Getter function to retrieve the selected option
+    int getSelectedOption() const;
+
+    // Destructor
     ~MainMenuView() override = default;
 
 private:
-    int selected_option = 0;                     // Biến lưu trữ lựa chọn
-    std::vector<std::string> menu_entries = {    // Danh sách các mục trong menu
+    int selected_option = 0;                     // Variable to store the user's selected option
+    std::vector<std::string> menu_entries = {    // List of menu entries
         "Scan Options",
         "All Songs",
         "Playlist",

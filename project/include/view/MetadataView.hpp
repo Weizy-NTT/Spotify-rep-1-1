@@ -7,11 +7,13 @@
 #include "MediaFile.hpp"
 #include <memory>
 
+// Enum for metadata menu options
 enum MetadataMenu {
-    EDIT_METADATA,
-    BACK_FROM_METADATA
+    EDIT_METADATA,        // Option to edit file metadata
+    BACK_FROM_METADATA    // Option to go back to the previous menu
 };
 
+// Enum for audio metadata editing options
 enum AudioEdit {
     AUDIO_TITLE,
     AUDIO_ARTIST,
@@ -22,6 +24,7 @@ enum AudioEdit {
     AUDIO_BACK
 };
 
+// Enum for video metadata editing options
 enum VideoEdit {
     VIDEO_TITLE,
     VIDEO_BACK
@@ -29,6 +32,7 @@ enum VideoEdit {
 
 class MetadataView : public BaseView {
 private:
+    // Menu entries for the metadata view
     std::vector<std::string> menu_entries = {
         "Edit File Metadata",
         "Go Back"
@@ -37,14 +41,25 @@ private:
     int selected_option_audio = 0;        
     int selected_option_video = 0;
 public:
+    // Override to display the menu
     void showMenu() override;
+
+    // Getter to retrieve the user's selected option
     int getSelectedOption() const;
     int getAuditoOption() const;
     int getVideoOption() const;
     ~MetadataView() override = default;
+
+    // Override to hide the menu
     void hideMenu() override;
+
+    // Display the metadata of the specified media file
     void showFileMetadata(const std::shared_ptr<MediaFile>& file);
+
+    // Display the menu for editing audio metadata
     void menuEditAudio();
+
+    // Display the menu for editing video metadata
     void menuEditVideo();
 };
 

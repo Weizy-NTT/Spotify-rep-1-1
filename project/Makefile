@@ -1,5 +1,5 @@
 # Output file
-TARGET = build/main.exe
+TARGET = build/Spotify.exe
 
 # Compiler and Flags
 CC = g++

@@ -8,40 +8,49 @@
 
 namespace fs = std::filesystem;
 
-void MetadataController::handleInput(const std::string& ID){
+// Handle user input for editing metadata
+void MetadataController::handleInput(const std::string& ID) {
     MediaType type = ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getType();
     do {
-    ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-    getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
-    ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
-    switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption())
-        {
+        // Hide the current view and display metadata of the selected file
+        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+        getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+
+        // Switch to the metadata view
+        ControllerManager::getInstance()->getViewManager()->switchView(SwitchView::SW_METADATA_VIEW);
+
+        // Handle user input based on the selected metadata menu option
+        switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption()) {
             case MetadataMenu::BACK_FROM_METADATA: {
                 back();
                 break;
             }
-            case MetadataMenu::EDIT_METADATA:{
-                if (type == AUDIO) {     
-                    handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
-                }
-                else {
-                    handleEditVideo(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(),ID);
+            case MetadataMenu::EDIT_METADATA: {
+                // Handle editing based on file type (audio or video)
+                if (type == AUDIO) {
+                    handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(), ID);
+                } else {
+                    handleEditVideo(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(), ID);
                 }
                 break;
             }
         }
-    } while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption() != MetadataMenu::BACK_FROM_METADATA);
+    } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getSelectedOption() != MetadataMenu::BACK_FROM_METADATA);
 }
 
-void MetadataController::getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const{
+// Retrieve and display metadata of the given media file
+void MetadataController::getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const {
     ControllerManager::getInstance()->getViewManager()->getMetadataView()->showFileMetadata(file);
 }
 
-void MetadataController::updateMediaFileMetadata(const std::string& key, const std::string& value,const std::string& ID){
-    ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getMetadata().setValue(key,value);
+// Update the metadata of the specified media file
+void MetadataController::updateMediaFileMetadata(const std::string& key, const std::string& value, const std::string& ID) {
+    ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getMetadata().setValue(key, value);
 }
-void MetadataController::back(){
-    
+
+// Handle the back navigation logic
+void MetadataController::back() {
+    // Placeholder for back navigation logic
 }
 
 void MetadataController::handleEditAudio(const std::string& filepath,const std::string& ID) {
