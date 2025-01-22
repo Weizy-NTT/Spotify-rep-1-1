@@ -3,7 +3,7 @@
 
 void MainMenuController::handleInput() {
     // Start the thread for reading data from the hardware controller
-    ControllerManager::getInstance()->getHardwareController()->threadReading();
+    ControllerManager::getInstance()->getHardwareController()->startReading();
 
     bool status = false;
     std::string filePath = "resources/playlists.txt";

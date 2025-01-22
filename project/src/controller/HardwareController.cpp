@@ -1,12 +1,9 @@
 #include "HardwareController.hpp"
 #include "ControllerManager.hpp"
+#include <iostream>
+#include <stdexcept>
 
-// Constructor: Initialize the HardwareController
-// Sets up a UART connection using the specified device and baud rate.
-HardwareController::HardwareController(const std::string& device, int baudRate)
-    : uart(device, baudRate) {}
 
-// Send the "Play" command
 // Sends a "PL" signal through the UART connection to trigger the Play action on the hardware.
 void HardwareController::sendPlayCommand() {
     uart.writeData(PLAY_MODE);
@@ -24,20 +21,62 @@ void HardwareController::sendStopCommand() {
     uart.writeData(STOP_MODE);
 }
 
-// Start reading data in a separate thread
-// Begins the UART data reading loop, allowing the controller to continuously read incoming data.
-void HardwareController::threadReading() {
-    uart.startReadLoop();
-}
-
-// Stop reading data
-// Stops the UART data reading loop, halting any ongoing reading operations.
-void HardwareController::stopReading() {
-    uart.stop();
-}
-
 // Send a custom signal
 // Sends a custom string signal through the UART connection for hardware-specific actions.
 void HardwareController::sendSignal(const std::string& signal) {
     uart.writeData(signal);
+}
+
+// Constructor
+HardwareController::HardwareController(const std::string& device, int baudRate)
+    : uart(device, baudRate), running(false) {
+    // Đăng ký callback để xử lý dữ liệu từ UART
+    uart.setDataCallback([this](const std::string& data) {
+        handleReceivedData(data);
+    });
+}
+
+// Destructor
+HardwareController::~HardwareController() {
+    stopReading(); // Đảm bảo dừng luồng đọc trước khi hủy
+}
+
+void HardwareController::handleReceivedData(const std::string& data) {
+    if (data == PLAY_MODE_RECEIVE) {
+        ControllerManager::getInstance()->getPlayingMediaController()->play();
+    } else if (data == PAUSE_MODE_RECEIVE) {
+        ControllerManager::getInstance()->getPlayingMediaController()->pause();
+    } else if (data == NEXT_MODE_RECEIVE){
+        ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
+    } else if (data == PREV_MODE_RECEIVE){
+        ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
+    } else {
+        ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setVolume(std::stoi(data));
+    }
+}
+
+void HardwareController::startReading() {
+    if (running) {
+        return; // Luồng đọc đã chạy
+    }
+    running = true;
+
+    readThread = std::thread([this]() {
+        try {
+            uart.readData(); // Bắt đầu đọc dữ liệu
+        } catch (const std::exception& e) {
+            std::cerr << "Error in reading thread: " << e.what() << std::endl;
+        }
+    });
+}
+
+void HardwareController::stopReading() {
+    if (!running) {
+        return; // Luồng đã dừng
+    }
+    running = false;
+    uart.stop(); // Dừng giao tiếp UART
+    if (readThread.joinable()) {
+        readThread.join(); // Đợi luồng đọc kết thúc
+    }
 }

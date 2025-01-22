@@ -32,6 +32,10 @@ UART::~UART() {
     stop();
 }
 
+void UART::setDataCallback(const std::function<void(const std::string&)>& callback) {
+    dataCallback = callback;
+}
+
 // Gửi dữ liệu qua UART
 void UART::writeData(const std::string& data) {
     try {
@@ -51,38 +55,18 @@ void UART::readData() {
             size_t bytes_read = serial_port.read_some(boost::asio::buffer(buffer));
             if (bytes_read > 0) {
                 std::lock_guard<std::mutex> lock(data_mutex);
-
-                // Thêm dữ liệu mới vào buffer
                 receivedData.append(buffer, bytes_read);
 
-                // Tách dữ liệu theo dấu '\n'
                 size_t pos;
                 while ((pos = receivedData.find('\n')) != std::string::npos) {
-                    std::string data = receivedData.substr(0, pos); // Lấy giá trị trước '\n'
+                    std::string data = receivedData.substr(0, pos); // Lấy dữ liệu trước '\n'
                     receivedData.erase(0, pos + 1); // Xóa phần đã xử lý
 
-                    if (!data.empty()) {
-                        // Nếu là ký tự đơn (A, B, C, D)
-                        if (data.length() == 1 && (data == PLAY_MODE_RECEIVE || data == PAUSE_MODE_RECEIVE || data == NEXT_MODE_RECEIVE || data == PREV_MODE_RECEIVE)) {
-                            if (data == PLAY_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->play();
-                            } else if (data == PAUSE_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->pause();
-                            } else if (data == NEXT_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
-                            } else if (data == PREV_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
-                            }
-                        }
-                        // Nếu là chuỗi số
-                        else if (std::all_of(data.begin(), data.end(), ::isdigit)) {
-                            ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setVolume(std::stoi(data));
-                            //std::cout << "Volume set to: " << volume << std::endl;
-                        }
-                        // Xử lý dữ liệu không mong muốn
-                        else {
-                            std::cout << "Unhandled data: " << data << std::endl;
-                        }
+                    // Gọi callback để xử lý dữ liệu
+                    if (dataCallback) {
+                        dataCallback(data);
+                    } else {
+                        std::cout << "No callback registered to handle data: " << data << std::endl;
                     }
                 }
             }
