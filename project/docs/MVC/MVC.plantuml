@@ -1,20 +1,21 @@
 @startuml MVC
 package Controller {
-
-    ControllerManager --> ScanfOptionController
-    ControllerManager --> PlaylistController
-    ControllerManager --> MediaFileController
-    ControllerManager --> PlayingMediaController
-    ControllerManager --> DetailedPlaylistController
-    ControllerManager --> MetadataController
+    ControllerManager o--> BaseController
+    BaseController --|> MainMenuController
+    BaseController --|> ScanfOptionController
+    BaseController --|> PlaylistController
+    BaseController --|> MediaFileController
+    BaseController --|> PlayingMediaController
+    BaseController --|> DetailedPlaylistController
+    BaseController --|> MetadataController
+    BaseController --|> HardwareController
 }
 
 package Model {
 
-    ModelManager --> MediaLibrary
-    ModelManager --> PlaylistLibrary
-    ModelManager --> PlayingMedia
-    ModelManager --> Device
+    ModelManager o--> MediaLibrary
+    ModelManager o--> PlaylistLibrary
+    ModelManager o--> PlayingMedia
     MediaLibrary o--> MediaFile
     PlaylistLibrary o--> Playlist
     Playlist o--> MediaFile
@@ -22,7 +23,7 @@ package Model {
 }
 
 package View {
-
+    MainMenuView --|> BaseView
     ScanfOptionView --|> BaseView
     MediaFileView --|> BaseView
     PlaylistView --|> BaseView
@@ -31,9 +32,9 @@ package View {
     MetadataView --|> BaseView
     BaseView <--o ViewManager
 }
-
+HardwareController o--> UART
 package Hardware {
-    Device "1" --> "1" KL46ZInterface : interfaces with >
+    UART "1" --> "1" KL46ZInterface : interfaces with >
 }
 
 ViewManager -- ControllerManager
