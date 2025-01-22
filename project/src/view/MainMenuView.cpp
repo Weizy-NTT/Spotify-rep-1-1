@@ -56,6 +56,7 @@ int MainMenuView::getSelectedOption() const {
 
 void MainMenuView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

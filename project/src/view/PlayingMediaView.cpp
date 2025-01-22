@@ -129,6 +129,7 @@ int PlayingMediaView::getSelectedOption() const {
 
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

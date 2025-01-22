@@ -55,6 +55,9 @@ void MetadataView::showMenu() {
 }
 void MetadataView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
+    selected_option_audio = 0;
+    selected_option_video = 0;
     std::system("clear");
 }
 

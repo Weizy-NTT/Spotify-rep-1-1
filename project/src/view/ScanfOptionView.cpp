@@ -55,6 +55,7 @@ int ScanfOptionView::getSelectedOption() const {
 
 void ScanfOptionView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

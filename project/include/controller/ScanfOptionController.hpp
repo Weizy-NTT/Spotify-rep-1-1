@@ -8,10 +8,6 @@
 #include "Playlist.hpp"
 
 class ScanfOptionController : public BaseController {
-private:
-    // Remove accents from the input string (e.g., for normalization)
-    std::string removeAccents(const std::string& input);
-
 public:
     // Handle user input for scanning options
     void handleInput();

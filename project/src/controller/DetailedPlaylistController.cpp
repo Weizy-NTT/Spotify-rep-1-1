@@ -84,6 +84,8 @@ void DetailedPlaylistController::handleInput(std::string listId) {
                         ->setPlaylist(ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()
                                       ->getPlaylistByID(listId)
                                       ->getSongs());
+                    ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
+                    ControllerManager::getInstance()->getHardwareController()->sendPlayCommand();
                     ControllerManager::getInstance()->getPlayingMediaController()->handleInput(songID);
                 } else {
                     // Set status to indicate failure in playing the song.

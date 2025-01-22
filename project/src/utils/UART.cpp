@@ -10,17 +10,16 @@
 UART::UART(const std::string& port, unsigned int baud_rate)
     : serial_port(io_context), running(true) {
     try {
-        // Mở cổng serial
+        // Open serial port
         serial_port.open(port);
 
-        // Cấu hình cổng serial
+        // Serial configuration
         serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
         serial_port.set_option(boost::asio::serial_port_base::character_size(8));
         serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
         serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
         serial_port.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
-        //std::cout << "Serial port opened successfully on " << port << " with baud rate " << baud_rate << ".\n";
     } catch (const boost::system::system_error& e) {
         std::cerr << "Error opening serial port: " << e.what() << std::endl;
         throw;
@@ -36,17 +35,16 @@ void UART::setDataCallback(const std::function<void(const std::string&)>& callba
     dataCallback = callback;
 }
 
-// Gửi dữ liệu qua UART
+// Send data to UART
 void UART::writeData(const std::string& data) {
     try {
         boost::asio::write(serial_port, boost::asio::buffer(data));
-        //std::cout << "Data sent: " << data << std::endl;
     } catch (const boost::system::system_error& e) {
-        //std::cerr << "Error sending data: " << e.what() << std::endl;
+        std::cerr << "Error sending data: " << e.what() << std::endl;
     }
 }
 
-// Đọc dữ liệu từ UART
+// Read data from UART
 void UART::readData() {
     try {
         char buffer[256];
@@ -59,10 +57,10 @@ void UART::readData() {
 
                 size_t pos;
                 while ((pos = receivedData.find('\n')) != std::string::npos) {
-                    std::string data = receivedData.substr(0, pos); // Lấy dữ liệu trước '\n'
-                    receivedData.erase(0, pos + 1); // Xóa phần đã xử lý
+                    std::string data = receivedData.substr(0, pos);
+                    receivedData.erase(0, pos + 1);
 
-                    // Gọi callback để xử lý dữ liệu
+                    // Callback handler data
                     if (dataCallback) {
                         dataCallback(data);
                     } else {
@@ -78,14 +76,14 @@ void UART::readData() {
     }
 }
 
-// Bắt đầu vòng lặp đọc dữ liệu
+// Start reading loop
 void UART::startReadLoop() {
     std::thread([this]() {
         readData();
     }).detach();
 }
 
-// Dừng giao tiếp UART
+// Stop UART communication
 void UART::stop() {
     running = false;
     if (serial_port.is_open()) {

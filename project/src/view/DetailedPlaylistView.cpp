@@ -61,6 +61,7 @@ int DetailedPlaylistView::getSelectedOption() const {
 
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

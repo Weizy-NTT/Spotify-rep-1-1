@@ -99,6 +99,7 @@ int MediaFileView::getSelectedOption() const {
 
 void MediaFileView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

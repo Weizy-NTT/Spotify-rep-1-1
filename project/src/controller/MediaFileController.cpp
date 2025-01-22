@@ -78,6 +78,7 @@ void MediaFileController::handleInput() {
 }
 
 void MediaFileController::back(){
+    currentPage = 1;
 }
 
 // Display media files with pagination

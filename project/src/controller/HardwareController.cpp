@@ -3,14 +3,12 @@
 #include <iostream>
 #include <stdexcept>
 
-
-// Sends a "PL" signal through the UART connection to trigger the Play action on the hardware.
+// Send the "Play" command
 void HardwareController::sendPlayCommand() {
     uart.writeData(PLAY_MODE);
 }
 
 // Send the "Pause" command
-// Sends a "PA" signal through the UART connection to trigger the Pause action on the hardware.
 void HardwareController::sendPauseCommand() {
     uart.writeData(PAUSE_MODE);
 }
