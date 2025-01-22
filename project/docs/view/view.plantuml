@@ -1,66 +1,118 @@
 @startuml view
 
 package View {
-    class BaseView { 
-        - statusView: bool
-        + showMenu(): virtual void
-        + hideMenu(): virtual void
-        + isShown(): bool
+
+    class BaseView {
+        - bool statusView
+
+        + BaseView()
+        + virtual void showMenu()
+        + virtual void hideMenu()
+        + bool isShown() const
+        + virtual ~BaseView()
     }
 
     class ScanfOptionView {
-        + showMenu(): void
-        + hideMenu(): void
+        - int selected_option
+        - std::vector<std::string> menu_entries
+
+        + void showMenu() override
+        + int getSelectedOption() const
+        + ~ScanfOptionView()
+        + void hideMenu() override
+        + void displayStatusMessage(ScanStatus& status)
     }
 
     class MainMenuView {
-        + showMenu(): void
-        + hideMenu(): void
+        - int selected_option
+        - std::vector<std::string> menu_entries
+
+        + void showMenu() override
+        + void hideMenu() override
+        + int getSelectedOption() const
+        + ~MainMenuView()
     }
 
     class MediaFileView {
-        + showMenu(): void
-        + hideMenu(): void
-        + showMediaFilesPage(files: vector<shared_ptr<MediaFile>>, page: int): void
+        - std::vector<std::string> menu_entries
+        - int selected_option
+
+        + void showMenu() override
+        + int getSelectedOption() const
+        + void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong)
+        + void hideMenu() override
+        + void displayStatusMessage(MediaFileStatus& status)
+        + ~MediaFileView()
     }
 
     class PlaylistView {
-        + showMenu(): void
-        + hideMenu(): void
-        + showPlaylistList(playlists: vector<shared_ptr<Playlist>>)
+        - std::vector<std::string> menu_entries
+        - int selected_option
+
+        + void showMenu() override
+        + int getSelectedOption() const
+        + ~PlaylistView()
+        + void hideMenu() override
+        + void showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists)
+        + void displayStatusMessage(PlaylistStatus& status)
     }
 
     class DetailedPlaylistView {
-        + showMenu(): void
-        + hideMenu(): void
-        + showPlaylistDetails(playlist: shared_ptr<Playlist>): void
-        + showListofSongs(playlist: shared_ptr<Playlist>): void
+        - std::vector<std::string> menu_entries
+        - int selected_option
+
+        + void showMenu() override
+        + void hideMenu() override
+        + void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist)
+        + void showListOfSongs(const std::shared_ptr<Playlist>& playlist)
+        + void displayStatusMessage(DetailedPlaylistStatus& status)
+        + int getSelectedOption() const
+        + ~DetailedPlaylistView()
     }
 
     class PlayingMediaView {
-        + showMenu(): void
-        + hideMenu(): void
-        + showSongInfo(file: MediaFile)
+        - std::vector<std::string> menu_entries
+        - int selected_option
+
+        + void showMenu() override
+        + int getSelectedOption() const
+        + ~PlayingMediaView()
+        + void hideMenu() override
+        + void showPlayingMedia(PlayingMedia* player, size_t& currentTime, size_t totalTime, int& volume)
     }
 
     class MetadataView {
-        + showMenu(): void
-        + hideMenu(): void
-        + showFileMetadata(file: MediaFile): void
+        - std::vector<std::string> menu_entries
+        - int selected_option
+        - int selected_option_audio
+        - int selected_option_video
+
+        + void showMenu() override
+        + int getSelectedOption() const
+        + int getAuditoOption() const
+        + int getVideoOption() const
+        + ~MetadataView()
+        + void hideMenu() override
+        + void showFileMetadata(const std::shared_ptr<MediaFile>& file)
+        + void menuEditAudio()
+        + void menuEditVideo()
     }
 
     class ViewManager {
-        - currentView: BaseView*
-        - views : vector<BaseView*>
-        + showCurrentMenu(): void
-        + switchView(indexView: switch_type): void
-        + getDetailedPlaylistView(): DetailedPlaylistView*
-        + getMainMenuView(): MainMenuView*
-        + getMediaFileView(): MediaFileView*
-        + getMetadataView(): MetadataView*
-        + getPlayingMediaView(): PlayingMediaView*
-        + getPlaylistView(): PlaylistView*
-        + getScanfOptionView(): ScanfOptionView*
+        - BaseView* currentView
+        - std::vector<std::unique_ptr<BaseView>> views
+
+        + ViewManager()
+        + void showCurrentView()
+        + void hideCurrentView()
+        + void switchView(SwitchView viewIndex)
+        + ScanfOptionView* getScanfOptionView() const
+        + PlaylistView* getPlaylistView() const
+        + MediaFileView* getMediaFileView() const
+        + PlayingMediaView* getPlayingMediaView() const
+        + DetailedPlaylistView* getDetailedPlaylistView() const
+        + MetadataView* getMetadataView() const
+        + MainMenuView* getMainMenuView() const
     }
 
     ViewManager o--> BaseView

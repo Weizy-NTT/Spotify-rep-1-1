@@ -1,4 +1,3 @@
-
 #include "PlayingMediaView.hpp"
 #include <iomanip>
 #include <mutex>
@@ -16,15 +15,11 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
     
     bool running = true;
 
-    // Tạo menu với các mục
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Tạo màn hình tương tác
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Giao diện hiển thị
     auto renderer = Renderer(menu, [&] {
-        // Hiển thị thông tin bài hát
         std::string current = (currentTime / 60 < 10 ? "0" : "") + std::to_string(currentTime / 60) + ":" +
                               (currentTime % 60 < 10 ? "0" : "") + std::to_string(currentTime % 60);
         std::string total = (player->getTotalTime() / 60 < 10 ? "0" : "") + std::to_string(player->getTotalTime() / 60) + ":" +
@@ -33,8 +28,6 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
         float progress = static_cast<float>(currentTime) / player->getTotalTime();
         int barWidth = 50;
         int pos = static_cast<int>(barWidth * progress);
-
-        // Tạo thanh tiến trình bài hát
         std::vector<Element> progress_bar_elements(barWidth, text("="));
         std::fill(progress_bar_elements.begin(), progress_bar_elements.begin() + pos, text("#"));
         auto progress_bar = hbox({
@@ -43,7 +36,6 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             text("]")
         });
 
-        // Tạo thanh âm lượng
         int volumeBarWidth = 30;
         int volumePos = static_cast<int>(volumeBarWidth * (volume / 128.0));
         std::vector<Element> volume_bar_elements(volumeBarWidth, text("="));
@@ -54,10 +46,8 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             text("]")
         });
 
-        // Hiển thị % volume
         std::string volumePercent = std::to_string(static_cast<int>((volume / 128.0) * 100)) + "%";
 
-        // Kết hợp thông tin bài hát, thanh tiến trình, và âm lượng
         return vbox({
                 text("===== Now Playing ====="),
                 text("Song: " + player->getCurrentMediaFile()->getName() + " - " + player->getCurrentMediaFile()->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
@@ -76,7 +66,6 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             border;
     });
 
-    // Luồng cập nhật giao diện
     std::thread refresh_thread([&] {
         size_t lastTime = currentTime;
         int lastVolume = volume;
@@ -85,36 +74,33 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             if (lastTime != currentTime || lastVolume != volume) {
                 lastTime = currentTime;
                 lastVolume = volume;
-                screen.PostEvent(Event::Custom); // Làm mới giao diện khi thời gian hoặc âm lượng thay đổi
+                screen.PostEvent(Event::Custom); 
             }
         }
     });
 
-    // Xử lý sự kiện
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         }
-        if (event == Event::Return) {
+        if (event == Event::Return) { 
             if (menu->OnEvent(event)) {
-            screen.ExitLoopClosure()();
-            return true;
+                screen.ExitLoopClosure()();
+                return true;
             }
         } 
-        if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+        if (event == Event::Escape || event == Event::Character('q')) { 
+            screen.ExitLoopClosure()();
             return true;
         }
-        return menu->OnEvent(event);
+        return menu->OnEvent(event); 
     });
 
-    // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
 
-    // Dừng luồng cập nhật
     running = false;
     if (refresh_thread.joinable()) {
         refresh_thread.join();
@@ -129,6 +115,7 @@ int PlayingMediaView::getSelectedOption() const {
 
 void PlayingMediaView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 

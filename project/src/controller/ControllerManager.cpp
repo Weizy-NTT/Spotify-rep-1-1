@@ -6,15 +6,14 @@ ControllerManager* ControllerManager::instance = nullptr;
 // Private constructor
 ControllerManager::ControllerManager(ViewManager* viewManager, ModelManager* modelManager)
     : views(viewManager), model(modelManager) {
-    // Initialize the controllers
-    controllers.push_back(std::make_unique<MainMenuController>()); // Initializes the MainMenuController
-    controllers.push_back(std::make_unique<ScanfOptionController>()); // Initializes the ScanfOptionController
-    controllers.push_back(std::make_unique<PlaylistController>()); // Initializes the PlaylistController
-    controllers.push_back(std::make_unique<MediaFileController>()); // Initializes the MediaFileController
-    controllers.push_back(std::make_unique<PlayingMediaController>()); // Initializes the PlayingMediaController
-    controllers.push_back(std::make_unique<DetailedPlaylistController>()); // Initializes the DetailedPlaylistController
-    controllers.push_back(std::make_unique<MetadataController>()); // Initializes the MetadataController
-    controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600)); // Initializes the HardwareController with a specific port and baud rate
+    controllers.push_back(std::make_unique<MainMenuController>()); 
+    controllers.push_back(std::make_unique<ScanfOptionController>()); 
+    controllers.push_back(std::make_unique<PlaylistController>()); 
+    controllers.push_back(std::make_unique<MediaFileController>()); 
+    controllers.push_back(std::make_unique<PlayingMediaController>()); 
+    controllers.push_back(std::make_unique<DetailedPlaylistController>()); 
+    controllers.push_back(std::make_unique<MetadataController>()); 
+    controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600)); 
 }
 
 // Private destructor
@@ -33,7 +32,6 @@ ControllerManager* ControllerManager::getInstance(ViewManager* viewManager, Mode
 }
 
 // Methods to access individual controllers
-
 // Returns a pointer to the MainMenuController if it exists, otherwise returns nullptr
 MainMenuController* ControllerManager::getMainMenuController() const {
     if (controllers[modeController::CT_MAIN]) {

@@ -10,17 +10,14 @@
 UART::UART(const std::string& port, unsigned int baud_rate)
     : serial_port(io_context), running(true) {
     try {
-        // Mở cổng serial
         serial_port.open(port);
 
-        // Cấu hình cổng serial
         serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
         serial_port.set_option(boost::asio::serial_port_base::character_size(8));
         serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
         serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
         serial_port.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
-        //std::cout << "Serial port opened successfully on " << port << " with baud rate " << baud_rate << ".\n";
     } catch (const boost::system::system_error& e) {
         std::cerr << "Error opening serial port: " << e.what() << std::endl;
         throw;
@@ -32,17 +29,20 @@ UART::~UART() {
     stop();
 }
 
-// Gửi dữ liệu qua UART
+void UART::setDataCallback(const std::function<void(const std::string&)>& callback) {
+    dataCallback = callback;
+}
+
+// Send data to UART
 void UART::writeData(const std::string& data) {
     try {
         boost::asio::write(serial_port, boost::asio::buffer(data));
-        //std::cout << "Data sent: " << data << std::endl;
     } catch (const boost::system::system_error& e) {
-        //std::cerr << "Error sending data: " << e.what() << std::endl;
+        std::cerr << "Error sending data: " << e.what() << std::endl;
     }
 }
 
-// Đọc dữ liệu từ UART
+// Read data from UART
 void UART::readData() {
     try {
         char buffer[256];
@@ -51,38 +51,18 @@ void UART::readData() {
             size_t bytes_read = serial_port.read_some(boost::asio::buffer(buffer));
             if (bytes_read > 0) {
                 std::lock_guard<std::mutex> lock(data_mutex);
-
-                // Thêm dữ liệu mới vào buffer
                 receivedData.append(buffer, bytes_read);
 
-                // Tách dữ liệu theo dấu '\n'
                 size_t pos;
                 while ((pos = receivedData.find('\n')) != std::string::npos) {
-                    std::string data = receivedData.substr(0, pos); // Lấy giá trị trước '\n'
-                    receivedData.erase(0, pos + 1); // Xóa phần đã xử lý
+                    std::string data = receivedData.substr(0, pos);
+                    receivedData.erase(0, pos + 1);
 
-                    if (!data.empty()) {
-                        // Nếu là ký tự đơn (A, B, C, D)
-                        if (data.length() == 1 && (data == PLAY_MODE_RECEIVE || data == PAUSE_MODE_RECEIVE || data == NEXT_MODE_RECEIVE || data == PREV_MODE_RECEIVE)) {
-                            if (data == PLAY_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->play();
-                            } else if (data == PAUSE_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->pause();
-                            } else if (data == NEXT_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->skipToNext();
-                            } else if (data == PREV_MODE_RECEIVE) {
-                                ControllerManager::getInstance()->getPlayingMediaController()->skipToPrevious();
-                            }
-                        }
-                        // Nếu là chuỗi số
-                        else if (std::all_of(data.begin(), data.end(), ::isdigit)) {
-                            ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->setVolume(std::stoi(data));
-                            //std::cout << "Volume set to: " << volume << std::endl;
-                        }
-                        // Xử lý dữ liệu không mong muốn
-                        else {
-                            std::cout << "Unhandled data: " << data << std::endl;
-                        }
+                    // Callback handler data
+                    if (dataCallback) {
+                        dataCallback(data);
+                    } else {
+                        std::cout << "No callback registered to handle data: " << data << std::endl;
                     }
                 }
             }
@@ -94,14 +74,14 @@ void UART::readData() {
     }
 }
 
-// Bắt đầu vòng lặp đọc dữ liệu
+// Start reading loop
 void UART::startReadLoop() {
     std::thread([this]() {
         readData();
     }).detach();
 }
 
-// Dừng giao tiếp UART
+// Stop UART communication
 void UART::stop() {
     running = false;
     if (serial_port.is_open()) {

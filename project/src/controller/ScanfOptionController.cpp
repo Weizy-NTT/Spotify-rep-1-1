@@ -11,10 +11,6 @@
 #include <vector>
 #include <MediaFile.hpp>
 #include <cstdlib>
-#include <unicode/unistr.h>
-#include <unicode/translit.h>
-#include <unicode/ucnv.h>
-#include <unicode/utypes.h>
 #include <memory>
 #include <stdexcept>
 #include <libudev.h>
@@ -105,7 +101,6 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
     fs::path path(filePath);
 
     if (path.extension() == ".mp3") {
-        // Extract metadata from an MP3 file
         TagLib::FileRef f(filePath.c_str());
         if (!f.isNull() && f.tag() && f.audioProperties()) {
             TagLib::Tag* tag = f.tag();
@@ -116,12 +111,12 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_mediafile->setType(AUDIO);
 
             Metadata new_metadata;
-            new_metadata.setValue("Title", removeAccents(tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true)));
-            new_metadata.setValue("Artist", removeAccents(tag->artist().isEmpty() ? "Unknown" : tag->artist().toCString(true)));
-            new_metadata.setValue("Album", removeAccents(tag->album().isEmpty() ? "Unknown" : tag->album().toCString(true)));
+            new_metadata.setValue("Title", tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true));
+            new_metadata.setValue("Artist", tag->artist().isEmpty() ? "Unknown" : tag->artist().toCString(true));
+            new_metadata.setValue("Album", tag->album().isEmpty() ? "Unknown" : tag->album().toCString(true));
             new_metadata.setValue("Year", tag->year() > 0 ? std::to_string(tag->year()) : "Unknown");
             new_metadata.setValue("Track", tag->track() > 0 ? std::to_string(tag->track()) : "Unknown");
-            new_metadata.setValue("Genre", removeAccents(tag->genre().isEmpty() ? "Unknown" : tag->genre().toCString(true)));
+            new_metadata.setValue("Genre", tag->genre().isEmpty() ? "Unknown" : tag->genre().toCString(true));
 
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
@@ -147,7 +142,7 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
             new_mediafile->setType(VIDEO);
 
             Metadata new_metadata;
-            new_metadata.setValue("Title", removeAccents(tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true)));
+            new_metadata.setValue("Title", tag->title().isEmpty() ? "Unknown" : tag->title().toCString(true));
             new_metadata.setValue("Size", std::to_string(fs::file_size(filePath)));
             int durationInSeconds = audioProperties->length();
             new_mediafile->setDuration(durationInSeconds);
@@ -183,7 +178,6 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     std::shared_ptr<Playlist> currentPlaylist = nullptr;
 
     while (std::getline(inFile, line)) {
-        // Trim whitespace
         line.erase(0, line.find_first_not_of(" \t"));
         line.erase(line.find_last_not_of(" \t") + 1);
 
@@ -232,65 +226,21 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     }
 }
 
-// Remove accents from a string
-std::string ScanfOptionController::removeAccents(const std::string& input) {
-    try {
-        // Khởi tạo UErrorCode
-        UErrorCode errorCode = U_ZERO_ERROR;
 
-        // Tạo Transliterator với UErrorCode
-        std::unique_ptr<icu::Transliterator> transliterator(
-            icu::Transliterator::createInstance(
-                icu::UnicodeString::fromUTF8("NFD; [:Nonspacing Mark:] Remove; NFC"),
-                UTRANS_FORWARD,
-                errorCode
-            )
-        );
-
-        // Kiểm tra lỗi
-        if (U_FAILURE(errorCode)) {
-            throw std::runtime_error("Failed to create Transliterator: " + std::string(u_errorName(errorCode)));
-        }
-
-        // Chuyển chuỗi từ UTF-8 sang ICU UnicodeString
-        icu::UnicodeString unicodeStr = icu::UnicodeString::fromUTF8(input);
-
-        // Áp dụng Transliterator
-        transliterator->transliterate(unicodeStr);
-
-        // Chuyển đổi lại UnicodeString sang UTF-8
-        std::string output;
-        unicodeStr.toUTF8String(output);
-
-        return output;
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return input; // Trả về chuỗi gốc nếu có lỗi
-    }
-}
-
-// Hàm quét USB và trả về vector chứa danh sách các điểm gắn kết USB
+// Function scans USB and returns a vector containing a list of USB mount points
 std::vector<std::string> ScanfOptionController::scanUSB() {
     std::vector<std::string> usbMountPoints;
-
-    // Lấy tên người dùng hiện tại
     const char* username = getenv("USER");
     if (!username) {
         std::cerr << "Unable to determine username." << std::endl;
         return usbMountPoints;
     }
-
-    // Đường dẫn cơ sở cho các USB
     std::string mediaPath = "/media/";
     mediaPath += username;
-
-    // Kiểm tra nếu thư mục /media/<username> tồn tại
     if (!fs::exists(mediaPath) || !fs::is_directory(mediaPath)) {
         std::cerr << "No USB mount directory found at: " << mediaPath << std::endl;
         return usbMountPoints;
     }
-
-    // Duyệt qua các thư mục trong /media/<username>
     for (const auto& entry : fs::directory_iterator(mediaPath)) {
         if (fs::is_directory(entry.path())) {
             usbMountPoints.push_back(entry.path().string());

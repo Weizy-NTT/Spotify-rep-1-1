@@ -17,7 +17,7 @@ void MediaFileLibrary::addMediaFile(const std::shared_ptr<MediaFile>& file) {
 void MediaFileLibrary::removeMediaFile(const std::string& ID) {
     for (auto it = mediaFiles.begin(); it != mediaFiles.end(); ++it) {
         if (it->get()->getID() == ID) {
-            mediaFiles.erase(it); // Remove the media file from the library
+            mediaFiles.erase(it); 
             return;
         }
     }
@@ -55,7 +55,7 @@ std::shared_ptr<MediaFile> MediaFileLibrary::getMediaFileByID(const std::string&
             return mediaFile;
         }
     }
-    return nullptr; // Return nullptr if the file is not found
+    return nullptr; 
 }
 
 // Retrieve a media file by its name
@@ -65,5 +65,5 @@ std::shared_ptr<MediaFile> MediaFileLibrary::getMediaFileByName(const std::strin
             return mediaFile;
         }
     }
-    return nullptr; // Return nullptr if the file is not found
+    return nullptr; 
 }

@@ -26,7 +26,6 @@ void MetadataController::handleInput(const std::string& ID) {
                 break;
             }
             case MetadataMenu::EDIT_METADATA: {
-                // Handle editing based on file type (audio or video)
                 if (type == AUDIO) {
                     handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(), ID);
                 } else {
@@ -50,102 +49,100 @@ void MetadataController::updateMediaFileMetadata(const std::string& key, const s
 
 // Handle the back navigation logic
 void MetadataController::back() {
-    // Placeholder for back navigation logic
 }
 
-void MetadataController::handleEditAudio(const std::string& filepath,const std::string& ID) {
+void MetadataController::handleEditAudio(const std::string& filepath, const std::string& ID) {
     std::string newValue;
-    TagLib::FileRef f(filepath.c_str());
+    TagLib::FileRef f(filepath.c_str()); 
 
     if (!f.isNull() && f.tag() && f.audioProperties()) {
-    TagLib::Tag* tag = f.tag();
-    do {
-        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-        system("clear");
-        getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
-        ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
-        switch(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption())
-        {
-            case AudioEdit::AUDIO_BACK: {
-                back();
-                break;
+        TagLib::Tag* tag = f.tag(); 
+        do {
+            ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+            getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+            ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
+
+            // Handle user input for different audio metadata fields.
+            switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption()) {
+                case AudioEdit::AUDIO_BACK: {
+                    back(); 
+                    break;
+                }
+                case AudioEdit::AUDIO_TITLE: {
+                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); 
+                    tag->setTitle(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Title", newValue, ID); 
+                    break;
+                }
+                case AudioEdit::AUDIO_ARTIST: {
+                    Exception_Handler("Enter new artist: ", newValue, validateAlphaSring); 
+                    tag->setArtist(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Artist", newValue, ID); 
+                    break;
+                }
+                case AudioEdit::AUDIO_ALBUM: {
+                    Exception_Handler("Enter new album: ", newValue, validateAlphaSring); 
+                    tag->setAlbum(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Album", newValue, ID); 
+                    break;
+                }
+                case AudioEdit::AUDIO_YEAR: {
+                    Exception_Handler("Enter new year: ", newValue, validateYear); 
+                    tag->setYear(std::stoi(newValue)); 
+                    updateMediaFileMetadata("Year", newValue, ID); 
+                    break;
+                }
+                case AudioEdit::AUDIO_TRACK: {
+                    Exception_Handler("Enter new track: ", newValue, validateTrack); 
+                    tag->setTrack(std::stoi(newValue)); 
+                    updateMediaFileMetadata("Track", newValue, ID); 
+                    break;
+                }
+                case AudioEdit::AUDIO_GENRE: {
+                    Exception_Handler("Enter new genre: ", newValue, validateAlphaSring); 
+                    tag->setGenre(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Genre", newValue, ID); 
+                    break;
+                }
+                default:
+                    std::cout << "Invalid input\n"; 
             }
-            case AudioEdit::AUDIO_TITLE: {
-                Exception_Handler("Enter new title: ",newValue,validateAlphaSring);
-                tag->setTitle(TagLib::String(newValue));
-                updateMediaFileMetadata("Title",newValue,ID);
-                break;
-            }
-            case AudioEdit::AUDIO_ARTIST: {
-                Exception_Handler("Enter new artist: ",newValue,validateAlphaSring);
-                tag->setArtist(TagLib::String(newValue));
-                updateMediaFileMetadata("Artist",newValue,ID);
-                break;
-            }
-            case AudioEdit::AUDIO_ALBUM: {
-                Exception_Handler("Enter new album: ",newValue,validateAlphaSring);
-                tag->setAlbum(TagLib::String(newValue));
-                updateMediaFileMetadata("Album",newValue,ID);
-                break;
-            }
-            case AudioEdit::AUDIO_YEAR: {
-                Exception_Handler("Enter new year: ",newValue,validateYear);
-                tag->setYear(std::stoi(newValue));
-                updateMediaFileMetadata("Year",newValue,ID);
-                break;
-            }
-            case AudioEdit::AUDIO_TRACK: {
-                Exception_Handler("Enter new track: ",newValue,validateTrack);
-                tag->setTrack(std::stoi(newValue));
-                updateMediaFileMetadata("Track",newValue,ID);
-                break;
-            }
-            case AudioEdit::AUDIO_GENRE: {
-                Exception_Handler("Enter new genre: ",newValue,validateAlphaSring);
-                tag->setGenre(TagLib::String(newValue));
-                updateMediaFileMetadata("Genre",newValue,ID);
-                break;
-            }
-            default:
-                std::cout << "Invalid input\n";
-        }
-    } while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption() != AudioEdit::AUDIO_BACK);
-    f.save();
-    }
-    else {
+        } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption() != AudioEdit::AUDIO_BACK);
+        f.save(); 
+    } else {
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;
     }
 }
 
-void MetadataController::handleEditVideo(const std::string& filepath,const std::string& ID) {
+void MetadataController::handleEditVideo(const std::string& filepath, const std::string& ID) {
     std::string newValue;
-    TagLib::FileRef f(filepath.c_str());
+    TagLib::FileRef f(filepath.c_str()); 
 
     if (!f.isNull() && f.tag() && f.audioProperties()) {
-    TagLib::Tag* tag = f.tag();
-    do {
-        ControllerManager::getInstance()->getViewManager()->hideCurrentView();
-        getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
-        ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
-        switch(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption())
-        {
-            case VideoEdit::VIDEO_BACK: {
-                back();
-                break;
+        TagLib::Tag* tag = f.tag(); 
+        do {
+            ControllerManager::getInstance()->getViewManager()->hideCurrentView();
+            getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
+            ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
+
+            // Handle user input for different video metadata fields.
+            switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption()) {
+                case VideoEdit::VIDEO_BACK: {
+                    back(); 
+                    break;
+                }
+                case VideoEdit::VIDEO_TITLE: {
+                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); 
+                    tag->setTitle(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Title", newValue, ID); 
+                    break;
+                }
+                default:
+                    std::cout << "Invalid input\n"; 
             }
-            case VideoEdit::VIDEO_TITLE: {
-                Exception_Handler("Enter new title: ",newValue,validateAlphaSring);
-                tag->setTitle(TagLib::String(newValue));
-                updateMediaFileMetadata("Title",newValue,ID);
-                break;
-            }
-            default:
-                std::cout << "Invalid input\n";
-        }
-    }while(ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption() != VideoEdit::VIDEO_BACK);
-    f.save();
-    }
-    else {
+        } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption() != VideoEdit::VIDEO_BACK);
+        f.save(); 
+    } else {
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;
     }
 }

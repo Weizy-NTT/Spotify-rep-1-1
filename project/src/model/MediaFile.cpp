@@ -7,13 +7,10 @@ std::queue<int> MediaFile::mediaFileFreeIDs;
 // Constructor: Create a MediaFile object with specified properties
 MediaFile::MediaFile(const std::string& name, const std::string& path, MediaType type, const Metadata& metadata) 
     : name(name), path(path), type(type), metadata(metadata) {
-    // Assign a unique ID to the media file
     if (!mediaFileFreeIDs.empty()) {
-        // Reuse an ID from the free ID queue if available
         ID = std::to_string(mediaFileFreeIDs.front());
         mediaFileFreeIDs.pop();
     } else {
-        // Otherwise, use the next available ID
         ID = std::to_string(mediaFileNextID++);
     }
 }

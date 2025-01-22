@@ -11,10 +11,8 @@ using namespace ftxui;
 
 void DetailedPlaylistView::showMenu() {
     BaseView::showMenu();
-    // Tạo menu
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Tạo renderer để hiển thị menu
     auto renderer = Renderer(menu, [&] {
         return vbox({
                    text("===== Detailed Playlist Menu ====="),
@@ -25,126 +23,116 @@ void DetailedPlaylistView::showMenu() {
                border;
     });
 
-    // Tạo đối tượng ScreenInteractive
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Xử lý sự kiện
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
+                screen.ExitLoopClosure()(); 
                 return true;
             }          
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-            screen.ExitLoopClosure()();
+            screen.ExitLoopClosure()(); 
             return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            screen.ExitLoopClosure()(); 
             return true;
         }
         return menu->OnEvent(event);
 
     });
 
-    // Chạy vòng lặp giao diện
     screen.Loop(event_handler);
-    // std::system("clear");
 }
 
+// Get the selected menu option
 int DetailedPlaylistView::getSelectedOption() const {
     return selected_option;
 }
 
+// Hide the menu and reset the selected option
 void DetailedPlaylistView::hideMenu() {
     BaseView::hideMenu();
+    selected_option = 0;
     std::system("clear");
 }
 
+// Show detailed information about a playlist
 void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& playlist) {
     using namespace ftxui;
 
-    // 1. Lấy thông tin chi tiết playlist
     std::string name = playlist->getName();
     size_t numberOfSongs = playlist->getSongs().size();
 
-    // 2. Tạo giao diện hiển thị
     auto document = vbox({
-        text("Playlist Details") | bold | hcenter,              // Tiêu đề
+        text("Playlist Details") | bold | hcenter,          
         separator(),
         hbox({
-            text("Name: ") | bold,                              // Tên playlist
+            text("Name: ") | bold,                             
             text(name) | color(Color::Yellow)
         }),
         hbox({
-            text("Number of Songs: ") | bold,                   // Số lượng bài hát
+            text("Number of Songs: ") | bold,                 
             text(std::to_string(numberOfSongs)) | color(Color::Green)
         }),
         separator(),
-        text("Press any key to continue...") | dim | hcenter    // Hướng dẫn
+        text("Press any key to continue...") | dim | hcenter    
     });
 
-    // 3. Điều chỉnh màn hình
     auto screen = Screen::Create(
-        Dimension::Full(),         // Chiều rộng tự động chiếm hết
-        Dimension::Fit(document)   // Chiều cao tự động vừa nội dung
+        Dimension::Full(),        
+        Dimension::Fit(document)   
     );
     Render(screen, document);
 
-    // 4. Hiển thị giao diện
     std::cout << screen.ToString() << std::endl;
 
 }
 
-
+// Display a list of songs in the playlist
 void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& playlist) {
     using namespace ftxui;
 
-    // 1. Lấy danh sách bài hát
     std::vector<std::shared_ptr<MediaFile>> songs = playlist->getSongs();
 
-    // 2. Tạo danh sách bài hát
     Elements items;
     for (const auto& song : songs) {
         items.push_back(hbox({
-            text("[" + song->getID() + "] ") | size(WIDTH, EQUAL, 10),   // Cột ID
-            text(song->getName()) | size(WIDTH, GREATER_THAN, 30)       // Cột Tên bài hát
+            text("[" + song->getID() + "] ") | size(WIDTH, EQUAL, 10),   
+            text(song->getName()) | size(WIDTH, GREATER_THAN, 30)      
         }));
     }
 
-    // 3. Tạo tiêu đề
     auto header = hbox({
         text("Songs in Playlist: ") | bold,
         text(playlist->getName()) | color(Color::Yellow)
     }) | hcenter;
 
-    // 4. Tạo footer
     auto footer = text("Total Songs: " + std::to_string(songs.size())) | hcenter;
 
-    // 5. Kết hợp giao diện
     auto document = vbox({
         header,
         separator(),
-        vbox(std::move(items)) | border, // Hiển thị danh sách
+        vbox(std::move(items)) | border, 
         separator(),
         footer
     });
 
-    // 6. Điều chỉnh màn hình
     auto screen = Screen::Create(
-        Dimension::Full(),         // Chiều rộng tự động chiếm hết
-        Dimension::Fit(document)   // Chiều cao tự động vừa nội dung
+        Dimension::Full(),         
+        Dimension::Fit(document)   
     );
     Render(screen, document);
 
-    // 7. Hiển thị giao diện
     std::cout << screen.ToString() << std::endl;
 
 }
 
+// Display appropriate status messages based on the status code
 void DetailedPlaylistView::displayStatusMessage(DetailedPlaylistStatus& status) {
     switch (status) {
         case DetailedPlaylistStatus::DETAILED_ADD_STATUS:
