@@ -5,7 +5,7 @@
 #include <thread>
 #include <atomic>
 #include <functional>
-#include "UART.hpp" // Include the UART class you have implemented
+#include "UART.hpp" 
 #include "BaseController.hpp"
 
 #define PLAY_MODE_RECEIVE       "C"
@@ -20,28 +20,27 @@
 
 class HardwareController : public BaseController {
 private:
-    UART uart; // UART giao tiếp phần cứng
-    std::thread readThread; // Luồng đọc dữ liệu
-    std::atomic<bool> running; // Trạng thái của luồng đọc
+    UART uart;
+    std::thread readThread; 
+    std::atomic<bool> running; 
 
-    // Xử lý dữ liệu từ UART
     void handleReceivedData(const std::string& data);
 
 public:
-    // Constructor
     HardwareController(const std::string& device, int baudRate);
 
-    // Destructor
     ~HardwareController();
 
-    // Gửi tín hiệu điều khiển
     void sendPlayCommand();
+
     void sendPauseCommand();
+
     void sendStopCommand();
+
     void sendSignal(const std::string& signal);
 
-    // Bắt đầu và dừng luồng đọc dữ liệu
     void startReading();
+
     void stopReading();
 };
 

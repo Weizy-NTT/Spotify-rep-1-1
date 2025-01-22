@@ -2,34 +2,34 @@
 
 // Constructor: Initialize the model components
 ModelManager::ModelManager() {
-    mediaLibrary = std::make_unique<MediaFileLibrary>();  // Initialize the media library
-    playlistLibrary = std::make_unique<PlaylistLibrary>(); // Initialize the playlist library
-    playingMedia = std::make_unique<PlayingMedia>(); // Initialize the currently playing media
+    mediaLibrary = std::make_unique<MediaFileLibrary>();  
+    playlistLibrary = std::make_unique<PlaylistLibrary>(); 
+    playingMedia = std::make_unique<PlayingMedia>(); 
 }
 
 // Retrieve the MediaFileLibrary instance
 MediaFileLibrary* ModelManager::getMediaLibrary() const {
     if (mediaLibrary) {
-        return mediaLibrary.get(); // Return the pointer to the media library if it exists
+        return mediaLibrary.get(); 
     } else {
-        return nullptr; // Return nullptr if the media library is not initialized
+        return nullptr; 
     }
 }
 
 // Retrieve the PlaylistLibrary instance
 PlaylistLibrary* ModelManager::getPlaylistLibrary() const {
     if (playlistLibrary) {
-        return playlistLibrary.get(); // Return the pointer to the playlist library if it exists
+        return playlistLibrary.get();
     } else {
-        return nullptr; // Return nullptr if the playlist library is not initialized
+        return nullptr; 
     }
 }
 
 // Retrieve the PlayingMedia instance
 PlayingMedia* ModelManager::getPlayingMedia() const {
     if (playingMedia) {
-        return playingMedia.get(); // Return the pointer to the currently playing media if it exists
+        return playingMedia.get(); 
     } else {
-        return nullptr; // Return nullptr if the playing media instance is not initialized
+        return nullptr; 
     }
 }

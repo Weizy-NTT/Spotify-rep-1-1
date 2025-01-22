@@ -5,7 +5,7 @@
 
 class BaseController {
 public:
-    virtual ~BaseController() = default; // Define a virtual destructor to ensure proper cleanup of derived classes
+    virtual ~BaseController() = default;
 };
 
 #endif // BASE_CONTROLLER_H

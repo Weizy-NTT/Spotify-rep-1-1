@@ -23,11 +23,11 @@ void Playlist::addSong(const std::shared_ptr<MediaFile>& song) {
 void Playlist::removeSong(const std::string& ID) {
     auto it = std::remove_if(songs.begin(), songs.end(),
         [&ID](const std::shared_ptr<MediaFile>& song) {
-            return song->getID() == ID; // Remove the song if the ID matches
+            return song->getID() == ID; 
         });
 
     if (it != songs.end()) {
-        songs.erase(it, songs.end()); // Erase the matching song(s)
+        songs.erase(it, songs.end()); 
     }
 }
 
@@ -35,20 +35,20 @@ void Playlist::removeSong(const std::string& ID) {
 bool Playlist::isValidMediaFileIDInPlaylist(const std::string& ID) {
     for (const auto& song : songs) {
         if (song->getID() == ID) {
-            return true; // Return true if a matching song is found
+            return true; 
         }
     }
-    return false; // Return false if no match is found
+    return false;
 }
 
 // Retrieve a song from the playlist by its ID
 std::shared_ptr<MediaFile> Playlist::getSongByID(const std::string& ID) const {
     for (const auto& song : songs) {
         if (song->getID() == ID) {
-            return song; // Return the matching song
+            return song; 
         }
     }
-    return nullptr; // Return nullptr if no match is found
+    return nullptr; 
 }
 
 // Get the unique ID of the playlist

@@ -101,7 +101,6 @@ std::shared_ptr<MediaFile> ScanfOptionController::scanfFilePath(const std::strin
     fs::path path(filePath);
 
     if (path.extension() == ".mp3") {
-        // Extract metadata from an MP3 file
         TagLib::FileRef f(filePath.c_str());
         if (!f.isNull() && f.tag() && f.audioProperties()) {
             TagLib::Tag* tag = f.tag();
@@ -179,7 +178,6 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     std::shared_ptr<Playlist> currentPlaylist = nullptr;
 
     while (std::getline(inFile, line)) {
-        // Trim whitespace
         line.erase(0, line.find_first_not_of(" \t"));
         line.erase(line.find_last_not_of(" \t") + 1);
 
@@ -228,28 +226,21 @@ void ScanfOptionController::scanPlaylistsFromTxt(const std::string& filePath) {
     }
 }
 
-// Hàm quét USB và trả về vector chứa danh sách các điểm gắn kết USB
+
+// Function scans USB and returns a vector containing a list of USB mount points
 std::vector<std::string> ScanfOptionController::scanUSB() {
     std::vector<std::string> usbMountPoints;
-
-    // Lấy tên người dùng hiện tại
     const char* username = getenv("USER");
     if (!username) {
         std::cerr << "Unable to determine username." << std::endl;
         return usbMountPoints;
     }
-
-    // Đường dẫn cơ sở cho các USB
     std::string mediaPath = "/media/";
     mediaPath += username;
-
-    // Kiểm tra nếu thư mục /media/<username> tồn tại
     if (!fs::exists(mediaPath) || !fs::is_directory(mediaPath)) {
         std::cerr << "No USB mount directory found at: " << mediaPath << std::endl;
         return usbMountPoints;
     }
-
-    // Duyệt qua các thư mục trong /media/<username>
     for (const auto& entry : fs::directory_iterator(mediaPath)) {
         if (fs::is_directory(entry.path())) {
             usbMountPoints.push_back(entry.path().string());

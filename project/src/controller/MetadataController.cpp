@@ -26,7 +26,6 @@ void MetadataController::handleInput(const std::string& ID) {
                 break;
             }
             case MetadataMenu::EDIT_METADATA: {
-                // Handle editing based on file type (audio or video)
                 if (type == AUDIO) {
                     handleEditAudio(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID)->getPath(), ID);
                 } else {
@@ -50,20 +49,15 @@ void MetadataController::updateMediaFileMetadata(const std::string& key, const s
 
 // Handle the back navigation logic
 void MetadataController::back() {
-    // Placeholder for back navigation logic
 }
 
 void MetadataController::handleEditAudio(const std::string& filepath, const std::string& ID) {
     std::string newValue;
-    TagLib::FileRef f(filepath.c_str()); // Create a TagLib::FileRef object to access metadata.
+    TagLib::FileRef f(filepath.c_str()); 
 
-    // Check if the file is valid and contains metadata and audio properties.
     if (!f.isNull() && f.tag() && f.audioProperties()) {
-        TagLib::Tag* tag = f.tag(); // Access the tag metadata.
-
-        // Enter a loop for editing audio metadata options.
+        TagLib::Tag* tag = f.tag(); 
         do {
-            // Hide the current view and display metadata details.
             ControllerManager::getInstance()->getViewManager()->hideCurrentView();
             getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
             ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditAudio();
@@ -71,67 +65,62 @@ void MetadataController::handleEditAudio(const std::string& filepath, const std:
             // Handle user input for different audio metadata fields.
             switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption()) {
                 case AudioEdit::AUDIO_BACK: {
-                    back(); // Exit the loop and return to the previous menu.
+                    back(); 
                     break;
                 }
                 case AudioEdit::AUDIO_TITLE: {
-                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); // Get and validate user input.
-                    tag->setTitle(TagLib::String(newValue)); // Update the title in the metadata.
-                    updateMediaFileMetadata("Title", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); 
+                    tag->setTitle(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Title", newValue, ID); 
                     break;
                 }
                 case AudioEdit::AUDIO_ARTIST: {
-                    Exception_Handler("Enter new artist: ", newValue, validateAlphaSring); // Get and validate user input.
-                    tag->setArtist(TagLib::String(newValue)); // Update the artist in the metadata.
-                    updateMediaFileMetadata("Artist", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new artist: ", newValue, validateAlphaSring); 
+                    tag->setArtist(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Artist", newValue, ID); 
                     break;
                 }
                 case AudioEdit::AUDIO_ALBUM: {
-                    Exception_Handler("Enter new album: ", newValue, validateAlphaSring); // Get and validate user input.
-                    tag->setAlbum(TagLib::String(newValue)); // Update the album in the metadata.
-                    updateMediaFileMetadata("Album", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new album: ", newValue, validateAlphaSring); 
+                    tag->setAlbum(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Album", newValue, ID); 
                     break;
                 }
                 case AudioEdit::AUDIO_YEAR: {
-                    Exception_Handler("Enter new year: ", newValue, validateYear); // Get and validate user input.
-                    tag->setYear(std::stoi(newValue)); // Update the year in the metadata.
-                    updateMediaFileMetadata("Year", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new year: ", newValue, validateYear); 
+                    tag->setYear(std::stoi(newValue)); 
+                    updateMediaFileMetadata("Year", newValue, ID); 
                     break;
                 }
                 case AudioEdit::AUDIO_TRACK: {
-                    Exception_Handler("Enter new track: ", newValue, validateTrack); // Get and validate user input.
-                    tag->setTrack(std::stoi(newValue)); // Update the track number in the metadata.
-                    updateMediaFileMetadata("Track", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new track: ", newValue, validateTrack); 
+                    tag->setTrack(std::stoi(newValue)); 
+                    updateMediaFileMetadata("Track", newValue, ID); 
                     break;
                 }
                 case AudioEdit::AUDIO_GENRE: {
-                    Exception_Handler("Enter new genre: ", newValue, validateAlphaSring); // Get and validate user input.
-                    tag->setGenre(TagLib::String(newValue)); // Update the genre in the metadata.
-                    updateMediaFileMetadata("Genre", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new genre: ", newValue, validateAlphaSring); 
+                    tag->setGenre(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Genre", newValue, ID); 
                     break;
                 }
                 default:
-                    std::cout << "Invalid input\n"; // Handle invalid input.
+                    std::cout << "Invalid input\n"; 
             }
         } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption() != AudioEdit::AUDIO_BACK);
-        f.save(); // Save the updated metadata back to the file.
+        f.save(); 
     } else {
-        // Handle cases where the file cannot be opened or metadata is not available.
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;
     }
 }
 
 void MetadataController::handleEditVideo(const std::string& filepath, const std::string& ID) {
     std::string newValue;
-    TagLib::FileRef f(filepath.c_str()); // Create a TagLib::FileRef object to access metadata.
+    TagLib::FileRef f(filepath.c_str()); 
 
-    // Check if the file is valid and contains metadata and audio properties.
     if (!f.isNull() && f.tag() && f.audioProperties()) {
-        TagLib::Tag* tag = f.tag(); // Access the tag metadata.
-
-        // Enter a loop for editing video metadata options.
+        TagLib::Tag* tag = f.tag(); 
         do {
-            // Hide the current view and display metadata details.
             ControllerManager::getInstance()->getViewManager()->hideCurrentView();
             getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
             ControllerManager::getInstance()->getViewManager()->getMetadataView()->menuEditVideo();
@@ -139,22 +128,21 @@ void MetadataController::handleEditVideo(const std::string& filepath, const std:
             // Handle user input for different video metadata fields.
             switch (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption()) {
                 case VideoEdit::VIDEO_BACK: {
-                    back(); // Exit the loop and return to the previous menu.
+                    back(); 
                     break;
                 }
                 case VideoEdit::VIDEO_TITLE: {
-                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); // Get and validate user input.
-                    tag->setTitle(TagLib::String(newValue)); // Update the title in the metadata.
-                    updateMediaFileMetadata("Title", newValue, ID); // Update metadata in the model.
+                    Exception_Handler("Enter new title: ", newValue, validateAlphaSring); 
+                    tag->setTitle(TagLib::String(newValue)); 
+                    updateMediaFileMetadata("Title", newValue, ID); 
                     break;
                 }
                 default:
-                    std::cout << "Invalid input\n"; // Handle invalid input.
+                    std::cout << "Invalid input\n"; 
             }
         } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption() != VideoEdit::VIDEO_BACK);
-        f.save(); // Save the updated metadata back to the file.
+        f.save(); 
     } else {
-        // Handle cases where the file cannot be opened or metadata is not available.
         std::cerr << "Error: Could not open file or retrieve metadata for " << filepath << std::endl;
     }
 }

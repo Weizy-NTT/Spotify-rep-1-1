@@ -9,23 +9,18 @@
 
 class ScanfOptionController : public BaseController {
 public:
-    // Handle user input for scanning options
     void handleInput();
 
-    // Scan media files from a specified directory
     void scanDirectory(const std::string& folderPath);
 
-    // Scan media files from a USB device
     void scanUSBDevice(const std::string& device);
 
-    // Navigate back to the previous menu or screen
     void back();
 
-    // Scan a single media file from the given file path
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
 
-    // Scan playlists from a text file at the specified path
     void scanPlaylistsFromTxt(const std::string& filePath);
+    
     std::vector<std::string> scanUSB();
 };
 

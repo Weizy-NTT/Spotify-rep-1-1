@@ -79,14 +79,14 @@ void validatePlaylistsMenu(const size_t& value);
 void validateDetailedPlaylistMenu(const size_t& value);
 void validatePlayingMediaMenu(const size_t& value);
 
-void validateID(const std::string& ID); // Validate ID format
-void validateTrack(const std::string& value); // Validate track number format
-void validatePath(const std::string& path); // Validate file or directory path
-bool isUSBDevicePresent(const std::string& device); // Check if a USB device is present
+void validateID(const std::string& ID);
+void validateTrack(const std::string& value); 
+void validatePath(const std::string& path);
+bool isUSBDevicePresent(const std::string& device);
 
-void validateAlphaSring(const std::string& alString); // Validate string with alpha characters
-void validateYear(const std::string& year); // Validate year format
-void validatePosInteger(const size_t& value); // Validate positive integer input
+void validateAlphaSring(const std::string& alString); 
+void validateYear(const std::string& year); 
+void validatePosInteger(const size_t& value); 
 
 // Exception handlers for strings and integers
 void Exception_Handler(const std::string& str, std::string& variable, void(*func)(const std::string&));

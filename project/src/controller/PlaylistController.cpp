@@ -19,7 +19,6 @@ void PlaylistController::handleInput() {
         // Handle user input based on the selected playlist menu option
         switch (ControllerManager::getInstance()->getViewManager()->getPlaylistView()->getSelectedOption()) {
             case PlaylistMenu::SELECT_PLAYLIST: {
-                // Handle selecting a playlist
                 std::string PlaylistID;
                 Exception_Handler("Enter playlist ID for looking: ",PlaylistID,validateID);
                 if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(PlaylistID))
@@ -32,14 +31,12 @@ void PlaylistController::handleInput() {
                 break;
             }
             case PlaylistMenu::ADD_PLAYLIST: {
-                // Handle adding a new playlist
                 std::string playlistName;
                 Exception_Handler("Enter playlist name for adding: ", playlistName, validateAlphaSring);
                 createPlaylist(playlistName);
                 break;
             }
             case PlaylistMenu::REMOVE_PLAYLIST: {
-                // Handle removing an existing playlist
                 std::string playlistID;
                 Exception_Handler("Enter playlist ID for removing: ",playlistID,validateID);
                 if (ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->isValidPlaylistIDInLibrary(playlistID))
@@ -52,7 +49,6 @@ void PlaylistController::handleInput() {
                 break;
             }
             case PlaylistMenu::BACK_FROM_PLAYLIST: {
-                // Handle going back to the previous menu
                 back();
                 break;
             }
@@ -73,7 +69,6 @@ void PlaylistController::deletePlaylist(const std::string& Id) {
 
 // Handle the back navigation logic
 void PlaylistController::back() {
-    // Placeholder for back navigation logic
 }
 
 // Display all playlists in the playlist view

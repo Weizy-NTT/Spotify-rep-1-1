@@ -7,10 +7,8 @@ using namespace ftxui;
 
 void MainMenuView::showMenu() {
     BaseView::showMenu();
-    // Create the menu with predefined entries
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Create a renderer to display the menu
     auto renderer = Renderer(menu, [&] {
         return vbox({
                    text("===== Main Menu ====="),
@@ -21,33 +19,29 @@ void MainMenuView::showMenu() {
                border;
     });
 
-    // Create a ScreenInteractive object for interaction
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Handle events
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit the loop when a menu item is clicked
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit the loop when Enter is pressed
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Exit the loop when ESC or 'q' is pressed
+            screen.ExitLoopClosure()();
             return true;
         }
         return menu->OnEvent(event);
     });
 
-    // Run the UI loop
     screen.Loop(event_handler);
-    // std::system("clear");
 }
 
 // Get the selected menu option

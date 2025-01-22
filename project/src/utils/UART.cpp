@@ -10,10 +10,8 @@
 UART::UART(const std::string& port, unsigned int baud_rate)
     : serial_port(io_context), running(true) {
     try {
-        // Open serial port
         serial_port.open(port);
 
-        // Serial configuration
         serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
         serial_port.set_option(boost::asio::serial_port_base::character_size(8));
         serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));

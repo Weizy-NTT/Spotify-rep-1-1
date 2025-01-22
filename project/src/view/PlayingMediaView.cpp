@@ -15,21 +15,16 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
     
     bool running = true;
 
-    // Create a menu for navigation
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Interactive screen for UI rendering
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Renderer for displaying UI elements
     auto renderer = Renderer(menu, [&] {
-        // Format current and total time
         std::string current = (currentTime / 60 < 10 ? "0" : "") + std::to_string(currentTime / 60) + ":" +
                               (currentTime % 60 < 10 ? "0" : "") + std::to_string(currentTime % 60);
         std::string total = (player->getTotalTime() / 60 < 10 ? "0" : "") + std::to_string(player->getTotalTime() / 60) + ":" +
                             (player->getTotalTime() % 60 < 10 ? "0" : "") + std::to_string(player->getTotalTime() % 60);
 
-        // Progress bar for song playback
         float progress = static_cast<float>(currentTime) / player->getTotalTime();
         int barWidth = 50;
         int pos = static_cast<int>(barWidth * progress);
@@ -41,7 +36,6 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             text("]")
         });
 
-        // Volume bar
         int volumeBarWidth = 30;
         int volumePos = static_cast<int>(volumeBarWidth * (volume / 128.0));
         std::vector<Element> volume_bar_elements(volumeBarWidth, text("="));
@@ -52,10 +46,8 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             text("]")
         });
 
-        // Volume percentage
         std::string volumePercent = std::to_string(static_cast<int>((volume / 128.0) * 100)) + "%";
 
-        // Combine UI elements for display
         return vbox({
                 text("===== Now Playing ====="),
                 text("Song: " + player->getCurrentMediaFile()->getName() + " - " + player->getCurrentMediaFile()->getMetadata().getMetadata()["Artist"]) | bold | color(Color::Green),
@@ -74,7 +66,6 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             border;
     });
 
-    // Thread for updating the UI based on playback progress and volume changes
     std::thread refresh_thread([&] {
         size_t lastTime = currentTime;
         int lastVolume = volume;
@@ -83,36 +74,33 @@ void PlayingMediaView::showPlayingMedia(PlayingMedia* player, size_t& currentTim
             if (lastTime != currentTime || lastVolume != volume) {
                 lastTime = currentTime;
                 lastVolume = volume;
-                screen.PostEvent(Event::Custom); // Refresh UI
+                screen.PostEvent(Event::Custom); 
             }
         }
     });
 
-    // Event handler for user interaction
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit on mouse click
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         }
-        if (event == Event::Return) { // Handle Enter key
+        if (event == Event::Return) { 
             if (menu->OnEvent(event)) {
                 screen.ExitLoopClosure()();
                 return true;
             }
         } 
-        if (event == Event::Escape || event == Event::Character('q')) { // Exit on ESC or 'q'
+        if (event == Event::Escape || event == Event::Character('q')) { 
             screen.ExitLoopClosure()();
             return true;
         }
-        return menu->OnEvent(event); // Handle other events
+        return menu->OnEvent(event); 
     });
 
-    // Run the interactive screen
     screen.Loop(event_handler);
 
-    // Stop the refresh thread
     running = false;
     if (refresh_thread.joinable()) {
         refresh_thread.join();

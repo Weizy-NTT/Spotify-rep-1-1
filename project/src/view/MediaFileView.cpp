@@ -14,44 +14,37 @@ using namespace ftxui;
 void MediaFileView::showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong) {
     using namespace ftxui;
 
-    // 1. Create the list of media files
     Elements items;
     for (size_t i = firstSong; i <= lastSong && i < files.size(); ++i) {
         items.push_back(hbox({
-            text("[" + files[i]->getID() + "] ") | size(WIDTH, EQUAL, 10), // ID column
-            text(files[i]->getName()) | size(WIDTH, GREATER_THAN, 30)      // Name column
+            text("[" + files[i]->getID() + "] ") | size(WIDTH, EQUAL, 10), 
+            text(files[i]->getName()) | size(WIDTH, GREATER_THAN, 30)      
         }));
     }
 
-    // 2. Create footer with current page information
     std::string footer = "Page " + std::to_string(currentPage);
 
-    // 3. Build the interface
     auto document = vbox({
-        text("Media Files") | bold | hcenter,   // Title
+        text("Media Files") | bold | hcenter,   
         separator(),
-        vbox(std::move(items)) | border,       // Auto-fit list
+        vbox(std::move(items)) | border,       
         separator(),
-        text(footer) | hcenter                 // Footer
+        text(footer) | hcenter                 
     });
 
-    // 4. Adjust screen size based on content
     auto screen = Screen::Create(
-        Dimension::Full(),         // Full-width
-        Dimension::Fit(document)   // Fit height to content
+        Dimension::Full(),         
+        Dimension::Fit(document)   
     );
     Render(screen, document);
 
-    // 5. Output the interface to the terminal
     std::cout << screen.ToString() << std::endl;
 }
 
 void MediaFileView::showMenu() {
     BaseView::showMenu();
-    // Create the menu with predefined entries
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Create a renderer to display the menu
     auto renderer = Renderer(menu, [&] {
         return vbox({
                    text("==== Media Player Menu ===="),
@@ -62,31 +55,28 @@ void MediaFileView::showMenu() {
                border;
     });
 
-    // Create a ScreenInteractive object for user interaction
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Handle events
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit the loop when clicking on a menu item
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit the loop when pressing Enter
+                screen.ExitLoopClosure()(); 
                 return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Exit the loop when pressing ESC or 'q'
+            screen.ExitLoopClosure()();
             return true;
         }
         return menu->OnEvent(event);
     });
 
-    // Run the UI loop
     screen.Loop(event_handler);
     std::system("clear");
 }
@@ -107,23 +97,22 @@ void MediaFileView::displayStatusMessage(MediaFileStatus& status) {
     switch (status) {
         case MediaFileStatus::MEDIAFILE_PLAY_STATUS:
             std::cout << "Song ID not found in media library. Cannot play.\n";
-            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset the status
+            status = MediaFileStatus::MEDIAFILE_NORMAL; 
             break;
         case MediaFileStatus::MEDIAFILE_DETAIL_STATUS:
             std::cout << "Song ID not found in media library. Cannot show details.\n";
-            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset the status
+            status = MediaFileStatus::MEDIAFILE_NORMAL; 
             break;
         case MediaFileStatus::MEDIAFILE_NEXT_PAGE_STATUS:
             std::cout << "This is the last page. Cannot go next.\n";
-            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset the status
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  
             break;
         case MediaFileStatus::MEDIAFILE_PREV_PAGE_STATUS:
             std::cout << "This is the first page. Cannot go back.\n";
-            status = MediaFileStatus::MEDIAFILE_NORMAL;  // Reset the status
+            status = MediaFileStatus::MEDIAFILE_NORMAL;  
             break;
         case MediaFileStatus::MEDIAFILE_NORMAL:
         default:
-            // No action needed for normal status
             break;
     }
 }

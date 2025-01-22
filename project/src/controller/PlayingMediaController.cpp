@@ -89,11 +89,8 @@ void PlayingMediaController::updateElapsedTime() {
     auto playing = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
 
     while (isPlayingMediaFile.load(std::memory_order_relaxed)) {
-        // Increment playback time every second
         std::this_thread::sleep_for(std::chrono::seconds(1));
         playing->setCurrentTime(playing->getCurrentTime() + 1);
-
-        // Move to the next track if the current one is finished
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
             ControllerManager::getInstance()->getHardwareController()->sendSignal(ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->getDurationStringType());
@@ -105,7 +102,7 @@ void PlayingMediaController::updateElapsedTime() {
 void PlayingMediaController::startUpdateThread() {
     if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {
         isPlayingMediaFile.store(true, std::memory_order_relaxed);
-        if (!updateThread.joinable()) { // Start the thread if not already running
+        if (!updateThread.joinable()) { 
             updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
         }
     }

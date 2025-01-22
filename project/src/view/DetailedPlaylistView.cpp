@@ -9,13 +9,10 @@
 
 using namespace ftxui;
 
-// Display the detailed playlist menu
 void DetailedPlaylistView::showMenu() {
     BaseView::showMenu();
-    // Create menu using ftxui
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Create a renderer to display the menu
     auto renderer = Renderer(menu, [&] {
         return vbox({
                    text("===== Detailed Playlist Menu ====="),
@@ -26,34 +23,30 @@ void DetailedPlaylistView::showMenu() {
                border;
     });
 
-    // Create a ScreenInteractive for interaction
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Handle user events for the menu
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Exit the loop when the menu is clicked
+                screen.ExitLoopClosure()(); 
                 return true;
             }          
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-            screen.ExitLoopClosure()(); // Exit the loop when Enter is pressed
+            screen.ExitLoopClosure()(); 
             return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Exit the loop when ESC or 'q' is pressed
+            screen.ExitLoopClosure()(); 
             return true;
         }
         return menu->OnEvent(event);
 
     });
 
-    // Start the interactive screen loop
     screen.Loop(event_handler);
-    // std::system("clear");
 }
 
 // Get the selected menu option
@@ -72,34 +65,30 @@ void DetailedPlaylistView::hideMenu() {
 void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& playlist) {
     using namespace ftxui;
 
-    // 1. Retrieve playlist details
     std::string name = playlist->getName();
     size_t numberOfSongs = playlist->getSongs().size();
 
-    // 2. Create the UI to display playlist details
     auto document = vbox({
-        text("Playlist Details") | bold | hcenter,              // Title
+        text("Playlist Details") | bold | hcenter,          
         separator(),
         hbox({
-            text("Name: ") | bold,                              // Playlist name
+            text("Name: ") | bold,                             
             text(name) | color(Color::Yellow)
         }),
         hbox({
-            text("Number of Songs: ") | bold,                   // Number of songs
+            text("Number of Songs: ") | bold,                 
             text(std::to_string(numberOfSongs)) | color(Color::Green)
         }),
         separator(),
-        text("Press any key to continue...") | dim | hcenter    // Instructions
+        text("Press any key to continue...") | dim | hcenter    
     });
 
-    // 3. Adjust the screen to fit the content
     auto screen = Screen::Create(
-        Dimension::Full(),         // Full width
-        Dimension::Fit(document)   // Fit height
+        Dimension::Full(),        
+        Dimension::Fit(document)   
     );
     Render(screen, document);
 
-    // 4. Output the UI to the terminal
     std::cout << screen.ToString() << std::endl;
 
 }
@@ -108,44 +97,37 @@ void DetailedPlaylistView::showPlaylistDetails(const std::shared_ptr<Playlist>& 
 void DetailedPlaylistView::showListOfSongs(const std::shared_ptr<Playlist>& playlist) {
     using namespace ftxui;
 
-    // 1. Retrieve the list of songs
     std::vector<std::shared_ptr<MediaFile>> songs = playlist->getSongs();
 
-    // 2. Create elements for each song
     Elements items;
     for (const auto& song : songs) {
         items.push_back(hbox({
-            text("[" + song->getID() + "] ") | size(WIDTH, EQUAL, 10),   // Song ID column
-            text(song->getName()) | size(WIDTH, GREATER_THAN, 30)       // Song name column
+            text("[" + song->getID() + "] ") | size(WIDTH, EQUAL, 10),   
+            text(song->getName()) | size(WIDTH, GREATER_THAN, 30)      
         }));
     }
 
-    // 3. Create the header
     auto header = hbox({
         text("Songs in Playlist: ") | bold,
         text(playlist->getName()) | color(Color::Yellow)
     }) | hcenter;
 
-    // 4. Create the footer
     auto footer = text("Total Songs: " + std::to_string(songs.size())) | hcenter;
 
-    // 5. Combine the header, list, and footer into the document
     auto document = vbox({
         header,
         separator(),
-        vbox(std::move(items)) | border, // Display the list
+        vbox(std::move(items)) | border, 
         separator(),
         footer
     });
 
-    // 6. Adjust the screen dimensions
     auto screen = Screen::Create(
-        Dimension::Full(),         // Full width
-        Dimension::Fit(document)   // Fit height
+        Dimension::Full(),         
+        Dimension::Fit(document)   
     );
     Render(screen, document);
 
-    // 7. Output the UI to the terminal
     std::cout << screen.ToString() << std::endl;
 
 }

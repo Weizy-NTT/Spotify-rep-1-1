@@ -22,21 +22,18 @@ void MainMenuController::handleInput() {
     switch (ControllerManager::getInstance()->getViewManager()->getMainMenuView()->getSelectedOption())
         {
             case MainMenu::EXIT: {
-                back(); // Exit the application
+                back();
                 break;
             }
             case MainMenu::SCAN_OPTIONS: {
-                // Handle scan options
                 ControllerManager::getInstance()->getScanfOptionController()->handleInput();
                 break;
             }
             case MainMenu::ALL_SONGS: {
-                // Handle the "All Songs" menu
                 ControllerManager::getInstance()->getMediaFileController()->handleInput();
                 break;
             }
             case MainMenu::PLAYLIST: {
-                // Handle the playlist menu
                 ControllerManager::getInstance()->getPlaylistController()->handleInput();
                 break;
             }
@@ -56,13 +53,8 @@ void MainMenuController::handleInput() {
 }
 
 void MainMenuController::back() {
-    // Save playlists to the specified file
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->saveToFile(filePath);
-
-    // Stop reading data from the hardware controller
     ControllerManager::getInstance()->getHardwareController()->stopReading();
-
-    // Exit the application
     std::exit(0);
 }

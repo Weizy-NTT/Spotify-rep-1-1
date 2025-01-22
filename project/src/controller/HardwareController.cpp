@@ -28,7 +28,6 @@ void HardwareController::sendSignal(const std::string& signal) {
 // Constructor
 HardwareController::HardwareController(const std::string& device, int baudRate)
     : uart(device, baudRate), running(false) {
-    // Đăng ký callback để xử lý dữ liệu từ UART
     uart.setDataCallback([this](const std::string& data) {
         handleReceivedData(data);
     });
@@ -36,7 +35,7 @@ HardwareController::HardwareController(const std::string& device, int baudRate)
 
 // Destructor
 HardwareController::~HardwareController() {
-    stopReading(); // Đảm bảo dừng luồng đọc trước khi hủy
+    stopReading(); 
 }
 
 void HardwareController::handleReceivedData(const std::string& data) {
@@ -55,13 +54,13 @@ void HardwareController::handleReceivedData(const std::string& data) {
 
 void HardwareController::startReading() {
     if (running) {
-        return; // Luồng đọc đã chạy
+        return; 
     }
     running = true;
 
     readThread = std::thread([this]() {
         try {
-            uart.readData(); // Bắt đầu đọc dữ liệu
+            uart.readData(); 
         } catch (const std::exception& e) {
             std::cerr << "Error in reading thread: " << e.what() << std::endl;
         }
@@ -70,11 +69,11 @@ void HardwareController::startReading() {
 
 void HardwareController::stopReading() {
     if (!running) {
-        return; // Luồng đã dừng
+        return; 
     }
     running = false;
-    uart.stop(); // Dừng giao tiếp UART
+    uart.stop(); 
     if (readThread.joinable()) {
-        readThread.join(); // Đợi luồng đọc kết thúc
+        readThread.join(); 
     }
 }

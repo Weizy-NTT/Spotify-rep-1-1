@@ -3,15 +3,15 @@
 
 ViewManager::ViewManager() {
     // Initialize all views and store them in the views vector
-    views.push_back(std::make_unique<MainMenuView>()); // Main menu view
-    views.push_back(std::make_unique<ScanfOptionView>()); // Scanf option view
-    views.push_back(std::make_unique<PlaylistView>()); // Playlist view
-    views.push_back(std::make_unique<MediaFileView>()); // Media file view
-    views.push_back(std::make_unique<PlayingMediaView>()); // Playing media view
-    views.push_back(std::make_unique<DetailedPlaylistView>()); // Detailed playlist view
-    views.push_back(std::make_unique<MetadataView>()); // Metadata view
+    views.push_back(std::make_unique<MainMenuView>()); 
+    views.push_back(std::make_unique<ScanfOptionView>()); 
+    views.push_back(std::make_unique<PlaylistView>());
+    views.push_back(std::make_unique<MediaFileView>()); 
+    views.push_back(std::make_unique<PlayingMediaView>()); 
+    views.push_back(std::make_unique<DetailedPlaylistView>()); 
+    views.push_back(std::make_unique<MetadataView>());
 
-    currentView = views[SwitchView::SW_MAIN_VIEW].get(); // Set the initial view to the main menu
+    currentView = views[SwitchView::SW_MAIN_VIEW].get(); 
 }
 
 void ViewManager::showCurrentView() {
@@ -31,7 +31,7 @@ void ViewManager::hideCurrentView() {
 void ViewManager::switchView(SwitchView viewIndex) {
     // Switch to a specific view based on the provided index
     currentView = views[viewIndex].get();
-    showCurrentView(); // Display the newly switched view
+    showCurrentView(); 
 }
 
 MainMenuView* ViewManager::getMainMenuView() const {
