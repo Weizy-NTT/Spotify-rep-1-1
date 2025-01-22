@@ -1,16 +1,16 @@
 #include "MainMenuView.hpp"
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/component/component.hpp>
-#include <ftxui/dom/elements.hpp> // Để dùng text, vbox, border
+#include <ftxui/dom/elements.hpp> // For using text, vbox, border
 #include <iostream>
 using namespace ftxui;
 
 void MainMenuView::showMenu() {
     BaseView::showMenu();
-    // Tạo menu với các mục đã khai báo
+    // Create the menu with predefined entries
     auto menu = Menu(&menu_entries, &selected_option);
 
-    // Tạo renderer để hiển thị menu
+    // Create a renderer to display the menu
     auto renderer = Renderer(menu, [&] {
         return vbox({
                    text("===== Main Menu ====="),
@@ -21,42 +21,43 @@ void MainMenuView::showMenu() {
                border;
     });
 
-    // Tạo đối tượng ScreenInteractive
+    // Create a ScreenInteractive object for interaction
     auto screen = ScreenInteractive::TerminalOutput();
 
-    // Xử lý sự kiện
+    // Handle events
     auto event_handler = CatchEvent(renderer, [&](Event event) {
         if (event.is_mouse()) {
             if (event.mouse().button == Mouse::Left && menu->OnEvent(event)) {
-                screen.ExitLoopClosure()(); // Thoát vòng lặp khi click vào menu
+                screen.ExitLoopClosure()(); // Exit the loop when a menu item is clicked
                 return true;
             }
         }
         if (event == Event::Return) {
             if (menu->OnEvent(event)) {
-            screen.ExitLoopClosure()();
-            return true;
+                screen.ExitLoopClosure()(); // Exit the loop when Enter is pressed
+                return true;
             }
         } 
         if (event == Event::Escape || event == Event::Character('q')) {
-            screen.ExitLoopClosure()(); // Thoát vòng lặp khi nhấn ESC hoặc 'q'
+            screen.ExitLoopClosure()(); // Exit the loop when ESC or 'q' is pressed
             return true;
         }
         return menu->OnEvent(event);
     });
 
-    // Chạy vòng lặp giao diện
+    // Run the UI loop
     screen.Loop(event_handler);
-    //std::system("clear");
+    // std::system("clear");
 }
 
+// Get the selected menu option
 int MainMenuView::getSelectedOption() const {
     return selected_option;
 }
 
+// Hide the menu and reset the selected option
 void MainMenuView::hideMenu() {
     BaseView::hideMenu();
     selected_option = 0;
     std::system("clear");
 }
-
