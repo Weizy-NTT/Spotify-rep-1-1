@@ -3,7 +3,7 @@ TARGET = build/Spotify.exe
 TEST_TARGET = build/TestSpotify.exe
 
 # Compiler and Flags
-CC = g++
+CC = g++ 
 CFLAGS = -Wall -g -std=c++20 -fprofile-arcs -ftest-coverage
 
 # Source folder, header folder
@@ -101,7 +101,6 @@ runtest: $(TEST_TARGET)
 
 # Generate coverage report
 coverage: $(TARGET)
-	lcov --capture --directory . --output-file coverage.info
-	genhtml coverage.info --output-directory out
+	@lcov --capture --directory ./build/obj/test --output-file coverage.info
+	@genhtml coverage.info --output-directory out
 	@echo "Coverage report generated in 'out/' directory."
-
