@@ -33,15 +33,15 @@ private:
 public:
     void showMenu() override;
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~PlaylistView() override = default;
 
     void hideMenu() override;
 
-    void showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists);
+    virtual void showPlaylistList(const std::vector<std::shared_ptr<Playlist>>& playlists);
 
-    void displayStatusMessage(PlaylistStatus& status);
+    virtual void displayStatusMessage(PlaylistStatus& status);
 };
 
 #endif // PLAYLIST_VIEW_H

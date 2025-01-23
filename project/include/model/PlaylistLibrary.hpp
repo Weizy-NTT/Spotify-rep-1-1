@@ -14,17 +14,19 @@ private:
     std::vector<std::shared_ptr<Playlist>> playlists;
 
 public:
-    const std::vector<std::shared_ptr<Playlist>>& getAllPlaylists() const;
+    virtual const std::vector<std::shared_ptr<Playlist>>& getAllPlaylists() const;
 
-    void addPlaylist(const std::shared_ptr<Playlist>& playlist);
+    virtual void addPlaylist(const std::shared_ptr<Playlist>& playlist);
 
-    void removePlaylist(const std::string& ID);
+    virtual void removePlaylist(const std::string& ID);
 
-    std::shared_ptr<Playlist> getPlaylistByID(const std::string& ID) const;
+    virtual std::shared_ptr<Playlist> getPlaylistByID(const std::string& ID) const;
 
-    bool isValidPlaylistIDInLibrary(const std::string& ID);
+    virtual bool isValidPlaylistIDInLibrary(const std::string& ID);
 
-    void saveToFile(const std::string& filePath) const;
+    virtual void saveToFile(const std::string& filePath) const;
+
+    virtual ~PlaylistLibrary() = default;
 };
 
 #endif // PLAYLISTLIBRARY_H

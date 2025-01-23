@@ -1,22 +1,31 @@
 # Output file
 TARGET = build/Spotify.exe
+TEST_TARGET = build/TestSpotify.exe
 
 # Compiler and Flags
 CC = g++
-CFLAGS = -Wall -g -std=c++20
+CFLAGS = -Wall -g -std=c++20 -fprofile-arcs -ftest-coverage
 
 # Source folder, header folder
 SRCDIR = src
 INCDIR = include
 OBJDIR = build/obj
+TESTDIR = test
+TEST_OBJDIR = build/obj/test
 
 # Automatically find all subdirectories in Include and Src
 INCLUDES = $(shell find $(INCDIR) -type d)
 CFLAGS += $(foreach dir, $(INCLUDES), -I$(dir))
 
-# Find all .cpp files in Src (do not include main.cpp multiple times)
-SRCS = $(shell find $(SRCDIR) -name "*.cpp")
+# Find all .cpp files in Src, excluding main.cpp for test
+SRCS = $(filter-out $(SRCDIR)/main.cpp, $(shell find $(SRCDIR) -name "*.cpp"))
+MAIN_SRC = $(SRCDIR)/main.cpp
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+MAIN_OBJ = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(MAIN_SRC))
+
+# Find all .cpp files in Test
+TEST_SRCS = $(shell find $(TESTDIR) -name "*.cpp")
+TEST_OBJS = $(patsubst $(TESTDIR)/%.cpp, $(TEST_OBJDIR)/%.o, $(TEST_SRCS))
 
 # FFmpeg settings
 FFMPEG_FLAGS = $(shell pkg-config --cflags --libs libavformat libavcodec libswresample libavutil libswscale)
@@ -52,23 +61,47 @@ BOOST_FLAGS = -lboost_system -lboost_filesystem -lboost_thread
 CFLAGS += $(BOOST_FLAGS)
 LDLIBS += $(BOOST_FLAGS)
 
+# Google Test & Google Mock settings
+GTEST_FLAGS = -lgtest -lgmock -pthread
+GTEST_MAIN = -lgtest_main
+
 # Main rule
 all: $(TARGET)
 
 # Create executable file
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(MAIN_OBJ)
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+
+# Create test executable file
+$(TEST_TARGET): $(OBJS) $(TEST_OBJS)
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -o $@ $^ $(GTEST_FLAGS) $(GTEST_MAIN) $(LDFLAGS) $(LDLIBS)
 
 # Compile .cpp files to .o files
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean rule (clean object files and executable)
+$(TEST_OBJDIR)/%.o: $(TESTDIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean rule (clean object files, executable, and test files)
 clean:
-	rm -rf $(OBJDIR) $(TARGET)
+	rm -rf $(OBJDIR) $(TEST_OBJDIR) $(TARGET) $(TEST_TARGET) coverage.info out
 
 # Run executable
 run: all
 	./$(TARGET)
+
+# Run unit tests
+runtest: $(TEST_TARGET)
+	./$(TEST_TARGET)
+
+# Generate coverage report
+coverage: $(TARGET)
+	lcov --capture --directory . --output-file coverage.info
+	genhtml coverage.info --output-directory out
+	@echo "Coverage report generated in 'out/' directory."
+

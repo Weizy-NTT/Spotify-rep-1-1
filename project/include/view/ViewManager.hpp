@@ -28,25 +28,27 @@ private:
 public:
     ViewManager();
 
-    void showCurrentView();
+    virtual void showCurrentView();
 
-    void hideCurrentView();
+    virtual void hideCurrentView();
 
-    void switchView(SwitchView viewIndex);
+    virtual void switchView(SwitchView viewIndex);
 
-    ScanfOptionView* getScanfOptionView() const;
+    virtual ScanfOptionView* getScanfOptionView() const;
 
-    PlaylistView* getPlaylistView() const;
+    virtual PlaylistView* getPlaylistView() const;
 
-    MediaFileView* getMediaFileView() const;
+    virtual MediaFileView* getMediaFileView() const;
 
-    PlayingMediaView* getPlayingMediaView() const;
+    virtual PlayingMediaView* getPlayingMediaView() const;
 
-    DetailedPlaylistView* getDetailedPlaylistView() const;
+    virtual DetailedPlaylistView* getDetailedPlaylistView() const;
 
-    MetadataView* getMetadataView() const;
+    virtual MetadataView* getMetadataView() const;
 
-    MainMenuView* getMainMenuView() const;
+    virtual MainMenuView* getMainMenuView() const;
+
+    virtual ~ViewManager() = default;
 };
 
 #endif // VIEW_MANAGER_H

@@ -16,8 +16,6 @@ ControllerManager::ControllerManager(ViewManager* viewManager, ModelManager* mod
     controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600)); 
 }
 
-// Private destructor
-ControllerManager::~ControllerManager() {}
 
 // Method to access the singleton instance
 // Ensures that there is only one instance of ControllerManager and initializes it if necessary

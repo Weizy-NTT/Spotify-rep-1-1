@@ -18,11 +18,13 @@ private:
 public:
     ModelManager();
 
-    MediaFileLibrary* getMediaLibrary() const;
+    virtual MediaFileLibrary* getMediaLibrary() const;
 
-    PlaylistLibrary* getPlaylistLibrary() const;
+    virtual PlaylistLibrary* getPlaylistLibrary() const;
 
-    PlayingMedia* getPlayingMedia() const;
+    virtual PlayingMedia* getPlayingMedia() const;
+
+    virtual ~ModelManager() = default;
 };
 
 #endif // MODEL_MANAGER_H

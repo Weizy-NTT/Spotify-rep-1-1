@@ -35,34 +35,37 @@ private:
     ViewManager* views; 
     ModelManager* model; 
     ControllerManager(ViewManager* viewManager, ModelManager* modelManager);
-    ~ControllerManager();
 
 public:
+    friend class MockControllerManager;
+    
     ControllerManager(const ControllerManager&) = delete;
     
     ControllerManager& operator=(const ControllerManager&) = delete;
 
     static ControllerManager* getInstance(ViewManager* viewManager = nullptr, ModelManager* modelManager = nullptr);
 
-    MainMenuController* getMainMenuController() const; 
+    virtual MainMenuController* getMainMenuController() const; 
 
-    ScanfOptionController* getScanfOptionController() const;  
+    virtual ScanfOptionController* getScanfOptionController() const;  
 
-    PlaylistController* getPlaylistController() const; 
+    virtual PlaylistController* getPlaylistController() const; 
 
-    MediaFileController* getMediaFileController() const; 
+    virtual MediaFileController* getMediaFileController() const; 
 
-    PlayingMediaController* getPlayingMediaController() const;      
+    virtual PlayingMediaController* getPlayingMediaController() const;      
 
-    DetailedPlaylistController* getDetailedPlaylistController() const; 
+    virtual DetailedPlaylistController* getDetailedPlaylistController() const; 
 
-    MetadataController* getMetadataController() const;   
+    virtual MetadataController* getMetadataController() const;   
 
-    ViewManager* getViewManager() const;   
+    virtual ViewManager* getViewManager() const;   
                              
-    ModelManager* getModelManager() const;  
+    virtual ModelManager* getModelManager() const;  
 
-    HardwareController* getHardwareController() const;                
+    virtual HardwareController* getHardwareController() const;    
+
+    virtual ~ControllerManager() = default;            
 };
 
 #endif // CONTROLLER_MANAGER_H
