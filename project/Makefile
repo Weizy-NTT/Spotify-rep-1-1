@@ -101,6 +101,7 @@ runtest: $(TEST_TARGET)
 
 # Generate coverage report
 coverage: $(TARGET)
-	@lcov --capture --directory ./build/obj/test --output-file coverage.info
-	@genhtml coverage.info --output-directory out
+	@lcov --capture --directory ./build/obj/controller --output-file coverage.info
+	@lcov --remove coverage.info '/usr/*' 'tests/*' 'external_libs/*' -o coverage_filtered.info
+	@genhtml coverage_filtered.info --output-directory out
 	@echo "Coverage report generated in 'out/' directory."

@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">65</td>
+            <td class="headerCovTableEntryLo">13.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2025-01-23 16:40:38</td>
+            <td class="headerValue">2025-02-03 08:34:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntryLo">20.8 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -221,8 +221,8 @@
 <a name="159"><span class="lineNum">     159 </span>            : </a>
 <a name="160"><span class="lineNum">     160 </span>            :   template&lt;typename _CharT, typename _Traits, typename _Alloc&gt;</a>
 <a name="161"><span class="lineNum">     161 </span>            :     inline basic_string_view&lt;_CharT, _Traits&gt;</a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineNoCov">          0 :     __effective_range(const basic_string&lt;_CharT, _Traits, _Alloc&gt;&amp; __source)</span></a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineNoCov">          0 :     { return __source; }</span></a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">         12 :     __effective_range(const basic_string&lt;_CharT, _Traits, _Alloc&gt;&amp; __source)</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">         12 :     { return __source; }</span></a>
 <a name="164"><span class="lineNum">     164 </span>            : </a>
 <a name="165"><span class="lineNum">     165 </span>            :   template&lt;typename _CharT, typename _Traits&gt;</a>
 <a name="166"><span class="lineNum">     166 </span>            :     inline const basic_string_view&lt;_CharT, _Traits&gt;&amp;</a>
@@ -231,10 +231,10 @@
 <a name="169"><span class="lineNum">     169 </span>            : </a>
 <a name="170"><span class="lineNum">     170 </span>            :   template&lt;typename _Source&gt;</a>
 <a name="171"><span class="lineNum">     171 </span>            :     inline auto</a>
-<a name="172"><span class="lineNum">     172 </span>            :     __effective_range(const _Source&amp; __source)</a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineNoCov">          0 :     __effective_range(const _Source&amp; __source)</span></a>
 <a name="173"><span class="lineNum">     173 </span>            :     {</a>
 <a name="174"><span class="lineNum">     174 </span>            :       if constexpr (is_pointer_v&lt;decay_t&lt;_Source&gt;&gt;)</a>
-<a name="175"><span class="lineNum">     175 </span>            :         return basic_string_view{&amp;*__source};</a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineNoCov">          0 :         return basic_string_view{&amp;*__source};</span></a>
 <a name="176"><span class="lineNum">     176 </span>            :       else</a>
 <a name="177"><span class="lineNum">     177 </span>            :         {</a>
 <a name="178"><span class="lineNum">     178 </span>            :           // _Source is an input iterator that iterates over an NTCTS.</a>
@@ -329,9 +329,9 @@
 <a name="267"><span class="lineNum">     267 </span>            : </a>
 <a name="268"><span class="lineNum">     268 </span>            :     // constructors and destructor</a>
 <a name="269"><span class="lineNum">     269 </span>            : </a>
-<a name="270"><span class="lineNum">     270 </span>            :     path() noexcept { }</a>
+<a name="270"><span class="lineNum">     270 </span><span class="lineNoCov">          0 :     path() noexcept { }</span></a>
 <a name="271"><span class="lineNum">     271 </span>            : </a>
-<a name="272"><span class="lineNum">     272 </span>            :     path(const path&amp; __p) = default;</a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineNoCov">          0 :     path(const path&amp; __p) = default;</span></a>
 <a name="273"><span class="lineNum">     273 </span>            : </a>
 <a name="274"><span class="lineNum">     274 </span>            :     path(path&amp;&amp; __p)</a>
 <a name="275"><span class="lineNum">     275 </span>            : #if _GLIBCXX_USE_CXX11_ABI || _GLIBCXX_FULLY_DYNAMIC_STRING == 0</a>
@@ -347,9 +347,9 @@
 <a name="285"><span class="lineNum">     285 </span>            : </a>
 <a name="286"><span class="lineNum">     286 </span>            :     template&lt;typename _Source,</a>
 <a name="287"><span class="lineNum">     287 </span>            :              typename _Require = __detail::_Path&lt;_Source&gt;&gt;</a>
-<a name="288"><span class="lineNum">     288 </span><span class="lineNoCov">          0 :       path(_Source const&amp; __source, format = auto_format)</span></a>
-<a name="289"><span class="lineNum">     289 </span><span class="lineNoCov">          0 :       : _M_pathname(_S_convert(__detail::__effective_range(__source)))</span></a>
-<a name="290"><span class="lineNum">     290 </span><span class="lineNoCov">          0 :       { _M_split_cmpts(); }</span></a>
+<a name="288"><span class="lineNum">     288 </span><span class="lineCov">         12 :       path(_Source const&amp; __source, format = auto_format)</span></a>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">         12 :       : _M_pathname(_S_convert(__detail::__effective_range(__source)))</span></a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">         12 :       { _M_split_cmpts(); }</span></a>
 <a name="291"><span class="lineNum">     291 </span>            : </a>
 <a name="292"><span class="lineNum">     292 </span>            :     template&lt;typename _InputIterator,</a>
 <a name="293"><span class="lineNum">     293 </span>            :              typename _Require = __detail::_Path2&lt;_InputIterator&gt;&gt;</a>
@@ -372,7 +372,7 @@
 <a name="310"><span class="lineNum">     310 </span>            :       : _M_pathname(_S_convert_loc(__first, __last, __loc))</a>
 <a name="311"><span class="lineNum">     311 </span>            :       { _M_split_cmpts(); }</a>
 <a name="312"><span class="lineNum">     312 </span>            : </a>
-<a name="313"><span class="lineNum">     313 </span><span class="lineNoCov">          0 :     ~path() = default;</span></a>
+<a name="313"><span class="lineNum">     313 </span><span class="lineCov">         12 :     ~path() = default;</span></a>
 <a name="314"><span class="lineNum">     314 </span>            : </a>
 <a name="315"><span class="lineNum">     315 </span>            :     // assignments</a>
 <a name="316"><span class="lineNum">     316 </span>            : </a>
@@ -530,7 +530,7 @@
 <a name="468"><span class="lineNum">     468 </span>            : </a>
 <a name="469"><span class="lineNum">     469 </span>            :     // query</a>
 <a name="470"><span class="lineNum">     470 </span>            : </a>
-<a name="471"><span class="lineNum">     471 </span>            :     [[nodiscard]] bool empty() const noexcept { return _M_pathname.empty(); }</a>
+<a name="471"><span class="lineNum">     471 </span><span class="lineNoCov">          0 :     [[nodiscard]] bool empty() const noexcept { return _M_pathname.empty(); }</span></a>
 <a name="472"><span class="lineNum">     472 </span>            :     bool has_root_name() const noexcept;</a>
 <a name="473"><span class="lineNum">     473 </span>            :     bool has_root_directory() const noexcept;</a>
 <a name="474"><span class="lineNum">     474 </span>            :     bool has_root_path() const noexcept;</a>
@@ -577,8 +577,8 @@
 <a name="515"><span class="lineNum">     515 </span>            :     // non-member operators</a>
 <a name="516"><span class="lineNum">     516 </span>            : </a>
 <a name="517"><span class="lineNum">     517 </span>            :     /// Compare paths</a>
-<a name="518"><span class="lineNum">     518 </span>            :     friend bool operator==(const path&amp; __lhs, const path&amp; __rhs) noexcept</a>
-<a name="519"><span class="lineNum">     519 </span>            :     { return path::_S_compare(__lhs, __rhs) == 0; }</a>
+<a name="518"><span class="lineNum">     518 </span><span class="lineNoCov">          0 :     friend bool operator==(const path&amp; __lhs, const path&amp; __rhs) noexcept</span></a>
+<a name="519"><span class="lineNum">     519 </span><span class="lineNoCov">          0 :     { return path::_S_compare(__lhs, __rhs) == 0; }</span></a>
 <a name="520"><span class="lineNum">     520 </span>            : </a>
 <a name="521"><span class="lineNum">     521 </span>            : #if __cpp_lib_three_way_comparison</a>
 <a name="522"><span class="lineNum">     522 </span>            :     /// Compare paths</a>
@@ -643,12 +643,12 @@
 <a name="581"><span class="lineNum">     581 </span>            : </a>
 <a name="582"><span class="lineNum">     582 </span>            :     template&lt;typename _Tp&gt;</a>
 <a name="583"><span class="lineNum">     583 </span>            :       static auto</a>
-<a name="584"><span class="lineNum">     584 </span><span class="lineNoCov">          0 :       _S_convert(const _Tp&amp; __str)</span></a>
+<a name="584"><span class="lineNum">     584 </span><span class="lineCov">         12 :       _S_convert(const _Tp&amp; __str)</span></a>
 <a name="585"><span class="lineNum">     585 </span>            :       {</a>
 <a name="586"><span class="lineNum">     586 </span>            :         if constexpr (is_same_v&lt;_Tp, string_type&gt;)</a>
 <a name="587"><span class="lineNum">     587 </span>            :           return __str;</a>
 <a name="588"><span class="lineNum">     588 </span>            :         else if constexpr (is_same_v&lt;_Tp, basic_string_view&lt;value_type&gt;&gt;)</a>
-<a name="589"><span class="lineNum">     589 </span><span class="lineNoCov">          0 :           return __str;</span></a>
+<a name="589"><span class="lineNum">     589 </span><span class="lineCov">         12 :           return __str;</span></a>
 <a name="590"><span class="lineNum">     590 </span>            :         else if constexpr (is_same_v&lt;typename _Tp::value_type, value_type&gt;)</a>
 <a name="591"><span class="lineNum">     591 </span>            :           return basic_string_view&lt;value_type&gt;(__str.data(), __str.size());</a>
 <a name="592"><span class="lineNum">     592 </span>            :         else</a>
@@ -689,7 +689,7 @@
 <a name="627"><span class="lineNum">     627 </span>            : </a>
 <a name="628"><span class="lineNum">     628 </span>            :     void _M_split_cmpts();</a>
 <a name="629"><span class="lineNum">     629 </span>            : </a>
-<a name="630"><span class="lineNum">     630 </span>            :     _Type _M_type() const noexcept { return _M_cmpts.type(); }</a>
+<a name="630"><span class="lineNum">     630 </span><span class="lineNoCov">          0 :     _Type _M_type() const noexcept { return _M_cmpts.type(); }</span></a>
 <a name="631"><span class="lineNum">     631 </span>            : </a>
 <a name="632"><span class="lineNum">     632 </span>            :     string_type _M_pathname;</a>
 <a name="633"><span class="lineNum">     633 </span>            : </a>
@@ -706,10 +706,10 @@
 <a name="644"><span class="lineNum">     644 </span>            :       _List(_List&amp;&amp;) = default;</a>
 <a name="645"><span class="lineNum">     645 </span>            :       _List&amp; operator=(const _List&amp;);</a>
 <a name="646"><span class="lineNum">     646 </span>            :       _List&amp; operator=(_List&amp;&amp;) = default;</a>
-<a name="647"><span class="lineNum">     647 </span><span class="lineNoCov">          0 :       ~_List() = default;</span></a>
+<a name="647"><span class="lineNum">     647 </span><span class="lineCov">         12 :       ~_List() = default;</span></a>
 <a name="648"><span class="lineNum">     648 </span>            : </a>
-<a name="649"><span class="lineNum">     649 </span>            :       _Type type() const noexcept</a>
-<a name="650"><span class="lineNum">     650 </span>            :       { return _Type(reinterpret_cast&lt;uintptr_t&gt;(_M_impl.get()) &amp; 0x3); }</a>
+<a name="649"><span class="lineNum">     649 </span><span class="lineNoCov">          0 :       _Type type() const noexcept</span></a>
+<a name="650"><span class="lineNum">     650 </span><span class="lineNoCov">          0 :       { return _Type(reinterpret_cast&lt;uintptr_t&gt;(_M_impl.get()) &amp; 0x3); }</span></a>
 <a name="651"><span class="lineNum">     651 </span>            : </a>
 <a name="652"><span class="lineNum">     652 </span>            :       void type(_Type) noexcept;</a>
 <a name="653"><span class="lineNum">     653 </span>            : </a>
@@ -941,7 +941,7 @@
 <a name="879"><span class="lineNum">     879 </span>            :     iterator&amp; operator=(const iterator&amp;) = default;</a>
 <a name="880"><span class="lineNum">     880 </span>            : </a>
 <a name="881"><span class="lineNum">     881 </span>            :     reference operator*() const;</a>
-<a name="882"><span class="lineNum">     882 </span>            :     pointer   operator-&gt;() const { return std::__addressof(**this); }</a>
+<a name="882"><span class="lineNum">     882 </span><span class="lineNoCov">          0 :     pointer   operator-&gt;() const { return std::__addressof(**this); }</span></a>
 <a name="883"><span class="lineNum">     883 </span>            : </a>
 <a name="884"><span class="lineNum">     884 </span>            :     iterator&amp; operator++();</a>
 <a name="885"><span class="lineNum">     885 </span>            :     iterator  operator++(int) { auto __tmp = *this; ++*this; return __tmp; }</a>
@@ -989,13 +989,13 @@
 <a name="927"><span class="lineNum">     927 </span>            :         }</a>
 <a name="928"><span class="lineNum">     928 </span>            :     }</a>
 <a name="929"><span class="lineNum">     929 </span>            : </a>
-<a name="930"><span class="lineNum">     930 </span>            :     iterator(const path* __path, path::_List::const_iterator __iter)</a>
-<a name="931"><span class="lineNum">     931 </span>            :     : _M_path(__path), _M_cur(__iter), _M_at_end()</a>
-<a name="932"><span class="lineNum">     932 </span>            :     { }</a>
+<a name="930"><span class="lineNum">     930 </span><span class="lineNoCov">          0 :     iterator(const path* __path, path::_List::const_iterator __iter)</span></a>
+<a name="931"><span class="lineNum">     931 </span><span class="lineNoCov">          0 :     : _M_path(__path), _M_cur(__iter), _M_at_end()</span></a>
+<a name="932"><span class="lineNum">     932 </span><span class="lineNoCov">          0 :     { }</span></a>
 <a name="933"><span class="lineNum">     933 </span>            : </a>
-<a name="934"><span class="lineNum">     934 </span>            :     iterator(const path* __path, bool __at_end)</a>
-<a name="935"><span class="lineNum">     935 </span>            :     : _M_path(__path), _M_cur(), _M_at_end(__at_end)</a>
-<a name="936"><span class="lineNum">     936 </span>            :     { }</a>
+<a name="934"><span class="lineNum">     934 </span><span class="lineNoCov">          0 :     iterator(const path* __path, bool __at_end)</span></a>
+<a name="935"><span class="lineNum">     935 </span><span class="lineNoCov">          0 :     : _M_path(__path), _M_cur(), _M_at_end(__at_end)</span></a>
+<a name="936"><span class="lineNum">     936 </span><span class="lineNoCov">          0 :     { }</span></a>
 <a name="937"><span class="lineNum">     937 </span>            : </a>
 <a name="938"><span class="lineNum">     938 </span>            :     bool _M_equals(iterator) const;</a>
 <a name="939"><span class="lineNum">     939 </span>            : </a>
@@ -1135,16 +1135,16 @@
 <a name="1073"><span class="lineNum">    1073 </span>            : </a>
 <a name="1074"><span class="lineNum">    1074 </span>            :   template&lt;typename _CharT, typename _Traits, typename _Allocator&gt;</a>
 <a name="1075"><span class="lineNum">    1075 </span>            :     inline basic_string&lt;_CharT, _Traits, _Allocator&gt;</a>
-<a name="1076"><span class="lineNum">    1076 </span>            :     path::string(const _Allocator&amp; __a) const</a>
+<a name="1076"><span class="lineNum">    1076 </span><span class="lineNoCov">          0 :     path::string(const _Allocator&amp; __a) const</span></a>
 <a name="1077"><span class="lineNum">    1077 </span>            :     {</a>
 <a name="1078"><span class="lineNum">    1078 </span>            :       if constexpr (is_same_v&lt;_CharT, value_type&gt;)</a>
-<a name="1079"><span class="lineNum">    1079 </span>            :         return { _M_pathname.c_str(), _M_pathname.length(), __a };</a>
+<a name="1079"><span class="lineNum">    1079 </span><span class="lineNoCov">          0 :         return { _M_pathname.c_str(), _M_pathname.length(), __a };</span></a>
 <a name="1080"><span class="lineNum">    1080 </span>            :       else</a>
 <a name="1081"><span class="lineNum">    1081 </span>            :         return _S_str_convert&lt;_CharT, _Traits&gt;(_M_pathname, __a);</a>
 <a name="1082"><span class="lineNum">    1082 </span>            :     }</a>
 <a name="1083"><span class="lineNum">    1083 </span>            : </a>
 <a name="1084"><span class="lineNum">    1084 </span>            :   inline std::string</a>
-<a name="1085"><span class="lineNum">    1085 </span>            :   path::string() const { return string&lt;char&gt;(); }</a>
+<a name="1085"><span class="lineNum">    1085 </span><span class="lineNoCov">          0 :   path::string() const { return string&lt;char&gt;(); }</span></a>
 <a name="1086"><span class="lineNum">    1086 </span>            : </a>
 <a name="1087"><span class="lineNum">    1087 </span>            : #if _GLIBCXX_USE_WCHAR_T</a>
 <a name="1088"><span class="lineNum">    1088 </span>            :   inline std::wstring</a>
@@ -1257,21 +1257,21 @@
 <a name="1195"><span class="lineNum">    1195 </span>            :   { return compare(basic_string_view&lt;value_type&gt;(__s)); }</a>
 <a name="1196"><span class="lineNum">    1196 </span>            : </a>
 <a name="1197"><span class="lineNum">    1197 </span>            :   inline path</a>
-<a name="1198"><span class="lineNum">    1198 </span>            :   path::filename() const</a>
+<a name="1198"><span class="lineNum">    1198 </span><span class="lineNoCov">          0 :   path::filename() const</span></a>
 <a name="1199"><span class="lineNum">    1199 </span>            :   {</a>
-<a name="1200"><span class="lineNum">    1200 </span>            :     if (empty())</a>
-<a name="1201"><span class="lineNum">    1201 </span>            :       return {};</a>
-<a name="1202"><span class="lineNum">    1202 </span>            :     else if (_M_type() == _Type::_Filename)</a>
-<a name="1203"><span class="lineNum">    1203 </span>            :       return *this;</a>
-<a name="1204"><span class="lineNum">    1204 </span>            :     else if (_M_type() == _Type::_Multi)</a>
+<a name="1200"><span class="lineNum">    1200 </span><span class="lineNoCov">          0 :     if (empty())</span></a>
+<a name="1201"><span class="lineNum">    1201 </span><span class="lineNoCov">          0 :       return {};</span></a>
+<a name="1202"><span class="lineNum">    1202 </span><span class="lineNoCov">          0 :     else if (_M_type() == _Type::_Filename)</span></a>
+<a name="1203"><span class="lineNum">    1203 </span><span class="lineNoCov">          0 :       return *this;</span></a>
+<a name="1204"><span class="lineNum">    1204 </span><span class="lineNoCov">          0 :     else if (_M_type() == _Type::_Multi)</span></a>
 <a name="1205"><span class="lineNum">    1205 </span>            :       {</a>
-<a name="1206"><span class="lineNum">    1206 </span>            :         if (_M_pathname.back() == preferred_separator)</a>
-<a name="1207"><span class="lineNum">    1207 </span>            :           return {};</a>
-<a name="1208"><span class="lineNum">    1208 </span>            :         auto __last = --end();</a>
-<a name="1209"><span class="lineNum">    1209 </span>            :         if (__last-&gt;_M_type() == _Type::_Filename)</a>
-<a name="1210"><span class="lineNum">    1210 </span>            :           return *__last;</a>
+<a name="1206"><span class="lineNum">    1206 </span><span class="lineNoCov">          0 :         if (_M_pathname.back() == preferred_separator)</span></a>
+<a name="1207"><span class="lineNum">    1207 </span><span class="lineNoCov">          0 :           return {};</span></a>
+<a name="1208"><span class="lineNum">    1208 </span><span class="lineNoCov">          0 :         auto __last = --end();</span></a>
+<a name="1209"><span class="lineNum">    1209 </span><span class="lineNoCov">          0 :         if (__last-&gt;_M_type() == _Type::_Filename)</span></a>
+<a name="1210"><span class="lineNum">    1210 </span><span class="lineNoCov">          0 :           return *__last;</span></a>
 <a name="1211"><span class="lineNum">    1211 </span>            :       }</a>
-<a name="1212"><span class="lineNum">    1212 </span>            :     return {};</a>
+<a name="1212"><span class="lineNum">    1212 </span><span class="lineNoCov">          0 :     return {};</span></a>
 <a name="1213"><span class="lineNum">    1213 </span>            :   }</a>
 <a name="1214"><span class="lineNum">    1214 </span>            : </a>
 <a name="1215"><span class="lineNum">    1215 </span>            :   inline path</a>
@@ -1284,12 +1284,12 @@
 <a name="1222"><span class="lineNum">    1222 </span>            :   }</a>
 <a name="1223"><span class="lineNum">    1223 </span>            : </a>
 <a name="1224"><span class="lineNum">    1224 </span>            :   inline path</a>
-<a name="1225"><span class="lineNum">    1225 </span>            :   path::extension() const</a>
+<a name="1225"><span class="lineNum">    1225 </span><span class="lineNoCov">          0 :   path::extension() const</span></a>
 <a name="1226"><span class="lineNum">    1226 </span>            :   {</a>
-<a name="1227"><span class="lineNum">    1227 </span>            :     auto ext = _M_find_extension();</a>
-<a name="1228"><span class="lineNum">    1228 </span>            :     if (ext.first &amp;&amp; ext.second != string_type::npos)</a>
-<a name="1229"><span class="lineNum">    1229 </span>            :       return path{ext.first-&gt;substr(ext.second)};</a>
-<a name="1230"><span class="lineNum">    1230 </span>            :     return {};</a>
+<a name="1227"><span class="lineNum">    1227 </span><span class="lineNoCov">          0 :     auto ext = _M_find_extension();</span></a>
+<a name="1228"><span class="lineNum">    1228 </span><span class="lineNoCov">          0 :     if (ext.first &amp;&amp; ext.second != string_type::npos)</span></a>
+<a name="1229"><span class="lineNum">    1229 </span><span class="lineNoCov">          0 :       return path{ext.first-&gt;substr(ext.second)};</span></a>
+<a name="1230"><span class="lineNum">    1230 </span><span class="lineNoCov">          0 :     return {};</span></a>
 <a name="1231"><span class="lineNum">    1231 </span>            :   }</a>
 <a name="1232"><span class="lineNum">    1232 </span>            : </a>
 <a name="1233"><span class="lineNum">    1233 </span>            :   inline bool</a>
@@ -1325,11 +1325,11 @@
 <a name="1263"><span class="lineNum">    1263 </span>            :   }</a>
 <a name="1264"><span class="lineNum">    1264 </span>            : </a>
 <a name="1265"><span class="lineNum">    1265 </span>            :   inline path::iterator</a>
-<a name="1266"><span class="lineNum">    1266 </span>            :   path::end() const</a>
+<a name="1266"><span class="lineNum">    1266 </span><span class="lineNoCov">          0 :   path::end() const</span></a>
 <a name="1267"><span class="lineNum">    1267 </span>            :   {</a>
-<a name="1268"><span class="lineNum">    1268 </span>            :     if (_M_type() == _Type::_Multi)</a>
-<a name="1269"><span class="lineNum">    1269 </span>            :       return iterator(this, _M_cmpts.end());</a>
-<a name="1270"><span class="lineNum">    1270 </span>            :     return iterator(this, true);</a>
+<a name="1268"><span class="lineNum">    1268 </span><span class="lineNoCov">          0 :     if (_M_type() == _Type::_Multi)</span></a>
+<a name="1269"><span class="lineNum">    1269 </span><span class="lineNoCov">          0 :       return iterator(this, _M_cmpts.end());</span></a>
+<a name="1270"><span class="lineNum">    1270 </span><span class="lineNoCov">          0 :     return iterator(this, true);</span></a>
 <a name="1271"><span class="lineNum">    1271 </span>            :   }</a>
 <a name="1272"><span class="lineNum">    1272 </span>            : </a>
 <a name="1273"><span class="lineNum">    1273 </span>            :   inline path::iterator&amp;</a>
@@ -1350,32 +1350,32 @@
 <a name="1288"><span class="lineNum">    1288 </span>            :   }</a>
 <a name="1289"><span class="lineNum">    1289 </span>            : </a>
 <a name="1290"><span class="lineNum">    1290 </span>            :   inline path::iterator&amp;</a>
-<a name="1291"><span class="lineNum">    1291 </span>            :   path::iterator::operator--()</a>
+<a name="1291"><span class="lineNum">    1291 </span><span class="lineNoCov">          0 :   path::iterator::operator--()</span></a>
 <a name="1292"><span class="lineNum">    1292 </span>            :   {</a>
 <a name="1293"><span class="lineNum">    1293 </span>            :     __glibcxx_assert(_M_path != nullptr);</a>
-<a name="1294"><span class="lineNum">    1294 </span>            :     if (_M_path-&gt;_M_type() == _Type::_Multi)</a>
+<a name="1294"><span class="lineNum">    1294 </span><span class="lineNoCov">          0 :     if (_M_path-&gt;_M_type() == _Type::_Multi)</span></a>
 <a name="1295"><span class="lineNum">    1295 </span>            :       {</a>
-<a name="1296"><span class="lineNum">    1296 </span>            :         __glibcxx_assert(_M_cur != _M_path-&gt;_M_cmpts.begin());</a>
-<a name="1297"><span class="lineNum">    1297 </span>            :         --_M_cur;</a>
+<a name="1296"><span class="lineNum">    1296 </span><span class="lineNoCov">          0 :         __glibcxx_assert(_M_cur != _M_path-&gt;_M_cmpts.begin());</span></a>
+<a name="1297"><span class="lineNum">    1297 </span><span class="lineNoCov">          0 :         --_M_cur;</span></a>
 <a name="1298"><span class="lineNum">    1298 </span>            :       }</a>
 <a name="1299"><span class="lineNum">    1299 </span>            :     else</a>
 <a name="1300"><span class="lineNum">    1300 </span>            :       {</a>
 <a name="1301"><span class="lineNum">    1301 </span>            :         __glibcxx_assert(_M_at_end);</a>
-<a name="1302"><span class="lineNum">    1302 </span>            :         _M_at_end = false;</a>
+<a name="1302"><span class="lineNum">    1302 </span><span class="lineNoCov">          0 :         _M_at_end = false;</span></a>
 <a name="1303"><span class="lineNum">    1303 </span>            :       }</a>
-<a name="1304"><span class="lineNum">    1304 </span>            :     return *this;</a>
+<a name="1304"><span class="lineNum">    1304 </span><span class="lineNoCov">          0 :     return *this;</span></a>
 <a name="1305"><span class="lineNum">    1305 </span>            :   }</a>
 <a name="1306"><span class="lineNum">    1306 </span>            : </a>
 <a name="1307"><span class="lineNum">    1307 </span>            :   inline path::iterator::reference</a>
-<a name="1308"><span class="lineNum">    1308 </span>            :   path::iterator::operator*() const</a>
+<a name="1308"><span class="lineNum">    1308 </span><span class="lineNoCov">          0 :   path::iterator::operator*() const</span></a>
 <a name="1309"><span class="lineNum">    1309 </span>            :   {</a>
 <a name="1310"><span class="lineNum">    1310 </span>            :     __glibcxx_assert(_M_path != nullptr);</a>
-<a name="1311"><span class="lineNum">    1311 </span>            :     if (_M_path-&gt;_M_type() == _Type::_Multi)</a>
+<a name="1311"><span class="lineNum">    1311 </span><span class="lineNoCov">          0 :     if (_M_path-&gt;_M_type() == _Type::_Multi)</span></a>
 <a name="1312"><span class="lineNum">    1312 </span>            :       {</a>
-<a name="1313"><span class="lineNum">    1313 </span>            :         __glibcxx_assert(_M_cur != _M_path-&gt;_M_cmpts.end());</a>
-<a name="1314"><span class="lineNum">    1314 </span>            :         return *_M_cur;</a>
+<a name="1313"><span class="lineNum">    1313 </span><span class="lineNoCov">          0 :         __glibcxx_assert(_M_cur != _M_path-&gt;_M_cmpts.end());</span></a>
+<a name="1314"><span class="lineNum">    1314 </span><span class="lineNoCov">          0 :         return *_M_cur;</span></a>
 <a name="1315"><span class="lineNum">    1315 </span>            :       }</a>
-<a name="1316"><span class="lineNum">    1316 </span>            :     return *_M_path;</a>
+<a name="1316"><span class="lineNum">    1316 </span><span class="lineNoCov">          0 :     return *_M_path;</span></a>
 <a name="1317"><span class="lineNum">    1317 </span>            :   }</a>
 <a name="1318"><span class="lineNum">    1318 </span>            : </a>
 <a name="1319"><span class="lineNum">    1319 </span>            :   inline bool</a>
@@ -1396,7 +1396,7 @@
 <a name="1334"><span class="lineNum">    1334 </span>            :   // which depends on whether path::iterator is complete.</a>
 <a name="1335"><span class="lineNum">    1335 </span>            :   inline int</a>
 <a name="1336"><span class="lineNum">    1336 </span>            :   path::_S_compare(const path&amp; __lhs, const path&amp; __rhs) noexcept</a>
-<a name="1337"><span class="lineNum">    1337 </span>            :   { return __lhs.compare(__rhs); }</a>
+<a name="1337"><span class="lineNum">    1337 </span><span class="lineNoCov">          0 :   { return __lhs.compare(__rhs); }</span></a>
 <a name="1338"><span class="lineNum">    1338 </span>            : </a>
 <a name="1339"><span class="lineNum">    1339 </span>            :   /// @} group filesystem</a>
 <a name="1340"><span class="lineNum">    1340 </span>            : _GLIBCXX_END_NAMESPACE_CXX11</a>

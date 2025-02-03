@@ -7,28 +7,34 @@ namespace fs = std::filesystem;
 class ScanfOptionControllerTest : public ::testing::Test {
 protected:
     ScanfOptionController controller;
-    std::string username = "testuser";
+    std::string username = std::getenv("USER");  // Lấy user hiện tại
     std::string mediaPath = "/media/" + username;
 
-    // Tạo thư mục giả lập trong thư mục /media
+    // Tạo thư mục giả lập trong thư mục /media/<current_user>/
     void SetUp() override {
-        // Tạo thư mục test cho người dùng giả
+        if (fs::exists(mediaPath)) {
+            fs::remove_all(mediaPath);
+        }
+
+        // Tạo thư mục test cho user hiện tại
         fs::create_directory(mediaPath);
 
-        // Tạo các thư mục giả đại diện cho USB
+        // Tạo các thư mục giả lập đại diện cho USB
         fs::create_directory(mediaPath + "/usb1");
         fs::create_directory(mediaPath + "/usb2");
     }
 
     // Xóa các thư mục sau khi kiểm tra xong
     void TearDown() override {
-        fs::remove_all(mediaPath);  // Xóa tất cả các thư mục trong /media/testuser
+        if (fs::exists(mediaPath)) {
+            fs::remove_all(mediaPath);
+        }
     }
 };
 
 // Kiểm tra trường hợp thư mục không tồn tại
 TEST_F(ScanfOptionControllerTest, ScanUSB_NoMediaDirectory) {
-    // Xóa thư mục /media/testuser nếu có
+    // Xóa thư mục /media/<current_user> nếu có
     fs::remove_all(mediaPath);
 
     // Kiểm tra scanUSB() khi không có thư mục người dùng
@@ -37,9 +43,9 @@ TEST_F(ScanfOptionControllerTest, ScanUSB_NoMediaDirectory) {
     EXPECT_TRUE(result.empty());  // Hàm trả về một vector rỗng
 }
 
-// Kiểm tra trường hợp thư mục không phải là thư mục USB
+// Kiểm tra trường hợp thư mục không có USB
 TEST_F(ScanfOptionControllerTest, ScanUSB_NoDirectory) {
-    // Kiểm tra khi thư mục /media/testuser không phải là thư mục con
+    // Kiểm tra khi thư mục /media/<current_user> không có thư mục con
     fs::remove_all(mediaPath);
     fs::create_directory(mediaPath);
 
@@ -51,7 +57,7 @@ TEST_F(ScanfOptionControllerTest, ScanUSB_NoDirectory) {
 
 // Kiểm tra khi có thư mục USB
 TEST_F(ScanfOptionControllerTest, ScanUSB_WithMountPoints) {
-    // Thư mục /media/{username}/usb1 và usb2 giả lập
+    // Thư mục giả lập các thiết bị USB được mount
     std::vector<std::string> expected = {
         mediaPath + "/usb1",
         mediaPath + "/usb2"
@@ -59,9 +65,8 @@ TEST_F(ScanfOptionControllerTest, ScanUSB_WithMountPoints) {
 
     // Kiểm tra scanUSB() với thư mục USB
     std::vector<std::string> result = controller.scanUSB();
+    std::sort(result.begin(), result.end());  // Sắp xếp danh sách kết quả
+    std::sort(expected.begin(), expected.end());  // Sắp xếp danh sách mong đợi
 
-    EXPECT_EQ(result.size(), 2);  // Nên có 2 thư mục USB
-    EXPECT_EQ(result[0], expected[0]);
-    EXPECT_EQ(result[1], expected[1]);
+    EXPECT_EQ(result, expected);  // So sánh lại sau khi đã sắp xếp
 }
-

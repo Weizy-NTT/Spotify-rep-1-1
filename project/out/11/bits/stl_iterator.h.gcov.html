@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
             <td class="headerCovTableEntry">6</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntryLo">40.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2025-01-23 16:40:38</td>
+            <td class="headerValue">2025-02-03 08:34:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">0</td>
             <td class="headerCovTableEntry">3</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">22</td>
+            <td class="headerCovTableEntryLo">13.6 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -1086,8 +1086,8 @@
 <a name="1024"><span class="lineNum">    1024 </span>            :       : _M_current(_Iterator()) { }</a>
 <a name="1025"><span class="lineNum">    1025 </span>            : </a>
 <a name="1026"><span class="lineNum">    1026 </span>            :       explicit _GLIBCXX20_CONSTEXPR</a>
-<a name="1027"><span class="lineNum">    1027 </span><span class="lineNoCov">          0 :       __normal_iterator(const _Iterator&amp; __i) _GLIBCXX_NOEXCEPT</span></a>
-<a name="1028"><span class="lineNum">    1028 </span><span class="lineNoCov">          0 :       : _M_current(__i) { }</span></a>
+<a name="1027"><span class="lineNum">    1027 </span><span class="lineCov">          2 :       __normal_iterator(const _Iterator&amp; __i) _GLIBCXX_NOEXCEPT</span></a>
+<a name="1028"><span class="lineNum">    1028 </span><span class="lineCov">          2 :       : _M_current(__i) { }</span></a>
 <a name="1029"><span class="lineNum">    1029 </span>            : </a>
 <a name="1030"><span class="lineNum">    1030 </span>            :       // Allow iterator to const_iterator conversion</a>
 <a name="1031"><span class="lineNum">    1031 </span>            :       template&lt;typename _Iter&gt;</a>
@@ -1101,8 +1101,8 @@
 <a name="1039"><span class="lineNum">    1039 </span>            :       // Forward iterator requirements</a>
 <a name="1040"><span class="lineNum">    1040 </span>            :       _GLIBCXX20_CONSTEXPR</a>
 <a name="1041"><span class="lineNum">    1041 </span>            :       reference</a>
-<a name="1042"><span class="lineNum">    1042 </span>            :       operator*() const _GLIBCXX_NOEXCEPT</a>
-<a name="1043"><span class="lineNum">    1043 </span>            :       { return *_M_current; }</a>
+<a name="1042"><span class="lineNum">    1042 </span><span class="lineNoCov">          0 :       operator*() const _GLIBCXX_NOEXCEPT</span></a>
+<a name="1043"><span class="lineNum">    1043 </span><span class="lineNoCov">          0 :       { return *_M_current; }</span></a>
 <a name="1044"><span class="lineNum">    1044 </span>            : </a>
 <a name="1045"><span class="lineNum">    1045 </span>            :       _GLIBCXX20_CONSTEXPR</a>
 <a name="1046"><span class="lineNum">    1046 </span>            :       pointer</a>
@@ -1111,10 +1111,10 @@
 <a name="1049"><span class="lineNum">    1049 </span>            : </a>
 <a name="1050"><span class="lineNum">    1050 </span>            :       _GLIBCXX20_CONSTEXPR</a>
 <a name="1051"><span class="lineNum">    1051 </span>            :       __normal_iterator&amp;</a>
-<a name="1052"><span class="lineNum">    1052 </span>            :       operator++() _GLIBCXX_NOEXCEPT</a>
+<a name="1052"><span class="lineNum">    1052 </span><span class="lineNoCov">          0 :       operator++() _GLIBCXX_NOEXCEPT</span></a>
 <a name="1053"><span class="lineNum">    1053 </span>            :       {</a>
-<a name="1054"><span class="lineNum">    1054 </span>            :         ++_M_current;</a>
-<a name="1055"><span class="lineNum">    1055 </span>            :         return *this;</a>
+<a name="1054"><span class="lineNum">    1054 </span><span class="lineNoCov">          0 :         ++_M_current;</span></a>
+<a name="1055"><span class="lineNum">    1055 </span><span class="lineNoCov">          0 :         return *this;</span></a>
 <a name="1056"><span class="lineNum">    1056 </span>            :       }</a>
 <a name="1057"><span class="lineNum">    1057 </span>            : </a>
 <a name="1058"><span class="lineNum">    1058 </span>            :       _GLIBCXX20_CONSTEXPR</a>
@@ -1159,13 +1159,13 @@
 <a name="1097"><span class="lineNum">    1097 </span>            : </a>
 <a name="1098"><span class="lineNum">    1098 </span>            :       _GLIBCXX20_CONSTEXPR</a>
 <a name="1099"><span class="lineNum">    1099 </span>            :       __normal_iterator</a>
-<a name="1100"><span class="lineNum">    1100 </span>            :       operator-(difference_type __n) const _GLIBCXX_NOEXCEPT</a>
-<a name="1101"><span class="lineNum">    1101 </span>            :       { return __normal_iterator(_M_current - __n); }</a>
+<a name="1100"><span class="lineNum">    1100 </span><span class="lineNoCov">          0 :       operator-(difference_type __n) const _GLIBCXX_NOEXCEPT</span></a>
+<a name="1101"><span class="lineNum">    1101 </span><span class="lineNoCov">          0 :       { return __normal_iterator(_M_current - __n); }</span></a>
 <a name="1102"><span class="lineNum">    1102 </span>            : </a>
 <a name="1103"><span class="lineNum">    1103 </span>            :       _GLIBCXX20_CONSTEXPR</a>
 <a name="1104"><span class="lineNum">    1104 </span>            :       const _Iterator&amp;</a>
-<a name="1105"><span class="lineNum">    1105 </span><span class="lineNoCov">          0 :       base() const _GLIBCXX_NOEXCEPT</span></a>
-<a name="1106"><span class="lineNum">    1106 </span><span class="lineNoCov">          0 :       { return _M_current; }</span></a>
+<a name="1105"><span class="lineNum">    1105 </span><span class="lineCov">          8 :       base() const _GLIBCXX_NOEXCEPT</span></a>
+<a name="1106"><span class="lineNum">    1106 </span><span class="lineCov">          8 :       { return _M_current; }</span></a>
 <a name="1107"><span class="lineNum">    1107 </span>            :     };</a>
 <a name="1108"><span class="lineNum">    1108 </span>            : </a>
 <a name="1109"><span class="lineNum">    1109 </span>            :   // Note: In what follows, the left- and right-hand-side iterators are</a>
@@ -1327,10 +1327,10 @@
 <a name="1265"><span class="lineNum">    1265 </span>            :   template&lt;typename _Iterator, typename _Container&gt;</a>
 <a name="1266"><span class="lineNum">    1266 </span>            :     _GLIBCXX20_CONSTEXPR</a>
 <a name="1267"><span class="lineNum">    1267 </span>            :     inline typename __normal_iterator&lt;_Iterator, _Container&gt;::difference_type</a>
-<a name="1268"><span class="lineNum">    1268 </span>            :     operator-(const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __lhs,</a>
+<a name="1268"><span class="lineNum">    1268 </span><span class="lineCov">          2 :     operator-(const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __lhs,</span></a>
 <a name="1269"><span class="lineNum">    1269 </span>            :               const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __rhs)</a>
 <a name="1270"><span class="lineNum">    1270 </span>            :     _GLIBCXX_NOEXCEPT</a>
-<a name="1271"><span class="lineNum">    1271 </span>            :     { return __lhs.base() - __rhs.base(); }</a>
+<a name="1271"><span class="lineNum">    1271 </span><span class="lineCov">          2 :     { return __lhs.base() - __rhs.base(); }</span></a>
 <a name="1272"><span class="lineNum">    1272 </span>            : </a>
 <a name="1273"><span class="lineNum">    1273 </span>            :   template&lt;typename _Iterator, typename _Container&gt;</a>
 <a name="1274"><span class="lineNum">    1274 </span>            :     _GLIBCXX20_CONSTEXPR</a>
