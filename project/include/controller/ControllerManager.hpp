@@ -65,6 +65,8 @@ public:
 
     virtual HardwareController* getHardwareController() const;    
 
+    static void resetInstance();
+
     virtual ~ControllerManager() = default;            
 };
 

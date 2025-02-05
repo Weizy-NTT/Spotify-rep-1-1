@@ -3,7 +3,7 @@ TARGET = build/Spotify.exe
 TEST_TARGET = build/TestSpotify.exe
 
 # Compiler and Flags
-CC = g++ 
+CC = g++
 CFLAGS = -Wall -g -std=c++20 -fprofile-arcs -ftest-coverage
 
 # Source folder, header folder
@@ -56,7 +56,7 @@ LDLIBS += $(ICU_FLAGS)
 LIBUDEV_FLAGS = -ludev
 LDLIBS += $(LIBUDEV_FLAGS)
 
-# Boost settings (ensure Boost libraries are installed)
+# Boost settings
 BOOST_FLAGS = -lboost_system -lboost_filesystem -lboost_thread
 CFLAGS += $(BOOST_FLAGS)
 LDLIBS += $(BOOST_FLAGS)
@@ -89,7 +89,7 @@ $(TEST_OBJDIR)/%.o: $(TESTDIR)/%.cpp
 
 # Clean rule (clean object files, executable, and test files)
 clean:
-	rm -rf $(OBJDIR) $(TEST_OBJDIR) $(TARGET) $(TEST_TARGET) coverage.info out
+	rm -rf $(OBJDIR) $(TEST_OBJDIR) $(TARGET) $(TEST_TARGET) coverage.info coverage_filtered.info out
 
 # Run executable
 run: all
@@ -97,11 +97,22 @@ run: all
 
 # Run unit tests
 runtest: $(TEST_TARGET)
+	@echo "Cleaning up previous GCOV data..."
+	find . -name '*.gcda' -exec rm -f {} +
+	@echo "Running tests..."
 	./$(TEST_TARGET)
 
 # Generate coverage report
-coverage: $(TARGET)
-	@lcov --capture --directory ./build/obj/controller --output-file coverage.info
+coverage: $(TEST_TARGET)
+	@echo "Generating code coverage..."
+	@lcov --capture --directory build/obj/controller --output-file coverage.info
 	@lcov --remove coverage.info '/usr/*' 'tests/*' 'external_libs/*' -o coverage_filtered.info
 	@genhtml coverage_filtered.info --output-directory out
 	@echo "Coverage report generated in 'out/' directory."
+
+# Reset coverage data
+reset:
+	@echo "Resetting coverage data..."
+	find . -name '*.gcda' -exec rm -f {} +
+	find . -name '*.gcno' -exec rm -f {} +
+	rm -rf coverage.info coverage_filtered.info out

@@ -39,12 +39,12 @@ public:
 
     std::shared_ptr<MediaFile> getCurrentMediaFile() const;
 
-    void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
-    size_t& getCurrentTime();
-    std::string getDurationStringType() const;
-    size_t getTotalTime() const;
+    virtual void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
+    virtual size_t& getCurrentTime();
+    virtual std::string getDurationStringType() const;
+    virtual size_t getTotalTime() const;
 
-    void setCurrentTime(size_t time);
+    virtual void setCurrentTime(size_t time);
 
     void playAudio(const char* filePath);
     void playVideo(const char* videoFilePath, const char* wavPath);
@@ -52,15 +52,15 @@ public:
 
     void play();
 
-    void pauseMusic();
+    virtual void pauseMusic();
 
-    void resumeMusic();
+    virtual void resumeMusic();
 
     void stop();
 
-    void nextTrack();
+    virtual void nextTrack();
 
-    void previousTrack();
+    virtual void previousTrack();
 
     bool hasNextTrack() const;
 
@@ -70,12 +70,12 @@ public:
 
     void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
 
-    void adjustVolume(size_t newVolume);
+    virtual void adjustVolume(size_t newVolume);
     void setVolume(const int &value);
-    int& getVolume();
+    virtual int& getVolume();
     void stopPlaybackThread();
     std::string extractAudio(const std::string &videoPath);
-    ~PlayingMedia();
+    virtual ~PlayingMedia();
 };
 
 #endif // PLAYING_MEDIA_H

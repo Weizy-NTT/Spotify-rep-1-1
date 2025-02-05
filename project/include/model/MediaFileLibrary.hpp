@@ -19,13 +19,14 @@ public:
 
     void setAllMediaFiles(const std::vector<std::shared_ptr<MediaFile>>& files);
 
-    std::shared_ptr<MediaFile> getMediaFileByID(const std::string& ID) const;
+    virtual std::shared_ptr<MediaFile> getMediaFileByID(const std::string& ID) const;
 
     std::shared_ptr<MediaFile> getMediaFileByName(const std::string& fileName) const;
 
     bool isValidMediaFileIDInLibrary(const std::string& ID);
 
     bool isValidMediaFileNameInLibrary(const std::string& fileName);
+    virtual ~MediaFileLibrary() = default;
 };
 
 #endif // MEDIA_FILE_LIBRARY_H

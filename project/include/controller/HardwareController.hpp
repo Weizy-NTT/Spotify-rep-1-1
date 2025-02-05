@@ -29,19 +29,19 @@ private:
 public:
     HardwareController(const std::string& device, int baudRate);
 
-    ~HardwareController();
+    virtual ~HardwareController();
 
-    void sendPlayCommand();
+    virtual void sendPlayCommand();
 
-    void sendPauseCommand();
+    virtual void sendPauseCommand();
 
-    void sendStopCommand();
+    virtual void sendStopCommand();
 
-    void sendSignal(const std::string& signal);
+    virtual void sendSignal(const std::string& signal);
 
-    void startReading();
+    virtual void startReading();
 
-    void stopReading();
+    virtual void stopReading();
 };
 
 

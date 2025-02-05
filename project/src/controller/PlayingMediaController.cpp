@@ -41,18 +41,17 @@ void PlayingMediaController::playMediaFile(const std::shared_ptr<MediaFile>& fil
     startUpdateThread();
 }
 
+
 // Resume playback
 void PlayingMediaController::play() {
     startUpdateThread();
-    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
-    playingMedia->resumeMusic();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->resumeMusic();
 }
 
 // Pause playback
 void PlayingMediaController::pause() {
     stopUpdateThread();
-    auto playingMedia = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
-    playingMedia->pauseMusic();
+    ControllerManager::getInstance()->getModelManager()->getPlayingMedia()->pauseMusic();
 }
 
 // Skip to the next track
@@ -89,7 +88,7 @@ void PlayingMediaController::updateElapsedTime() {
     auto playing = ControllerManager::getInstance()->getModelManager()->getPlayingMedia();
 
     while (isPlayingMediaFile.load(std::memory_order_relaxed)) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
         playing->setCurrentTime(playing->getCurrentTime() + 1);
         if (playing->getCurrentTime() >= playing->getTotalTime()) {
             playing->nextTrack();
@@ -103,7 +102,7 @@ void PlayingMediaController::startUpdateThread() {
     if (!isPlayingMediaFile.load(std::memory_order_relaxed)) {
         isPlayingMediaFile.store(true, std::memory_order_relaxed);
         if (!updateThread.joinable()) { 
-            updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
+            //updateThread = std::thread(&PlayingMediaController::updateElapsedTime, this);
         }
     }
 }

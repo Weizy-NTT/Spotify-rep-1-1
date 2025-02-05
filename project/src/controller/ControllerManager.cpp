@@ -13,7 +13,12 @@ ControllerManager::ControllerManager(ViewManager* viewManager, ModelManager* mod
     controllers.push_back(std::make_unique<PlayingMediaController>()); 
     controllers.push_back(std::make_unique<DetailedPlaylistController>()); 
     controllers.push_back(std::make_unique<MetadataController>()); 
-    controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600)); 
+    //controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600));
+    if (std::filesystem::exists("/dev/ttyACM0")) {
+        controllers.push_back(std::make_unique<HardwareController>("/dev/ttyACM0", 9600));
+    } else {
+        controllers.push_back(nullptr);  // Tránh lỗi
+    }
 }
 
 
@@ -110,4 +115,9 @@ ViewManager* ControllerManager::getViewManager() const {
 // Returns a pointer to the ModelManager
 ModelManager* ControllerManager::getModelManager() const {
     return model;
+}
+
+void ControllerManager::resetInstance() {
+    delete instance;
+    instance = nullptr;
 }

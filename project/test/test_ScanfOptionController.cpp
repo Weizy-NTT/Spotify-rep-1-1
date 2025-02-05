@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <filesystem>
 #include "ScanfOptionController.hpp"
+#include <taglib/fileref.h>
 
 namespace fs = std::filesystem;
 
@@ -70,3 +72,4 @@ TEST_F(ScanfOptionControllerTest, ScanUSB_WithMountPoints) {
 
     EXPECT_EQ(result, expected);  // So sánh lại sau khi đã sắp xếp
 }
+

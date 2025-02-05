@@ -87,6 +87,7 @@ void ScanfOptionController::scanUSBDevice(const std::string& device) {
 }
 
 void ScanfOptionController::back(){
+    
 }
 
 // Parse metadata from a file path and return a MediaFile object

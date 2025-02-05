@@ -15,10 +15,11 @@ extern std::mutex mediaMutex;
 
 class PlayingMediaController : public BaseController {
     std::thread updateThread; 
-    std::atomic<bool> isPlayingMediaFile{false}; 
+    std::atomic<bool> isPlayingMediaFile{false};    
     std::atomic<bool> isPlayingView{false};      
-    void updateElapsedTime(); 
 public:
+    void updateElapsedTime();
+
     void handleInput(const std::string& ID);
 
     void playMediaFile(const std::shared_ptr<MediaFile>& file);
@@ -35,9 +36,9 @@ public:
 
     void updateTime();
 
-    void startUpdateThread();
+    virtual void startUpdateThread();
 
-    void stopUpdateThread();
+    virtual void stopUpdateThread();
 
     void back();
 };

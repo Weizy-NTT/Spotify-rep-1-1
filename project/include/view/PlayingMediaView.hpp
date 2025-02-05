@@ -32,12 +32,12 @@ private:
 public:
     void showMenu() override;
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~PlayingMediaView() override = default;
 
     void hideMenu() override;
-    void showPlayingMedia(PlayingMedia* player, size_t& currentTime, size_t totalTime, int& volume) ;
+    virtual void showPlayingMedia(PlayingMedia* player, size_t& currentTime, size_t totalTime, int& volume) ;
 };
 
 #endif // PLAYING_MEDIA_VIEW_H
