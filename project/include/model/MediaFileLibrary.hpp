@@ -13,7 +13,7 @@ private:
 public:
     const std::vector<std::shared_ptr<MediaFile>>& getAllMediaFiles() const;
 
-    void addMediaFile(const std::shared_ptr<MediaFile>& files);
+    virtual void addMediaFile(const std::shared_ptr<MediaFile>& files);
 
     void removeMediaFile(const std::string& ID);
 
@@ -23,9 +23,9 @@ public:
 
     std::shared_ptr<MediaFile> getMediaFileByName(const std::string& fileName) const;
 
-    bool isValidMediaFileIDInLibrary(const std::string& ID);
+    virtual bool isValidMediaFileIDInLibrary(const std::string& ID);
 
-    bool isValidMediaFileNameInLibrary(const std::string& fileName);
+    virtual bool isValidMediaFileNameInLibrary(const std::string& fileName);
     virtual ~MediaFileLibrary() = default;
 };
 

@@ -27,11 +27,11 @@ private:
 public:
     MediaFile(const std::string& name = "", const std::string& path = "", MediaType type = AUDIO, const Metadata& metadata = Metadata());
 
-    void setName(const std::string& name);
+    virtual void setName(const std::string& name);
 
-    void setPath(const std::string& path);
+    virtual void setPath(const std::string& path);
 
-    void setDuration(const size_t& duration);
+    virtual void setDuration(const size_t& duration);
 
     std::string getName() const;
 
@@ -45,11 +45,11 @@ public:
 
     Metadata& getMetadata();
 
-    void setMetadata(const Metadata& metadata);
+    virtual void setMetadata(const Metadata& metadata);
 
-    void setType(MediaType type);
+    virtual void setType(MediaType type);
 
-    ~MediaFile();
+    virtual ~MediaFile();
 };
 
 #endif // MEDIA_FILE_H

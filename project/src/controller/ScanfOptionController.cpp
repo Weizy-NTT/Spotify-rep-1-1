@@ -20,7 +20,6 @@ namespace fs = std::filesystem;
 // Handle user input for scanning options
 void ScanfOptionController::handleInput() {
     ScanStatus status = ScanStatus::SCAN_NORMAL;
-
     do {
     ControllerManager::getInstance()->getViewManager()->hideCurrentView();
     ControllerManager::getInstance()->getViewManager()->getScanfOptionView()->displayStatusMessage(status);
@@ -40,7 +39,7 @@ void ScanfOptionController::handleInput() {
                 std::cout << i << ". " << devices[i] << std::endl;
             }
             size_t choice;
-            Exception_Handler("Enter your path: ",choice,validatePosInteger);
+            Exception_Handler_Int("Enter your path: ",choice,validatePosInteger);
             scanUSBDevice(devices[choice]);
             if (!devices.empty()) {
                 scanUSBDevice(devices[choice]);

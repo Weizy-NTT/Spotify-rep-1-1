@@ -23,13 +23,13 @@ class ScanfOptionView : public BaseView {
 public:
     void showMenu() override;
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~ScanfOptionView() override = default;
 
     void hideMenu() override;
 
-    void displayStatusMessage(ScanStatus& status);
+    virtual void displayStatusMessage(ScanStatus& status);
 
 private:
     int selected_option = 0;                     

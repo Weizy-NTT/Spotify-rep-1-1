@@ -89,7 +89,9 @@ void validateYear(const std::string& year);
 void validatePosInteger(const size_t& value); 
 
 // Exception handlers for strings and integers
-void Exception_Handler(const std::string& str, std::string& variable, void(*func)(const std::string&));
-void Exception_Handler(const std::string& str, size_t& variable, void(*func)(const size_t&));
+void Exception_Handler_1(const std::string& str, std::string& variable, void(*func)(const std::string&));
+void Exception_Handler_2(const std::string& str, size_t& variable, void(*func)(const size_t&));
 
+extern std::function<void(const std::string&, std::string&, void(*)(const std::string&))> Exception_Handler;
+extern std::function<void(const std::string&, size_t& , void(*func)(const size_t&))> Exception_Handler_Int;
 #endif // EXCEPTION_H

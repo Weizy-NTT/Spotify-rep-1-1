@@ -130,7 +130,7 @@ bool isUSBDevicePresent(const std::string& device) {
 }
 
 // Exception handling wrapper for string inputs.
-void Exception_Handler(const std::string& str, std::string& variable, void(*func)(const std::string&)) {
+void Exception_Handler_1(const std::string& str, std::string& variable, void(*func)(const std::string&)) {
     while (1) {
         try {
             std::cout << str; 
@@ -144,7 +144,7 @@ void Exception_Handler(const std::string& str, std::string& variable, void(*func
 }
 
 // Exception handling wrapper for size_t inputs.
-void Exception_Handler(const std::string& str, size_t& variable, void(*func)(const size_t&)) {
+void Exception_Handler_2(const std::string& str, size_t& variable, void(*func)(const size_t&)) {
     while (1) {
         try {
             std::cout << str; 
@@ -162,3 +162,6 @@ void Exception_Handler(const std::string& str, size_t& variable, void(*func)(con
         }
     }
 }
+
+std::function<void(const std::string&, std::string&, void(*)(const std::string&))> Exception_Handler = Exception_Handler_1;
+std::function<void(const std::string&, size_t& , void(*func)(const size_t&))> Exception_Handler_Int = Exception_Handler_2;
