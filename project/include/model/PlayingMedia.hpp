@@ -37,7 +37,7 @@ private:
 public:
     PlayingMedia();
 
-    std::shared_ptr<MediaFile> getCurrentMediaFile() const;
+    virtual std::shared_ptr<MediaFile> getCurrentMediaFile() const;
 
     virtual void setCurrentMediaFile(const std::shared_ptr<MediaFile>& mediaFile);
     virtual size_t& getCurrentTime();
@@ -68,10 +68,10 @@ public:
 
     void playCurrentTrack();
 
-    void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
+    virtual void setPlaylist(const std::vector<std::shared_ptr<MediaFile>>& newPlaylist);
 
     virtual void adjustVolume(size_t newVolume);
-    void setVolume(const int &value);
+    virtual void setVolume(const int &value);
     virtual int& getVolume();
     void stopPlaybackThread();
     std::string extractAudio(const std::string &videoPath);

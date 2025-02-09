@@ -56,7 +56,7 @@ void MetadataController::handleEditAudio(const std::string& filepath, const std:
     TagLib::FileRef f(filepath.c_str()); 
 
     if (!f.isNull() && f.tag() && f.audioProperties()) {
-        TagLib::Tag* tag = f.tag(); 
+        TagLib::Tag* tag = f.tag();
         do {
             ControllerManager::getInstance()->getViewManager()->hideCurrentView();
             getMediaFileMetadata(ControllerManager::getInstance()->getModelManager()->getMediaLibrary()->getMediaFileByID(ID));
@@ -104,8 +104,6 @@ void MetadataController::handleEditAudio(const std::string& filepath, const std:
                     updateMediaFileMetadata("Genre", newValue, ID); 
                     break;
                 }
-                default:
-                    std::cout << "Invalid input\n"; 
             }
         } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getAuditoOption() != AudioEdit::AUDIO_BACK);
         f.save(); 
@@ -137,8 +135,6 @@ void MetadataController::handleEditVideo(const std::string& filepath, const std:
                     updateMediaFileMetadata("Title", newValue, ID); 
                     break;
                 }
-                default:
-                    std::cout << "Invalid input\n"; 
             }
         } while (ControllerManager::getInstance()->getViewManager()->getMetadataView()->getVideoOption() != VideoEdit::VIDEO_BACK);
         f.save(); 

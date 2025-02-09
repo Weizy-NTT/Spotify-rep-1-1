@@ -9,7 +9,7 @@
 
 class ScanfOptionController : public BaseController {
 public:
-    void handleInput();
+    virtual void handleInput();
 
     void scanDirectory(const std::string& folderPath);
 
@@ -19,7 +19,7 @@ public:
 
     std::shared_ptr<MediaFile> scanfFilePath(const std::string& filePath);
 
-    void scanPlaylistsFromTxt(const std::string& filePath);
+    virtual void scanPlaylistsFromTxt(const std::string& filePath);
     
     std::vector<std::string> scanUSB();
 };

@@ -23,10 +23,10 @@ private:
     UART uart;
     std::thread readThread; 
     std::atomic<bool> running; 
+public:
 
     void handleReceivedData(const std::string& data);
 
-public:
     HardwareController(const std::string& device, int baudRate);
 
     virtual ~HardwareController();

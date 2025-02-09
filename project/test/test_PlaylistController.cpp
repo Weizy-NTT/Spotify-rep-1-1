@@ -1,193 +1,178 @@
-// #include <gtest/gtest.h>
-// #include <gmock/gmock.h>
-// #include "PlaylistController.hpp"
-// #include "ControllerManager.hpp"
-// #include "ModelManager.hpp"
-// #include "ViewManager.hpp"
-// #include "PlaylistLibrary.hpp"
-// #include "PlaylistView.hpp"
-// #include "Playlist.hpp"
+#include "Mock.hpp"
 
-// // Mock classes for dependencies
-// class MockViewManager : public ViewManager {
-// public:
-//     // Mock the methods you need in your test
-//     MOCK_METHOD(void, showCurrentView, (), (override));
-//     MOCK_METHOD(void, hideCurrentView, (), (override));
-//     MOCK_METHOD(void, switchView, (SwitchView viewIndex), (override));
 
-//     MOCK_METHOD(ScanfOptionView*, getScanfOptionView, (), (const, override));
-//     MOCK_METHOD(PlaylistView*, getPlaylistView, (), (const, override));
-//     MOCK_METHOD(MediaFileView*, getMediaFileView, (), (const, override));
-//     MOCK_METHOD(PlayingMediaView*, getPlayingMediaView, (), (const, override));
-//     MOCK_METHOD(DetailedPlaylistView*, getDetailedPlaylistView, (), (const, override));
-//     MOCK_METHOD(MetadataView*, getMetadataView, (), (const, override));
-//     MOCK_METHOD(MainMenuView*, getMainMenuView, (), (const, override));
-//     ~MockViewManager() override = default;
-// };
+class PlaylistControllerTest : public ::testing::Test {
+protected:
+    std::unique_ptr<MockControllerManager> mockControllerManager;
+    std::unique_ptr<MockModelManager> mockModelManager;
+    std::unique_ptr<MockViewManager> mockViewManager;
+    std::unique_ptr<MockPlaylistView> mockPlaylistView;
+    std::unique_ptr<MockPlaylistLibrary> mockPlaylistLibrary;
+    std::unique_ptr<MockDetailedPlaylistController> mockDetailedPlaylistController;
+    std::unique_ptr<PlaylistController> playlistController;
 
-// class MockModelManager : public ModelManager {
-// public:
-//     MOCK_METHOD(MediaFileLibrary*, getMediaLibrary, (), (const, override));
-//     MOCK_METHOD(PlaylistLibrary*, getPlaylistLibrary, (), (const, override));
-//     MOCK_METHOD(PlayingMedia*, getPlayingMedia, (), (const, override));
-//     ~MockModelManager() override = default;
-// };
+void SetUp() override {
 
-// // Mock ControllerManager class
-// class MockControllerManager : public ControllerManager {
-// public:
-//     MockControllerManager(ViewManager* viewManager, ModelManager* modelManager)
-//         : ControllerManager(viewManager, modelManager) {}
 
-//     // Mocking static getInstance method
-//     static MockControllerManager* getMockInstance(ViewManager* viewManager, ModelManager* modelManager) {
-//         if (instance == nullptr) {
-//             instance = new MockControllerManager(viewManager, modelManager);
-//         }
-//         return static_cast<MockControllerManager*>(instance);
-//     }
+    mockControllerManager = std::make_unique<MockControllerManager>();
+    mockModelManager = std::make_unique<MockModelManager>();
+    mockViewManager = std::make_unique<MockViewManager>();
+    mockPlaylistLibrary = std::make_unique<MockPlaylistLibrary>();
+    mockPlaylistView = std::make_unique<MockPlaylistView>();
+    mockDetailedPlaylistController = std::make_unique<MockDetailedPlaylistController>();
 
-//     // Mocking getters for each controller
-//     MOCK_METHOD(MainMenuController*, getMainMenuController, (), (const, override));
-//     MOCK_METHOD(ScanfOptionController*, getScanfOptionController, (), (const, override));
-//     MOCK_METHOD(PlaylistController*, getPlaylistController, (), (const, override));
-//     MOCK_METHOD(MediaFileController*, getMediaFileController, (), (const, override));
-//     MOCK_METHOD(PlayingMediaController*, getPlayingMediaController, (), (const, override));
-//     MOCK_METHOD(DetailedPlaylistController*, getDetailedPlaylistController, (), (const, override));
-//     MOCK_METHOD(MetadataController*, getMetadataController, (), (const, override));
-//     MOCK_METHOD(HardwareController*, getHardwareController, (), (const, override));
-    
-//     // Mocking the ViewManager and ModelManager getter
-//     MOCK_METHOD(ViewManager*, getViewManager, (), (const, override));
-//     MOCK_METHOD(ModelManager*, getModelManager, (), (const, override));
-//     ~MockControllerManager() override = default;
-// };
+    // Set ControllerManager instance
+    MockControllerManager::SetMockInstance(mockControllerManager.get());
 
-// class MockPlaylistLibrary : public PlaylistLibrary {
-// public:
-//     MOCK_METHOD(void, addPlaylist, (const std::shared_ptr<Playlist>& playlist), (override));
-//     MOCK_METHOD(void, removePlaylist, (const std::string& id), (override));
-//     MOCK_METHOD(bool, isValidPlaylistIDInLibrary, (const std::string& id), (override));
-//     MOCK_METHOD(const std::vector<std::shared_ptr<Playlist>>&, getAllPlaylists, (), (const, override));
-//     ~MockPlaylistLibrary() override = default;
-// };
+    // Set expectations
+    EXPECT_CALL(*mockControllerManager, getModelManager())
+        .WillRepeatedly(::testing::Return(mockModelManager.get()));
 
-// class MockPlaylistView : public PlaylistView {
-// public:
-//     MOCK_METHOD(void, showMenu, (), (override));
-//     MOCK_METHOD(int, getSelectedOption, (), (const, override));
-//     MOCK_METHOD(void, hideMenu, (), (override));
-//     MOCK_METHOD(void, showPlaylistList, (const std::vector<std::shared_ptr<Playlist>>&), (override));
-//     MOCK_METHOD(void, displayStatusMessage, (PlaylistStatus&), (override));
-//     ~MockPlaylistView() override = default;
-// };
+    EXPECT_CALL(*mockControllerManager, getViewManager())
+        .WillRepeatedly(::testing::Return(mockViewManager.get()));
 
-// class PlaylistControllerTest : public ::testing::Test {
-// protected:
-//     std::shared_ptr<MockViewManager> mockViewManager;
-//     std::shared_ptr<MockModelManager> mockModelManager;
-//     std::shared_ptr<MockPlaylistLibrary> mockPlaylistLibrary;
-//     std::shared_ptr<MockPlaylistView> mockPlaylistView;
-//     std::shared_ptr<MockControllerManager> mockControllerManager;
-//     PlaylistController* controller;  // changed from `controller` to pointer
+    EXPECT_CALL(*mockModelManager, getPlaylistLibrary())
+        .WillRepeatedly(::testing::Return(mockPlaylistLibrary.get()));
 
-//     void SetUp() override {
-//         mockViewManager = std::make_shared<MockViewManager>();
-//         mockModelManager = std::make_shared<MockModelManager>();
-//         mockPlaylistLibrary = std::make_shared<MockPlaylistLibrary>();
-//         mockPlaylistView = std::make_shared<MockPlaylistView>();
+    EXPECT_CALL(*mockViewManager, getPlaylistView())
+        .WillRepeatedly(::testing::Return(mockPlaylistView.get()));
 
-//         // Create a mock ControllerManager instance
-//         mockControllerManager = std::make_shared<MockControllerManager>(mockViewManager.get(), mockModelManager.get());
+    EXPECT_CALL(*mockControllerManager, getDetailedPlaylistController())
+        .WillRepeatedly(::testing::Return(mockDetailedPlaylistController.get()));
 
-//         // Now initialize PlaylistController with the mock ControllerManager
-//         controller = new PlaylistController();  // No longer directly instantiated without dependency injection
-        
-//         // Set up the mock methods to return the mocks we created
-//         EXPECT_CALL(*mockModelManager, getPlaylistLibrary()).WillRepeatedly(testing::Return(mockPlaylistLibrary.get()));
-//         EXPECT_CALL(*mockViewManager, getPlaylistView()).WillRepeatedly(testing::Return(mockPlaylistView.get()));
-//     }
+    playlistController = std::make_unique<PlaylistController>();
+}
+    void TearDown() override {
+        if (ControllerManager::getInstance() != nullptr) {
+            MockControllerManager::SetMockInstance(nullptr);
+        }
+    }
+};
 
-//     void TearDown() override {
-//         delete controller;  // Clean up the dynamically allocated controller
-//     }
-// };
+void mockExceptionHandler_PlaylistController(const std::string& str, std::string& variable, void (*func)(const std::string&)) {
+    variable = "1"; // Giáº£ láº­p ngÆ°á»i dĂ¹ng nháº­p vĂ o má»™t sá»‘ há»£p lá»‡
+}
 
-// // Test creating a playlist
-// TEST_F(PlaylistControllerTest, CreatePlaylist_AddsToLibrary) {
-//     std::string playlistName = "My Playlist";
+void mockExceptionHandler_PlaylistName(const std::string& str, std::string& variable, void (*func)(const std::string&)){
+    variable = "trung";
+}
 
-//     // Expect addPlaylist to be called with a playlist
-//     EXPECT_CALL(*mockPlaylistLibrary, addPlaylist(testing::_)).Times(1);
+TEST_F(PlaylistControllerTest, HandleInput_SelectValidPlaylist) {
+    Exception_Handler = mockExceptionHandler_PlaylistController;
+    std::string validPlaylistID = "1";
 
-//     controller->createPlaylist(playlistName);
-// }
+    EXPECT_CALL(*mockPlaylistView, getSelectedOption())
+        .WillOnce(::testing::Return(PlaylistMenu::SELECT_PLAYLIST))
+        .WillOnce(::testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST));
 
-// // Test deleting a playlist
-// TEST_F(PlaylistControllerTest, DeletePlaylist_RemovesFromLibrary) {
-//     std::string playlistID = "123";
+    // Thay vĂ¬ MockPlaylist, trá»±c tiáº¿p dĂ¹ng Playlist
+    std::vector<std::shared_ptr<Playlist>> mockPlaylists = {
+        std::make_shared<MockPlaylist>("Mocked Playlist")
+    };
 
-//     // Expect removePlaylist to be called with the correct playlist ID
-//     EXPECT_CALL(*mockPlaylistLibrary, removePlaylist(playlistID)).Times(1);
+    EXPECT_CALL(*mockPlaylistLibrary, getAllPlaylists())
+        .WillRepeatedly(::testing::ReturnRef(mockPlaylists));
 
-//     controller->deletePlaylist(playlistID);
-// }
+    EXPECT_CALL(*mockPlaylistLibrary, isValidPlaylistIDInLibrary(validPlaylistID))
+        .WillRepeatedly(::testing::Return(true));
 
-// // Test displaying all playlists
-// TEST_F(PlaylistControllerTest, ShowAllPlaylists_DisplaysCorrectly) {
-//     std::vector<std::shared_ptr<Playlist>> playlists = {
-//         std::make_shared<Playlist>("Playlist 1"),
-//         std::make_shared<Playlist>("Playlist 2")
-//     };
+    EXPECT_CALL(*mockViewManager, switchView(SwitchView::SW_PLAYLIST_VIEW)).Times(1);
+    EXPECT_CALL(*mockPlaylistView, displayStatusMessage(::testing::_)).Times(1);
+    EXPECT_CALL(*mockDetailedPlaylistController, handleInput(validPlaylistID)).Times(1);
 
-//     // Expect showPlaylistList to be called with the correct playlists
-//     EXPECT_CALL(*mockPlaylistView, showPlaylistList(playlists)).Times(1);
+    std::cout << ">>> Calling playlistController->handleInput();" << std::endl;
 
-//     controller->showAllPlaylists(playlists);
-// }
+    playlistController->handleInput();
+}
 
-// // Test handling user input for selecting a playlist
-// TEST_F(PlaylistControllerTest, HandleInput_SelectPlaylist) {
-//     std::string playlistID = "123";
+TEST_F(PlaylistControllerTest, HandleInput_AddPlaylist) {
+    Exception_Handler = mockExceptionHandler_PlaylistController;
 
-//     // Mock user input to select the playlist menu option
-//     EXPECT_CALL(*mockPlaylistView, getSelectedOption()).WillOnce(testing::Return(PlaylistMenu::SELECT_PLAYLIST));
-//     EXPECT_CALL(*mockPlaylistLibrary, isValidPlaylistIDInLibrary(playlistID)).WillOnce(testing::Return(true));
+    // Giáº£ láº­p viá»‡c chá»n ADD_PLAYLIST trong menu
+    EXPECT_CALL(*mockPlaylistView, getSelectedOption())
+        .WillOnce(::testing::Return(PlaylistMenu::ADD_PLAYLIST))
+        .WillOnce(::testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST));  // Quay láº¡i khi hoĂ n thĂ nh
 
-//     // Expect the DetailedPlaylistController to be called
-//     EXPECT_CALL(*mockControllerManager, getDetailedPlaylistController()).Times(1);
+    EXPECT_CALL(*mockViewManager, switchView(SwitchView::SW_PLAYLIST_VIEW)).Times(1);
+    EXPECT_CALL(*mockPlaylistView, displayStatusMessage(::testing::_)).Times(1);
 
-//     controller->handleInput();
-// }
+    // Mock phÆ°Æ¡ng thá»©c Ä‘á»ƒ thĂªm playlist vĂ o thÆ° viá»‡n
+    EXPECT_CALL(*mockPlaylistLibrary, addPlaylist(::testing::_))
+        .Times(1); // Chá»‰ cáº§n kiá»ƒm tra phÆ°Æ¡ng thá»©c Ä‘Æ°á»£c gá»i má»™t láº§n
 
-// // Test handling user input for adding a playlist
-// TEST_F(PlaylistControllerTest, HandleInput_AddPlaylist) {
-//     std::string playlistName = "New Playlist";
+    // Giáº£ láº­p sá»± gá»i createPlaylist vá»›i tĂªn playlist
+    EXPECT_CALL(*mockModelManager, getPlaylistLibrary())
+        .WillRepeatedly(::testing::Return(mockPlaylistLibrary.get()));
 
-//     // Mock user input for adding a playlist
-//     EXPECT_CALL(*mockPlaylistView, getSelectedOption()).WillOnce(testing::Return(PlaylistMenu::ADD_PLAYLIST));
-//     EXPECT_CALL(*mockPlaylistLibrary, addPlaylist(testing::_)).Times(1);
+    // Mock phÆ°Æ¡ng thá»©c hideCurrentView()
+    EXPECT_CALL(*mockViewManager, hideCurrentView()).Times(1);
 
-//     controller->handleInput();
-// }
+    // Giáº£ láº­p phÆ°Æ¡ng thá»©c getAllPlaylists() tráº£ vá» danh sĂ¡ch playlist
+    std::vector<std::shared_ptr<Playlist>> mockPlaylists = {
+        std::make_shared<MockPlaylist>("Mocked Playlist")
+    };
+    EXPECT_CALL(*mockPlaylistLibrary, getAllPlaylists())
+        .WillRepeatedly(::testing::ReturnRef(mockPlaylists));
 
-// // Test handling user input for removing a playlist
-// TEST_F(PlaylistControllerTest, HandleInput_RemovePlaylist) {
-//     std::string playlistID = "123";
+    // Gá»i handleInput Ä‘á»ƒ kiá»ƒm tra hĂ nh vi
+    std::cout << ">>> Calling playlistController->handleInput();" << std::endl;
+    playlistController->handleInput();
+}
 
-//     // Mock user input for removing a playlist
-//     EXPECT_CALL(*mockPlaylistView, getSelectedOption()).WillOnce(testing::Return(PlaylistMenu::REMOVE_PLAYLIST));
-//     EXPECT_CALL(*mockPlaylistLibrary, isValidPlaylistIDInLibrary(playlistID)).WillOnce(testing::Return(true));
-//     EXPECT_CALL(*mockPlaylistLibrary, removePlaylist(playlistID)).Times(1);
+TEST_F(PlaylistControllerTest, HandleInput_RemovePlaylist) {
+    Exception_Handler = mockExceptionHandler_PlaylistController;
 
-//     controller->handleInput();
-// }
+    std::string playlistID = "1";  // Giáº£ láº­p ID cá»§a playlist muá»‘n xĂ³a
 
-// // Test handling the back navigation option
-// TEST_F(PlaylistControllerTest, HandleInput_Back) {
-//     // Mock user input for back option
-//     EXPECT_CALL(*mockPlaylistView, getSelectedOption()).WillOnce(testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST));
+    // Giáº£ láº­p viá»‡c chá»n REMOVE_PLAYLIST trong menu
+    EXPECT_CALL(*mockPlaylistView, getSelectedOption())
+        .WillOnce(::testing::Return(PlaylistMenu::REMOVE_PLAYLIST))
+        .WillOnce(::testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST));  
 
-//     controller->handleInput();
-// }
+    // Ká»³ vá»ng ráº±ng phÆ°Æ¡ng thá»©c Exception_Handler Ä‘Æ°á»£c gá»i Ä‘á»ƒ nháº­p playlist ID
+    EXPECT_CALL(*mockPlaylistView, displayStatusMessage(::testing::_)).Times(1);
+
+    // Mock phÆ°Æ¡ng thá»©c kiá»ƒm tra playlist ID há»£p lá»‡ trong thÆ° viá»‡n
+    EXPECT_CALL(*mockPlaylistLibrary, isValidPlaylistIDInLibrary(playlistID))
+        .WillOnce(::testing::Return(true));  // Giáº£ láº­p playlist ID há»£p lá»‡
+
+    // Mock phÆ°Æ¡ng thá»©c Ä‘á»ƒ xĂ³a playlist tá»« thÆ° viá»‡n
+    EXPECT_CALL(*mockPlaylistLibrary, removePlaylist(playlistID))
+        .Times(1);  // Kiá»ƒm tra phÆ°Æ¡ng thá»©c Ä‘Æ°á»£c gá»i 1 láº§n vá»›i Ä‘Ăºng playlist ID
+
+    // Giáº£ láº­p phÆ°Æ¡ng thá»©c hideCurrentView()
+    EXPECT_CALL(*mockViewManager, hideCurrentView()).Times(1);
+
+    // Giáº£ láº­p phÆ°Æ¡ng thá»©c getAllPlaylists() tráº£ vá» danh sĂ¡ch playlist
+    std::vector<std::shared_ptr<Playlist>> mockPlaylists = {
+        std::make_shared<MockPlaylist>("Mocked Playlist")
+    };
+    EXPECT_CALL(*mockPlaylistLibrary, getAllPlaylists())
+        .WillRepeatedly(::testing::ReturnRef(mockPlaylists));
+
+    // Gá»i handleInput Ä‘á»ƒ kiá»ƒm tra hĂ nh vi
+    playlistController->handleInput();
+}
+
+
+TEST_F(PlaylistControllerTest, HandleInput_BackFromPlaylist) {
+    // Giáº£ láº­p viá»‡c chá»n BACK_FROM_PLAYLIST trong menu
+    EXPECT_CALL(*mockPlaylistView, getSelectedOption())
+        .Times(2)
+        .WillOnce(::testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST))  // Quay láº¡i khi ngÆ°á»i dĂ¹ng chá»n BACK_FROM_PLAYLIST
+        .WillOnce(::testing::Return(PlaylistMenu::BACK_FROM_PLAYLIST)); 
+
+    // Mock phÆ°Æ¡ng thá»©c hideCurrentView()
+    EXPECT_CALL(*mockViewManager, hideCurrentView()).Times(1);
+
+    // Giáº£ láº­p phÆ°Æ¡ng thá»©c getAllPlaylists() tráº£ vá» danh sĂ¡ch playlist
+    std::vector<std::shared_ptr<Playlist>> mockPlaylists = {
+        std::make_shared<MockPlaylist>("Mocked Playlist")
+    };
+    EXPECT_CALL(*mockPlaylistLibrary, getAllPlaylists())
+        .WillRepeatedly(::testing::ReturnRef(mockPlaylists));
+
+    // Gá»i handleInput Ä‘á»ƒ kiá»ƒm tra hĂ nh vi
+    std::cout << ">>> Calling playlistController->handleInput();" << std::endl;
+    playlistController->handleInput();
+}

@@ -39,13 +39,13 @@ public:
 
     void hideMenu() override;
 
-    void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist);
+    virtual void showPlaylistDetails(const std::shared_ptr<Playlist>& playlist);
 
-    void showListOfSongs(const std::shared_ptr<Playlist>& playlist);
+    virtual void showListOfSongs(const std::shared_ptr<Playlist>& playlist);
 
-    void displayStatusMessage(DetailedPlaylistStatus& status);
+    virtual void displayStatusMessage(DetailedPlaylistStatus& status);
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~DetailedPlaylistView() override = default;
 };

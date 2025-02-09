@@ -43,7 +43,7 @@ public:
 
     MediaType getType() const;
 
-    Metadata& getMetadata();
+    virtual Metadata& getMetadata();
 
     virtual void setMetadata(const Metadata& metadata);
 

@@ -56,5 +56,4 @@ void MainMenuController::back() {
     std::string filePath = "resources/playlists.txt";
     ControllerManager::getInstance()->getModelManager()->getPlaylistLibrary()->saveToFile(filePath);
     ControllerManager::getInstance()->getHardwareController()->stopReading();
-    std::exit(0);
 }

@@ -33,7 +33,7 @@ protected:
         mockViewManager = std::make_unique<MockViewManager>();
         mockScanfOptionView = std::make_unique<MockScanfOptionView>();
         mockPlaylistLibrary = std::make_unique<MockPlaylistLibrary>();
-        mockMediaFile = std::make_shared<MockMediaFile>();
+        mockMediaFile = std::make_shared<MockMediaFile>("aaa","111");
         mockMediaFileLibrary = std::make_unique<MockMediaFileLibrary>();
 
         MockControllerManager::SetMockInstance(mockControllerManager.get());

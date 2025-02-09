@@ -9,7 +9,6 @@ protected:
     std::unique_ptr<MockPlayingMedia> mockPlayingMedia;
     std::unique_ptr<MockMediaFileLibrary> mockMediaFileLibrary;
     std::unique_ptr<MockPlayingMediaView> mockPlayingMediaView;
-    std::unique_ptr<MockPlayingMediaController> mockPlayingMediaController;
     std::unique_ptr<MockHardwareController> mockHardwareController;
     std::unique_ptr<PlayingMediaController> playingMediaController;
     void SetUp() override {
@@ -19,7 +18,6 @@ protected:
         mockPlayingMedia = std::make_unique<MockPlayingMedia>();
         mockMediaFileLibrary = std::make_unique<MockMediaFileLibrary>();
         mockPlayingMediaView = std::make_unique<MockPlayingMediaView>();
-        mockPlayingMediaController = std::make_unique<MockPlayingMediaController>();
         mockHardwareController = std::make_unique<MockHardwareController>("/dev/ttyACM0", 9600);
 
         MockControllerManager::SetMockInstance(mockControllerManager.get());
@@ -56,44 +54,37 @@ protected:
 // Test 1: Adjust volume
 TEST_F(PlayingMediaControllerTest, AdjustVolume_ChangesVolume) {
     EXPECT_CALL(*mockPlayingMedia, adjustVolume(50)).Times(1);
-    mockPlayingMediaController->adjustVolume(50);
+    playingMediaController->adjustVolume(50);
 }
 
 // Test 2: Set current media file
 TEST_F(PlayingMediaControllerTest, PlayMediaFile_SetCurrentMediaFile) {
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
-    mockPlayingMediaController->playMediaFile(std::make_shared<MediaFile>());
+    playingMediaController->playMediaFile(std::make_shared<MediaFile>());
 }
 
 // Test 3: Resume playback
 TEST_F(PlayingMediaControllerTest, Resume_Playback) {
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
     EXPECT_CALL(*mockPlayingMedia, resumeMusic()).Times(1);
-    mockPlayingMediaController->play();
+    playingMediaController->play();
 }
 
 // Test 4: Pause playback
 TEST_F(PlayingMediaControllerTest, Pause_Playback) {
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
     EXPECT_CALL(*mockPlayingMedia, pauseMusic()).Times(1);
-    mockPlayingMediaController->pause();
+    playingMediaController->pause();
 }
 
 // Test 5: Next track playback
 TEST_F(PlayingMediaControllerTest, NextTrack_Playback) {
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
     EXPECT_CALL(*mockPlayingMedia, nextTrack()).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
-    mockPlayingMediaController->skipToNext();
+    playingMediaController->skipToNext();
 }
 
 // Test 6: Previous track playback
 TEST_F(PlayingMediaControllerTest, PreviousTrack_Playback) {
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
     EXPECT_CALL(*mockPlayingMedia, previousTrack()).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
-    mockPlayingMediaController->skipToPrevious();
+    playingMediaController->skipToPrevious();
 }
 
 // Test 7: Update Time
@@ -105,13 +96,13 @@ TEST_F(PlayingMediaControllerTest, UpdateTime_Playback) {
     EXPECT_CALL(*mockPlayingMedia, getCurrentTime()).WillOnce(::testing::ReturnRef(current));
     EXPECT_CALL(*mockPlayingMedia, getVolume()).WillOnce(::testing::ReturnRef(volume));
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
-    mockPlayingMediaController->updateTime();
+    playingMediaController->updateTime();
 }
 
 // Test 8: Back
 TEST_F(PlayingMediaControllerTest, Back_Playback) {
     
-    mockPlayingMediaController->back();
+    playingMediaController->back();
 }
 
 // Test 9: Start_Stop Update Thread
@@ -143,7 +134,6 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Back) {
     EXPECT_CALL(*mockMediaFileLibrary, getMediaFileByID(ID))
         .WillOnce(::testing::Return(newfile));
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
     
     int volume = 50;
     size_t current = 50;
@@ -152,7 +142,7 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Back) {
     EXPECT_CALL(*mockPlayingMedia, getCurrentTime()).WillOnce(::testing::ReturnRef(current));
     EXPECT_CALL(*mockPlayingMedia, getVolume()).WillOnce(::testing::ReturnRef(volume));
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
-    mockPlayingMediaController->handleInput(ID);
+    playingMediaController->handleInput(ID);
 }
 
 // Test 12: Handle Input : Play
@@ -166,7 +156,6 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Play) {
     EXPECT_CALL(*mockMediaFileLibrary, getMediaFileByID(ID))
         .WillOnce(::testing::Return(newfile));
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(2);
     
     EXPECT_CALL(*mockHardwareController, sendPlayCommand()).Times(1);
     int volume = 50;
@@ -178,7 +167,7 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Play) {
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
     
     EXPECT_CALL(*mockPlayingMedia, resumeMusic()).Times(1);
-    mockPlayingMediaController->handleInput(ID);
+    playingMediaController->handleInput(ID);
 }
 
 // Test 12: Handle Input : Pause
@@ -192,8 +181,6 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Pause) {
     EXPECT_CALL(*mockMediaFileLibrary, getMediaFileByID(ID))
         .WillOnce(::testing::Return(newfile));
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
     
     EXPECT_CALL(*mockHardwareController, sendPauseCommand()).Times(1);
     int volume = 50;
@@ -205,7 +192,7 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Pause) {
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
     
     EXPECT_CALL(*mockPlayingMedia, pauseMusic()).Times(1);
-    mockPlayingMediaController->handleInput(ID);
+    playingMediaController->handleInput(ID);
 }
 
 // Test 12: Handle Input : Next
@@ -219,8 +206,6 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Next) {
     EXPECT_CALL(*mockMediaFileLibrary, getMediaFileByID(ID))
         .WillOnce(::testing::Return(newfile));
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(2);
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
 
     EXPECT_CALL(*mockPlayingMedia, getDurationStringType())
         .WillOnce(::testing::Return("200"));
@@ -234,7 +219,7 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Next) {
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
     
     EXPECT_CALL(*mockPlayingMedia, nextTrack()).Times(1);
-    mockPlayingMediaController->handleInput(ID);
+    playingMediaController->handleInput(ID);
 }
 
 // Test 12: Handle Input : Previous
@@ -248,8 +233,7 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Previous) {
     EXPECT_CALL(*mockMediaFileLibrary, getMediaFileByID(ID))
         .WillOnce(::testing::Return(newfile));
     EXPECT_CALL(*mockPlayingMedia, setCurrentMediaFile(::testing::_)).Times(1);
-    EXPECT_CALL(*mockPlayingMediaController, startUpdateThread()).Times(2);
-    EXPECT_CALL(*mockPlayingMediaController, stopUpdateThread()).Times(1);
+
     
     EXPECT_CALL(*mockPlayingMedia, getDurationStringType())
         .WillOnce(::testing::Return("200"));
@@ -263,6 +247,6 @@ TEST_F(PlayingMediaControllerTest, HandleInput_Previous) {
     EXPECT_CALL(*mockPlayingMediaView, showPlayingMedia(mockPlayingMedia.get(), ::testing::Ref(current), 100, ::testing::Ref(volume))).Times(1);
     
     EXPECT_CALL(*mockPlayingMedia, previousTrack()).Times(1);
-    mockPlayingMediaController->handleInput(ID);
+    playingMediaController->handleInput(ID);
 }
 

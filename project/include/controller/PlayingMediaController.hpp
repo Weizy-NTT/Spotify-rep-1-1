@@ -20,17 +20,17 @@ class PlayingMediaController : public BaseController {
 public:
     void updateElapsedTime();
 
-    void handleInput(const std::string& ID);
+    virtual void handleInput(const std::string& ID);
 
     void playMediaFile(const std::shared_ptr<MediaFile>& file);
 
-    void play();
+    virtual void play();
 
-    void pause();
+    virtual void pause();
 
-    void skipToNext();
+    virtual void skipToNext();
 
-    void skipToPrevious();
+    virtual void skipToPrevious();
 
     void adjustVolume(size_t level);
 

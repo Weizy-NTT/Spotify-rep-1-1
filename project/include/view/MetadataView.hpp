@@ -39,18 +39,18 @@ private:
 public:
     void showMenu() override;
 
-    int getSelectedOption() const;
-    int getAuditoOption() const;
-    int getVideoOption() const;
+    virtual int getSelectedOption() const;
+    virtual int getAuditoOption() const;
+    virtual int getVideoOption() const;
     ~MetadataView() override = default;
 
     void hideMenu() override;
 
-    void showFileMetadata(const std::shared_ptr<MediaFile>& file);
+    virtual void showFileMetadata(const std::shared_ptr<MediaFile>& file);
 
-    void menuEditAudio();
+    virtual void menuEditAudio();
 
-    void menuEditVideo();
+    virtual void menuEditVideo();
 };
 
 #endif // METADATA_VIEW_H

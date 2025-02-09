@@ -21,15 +21,15 @@ public:
 
     std::string getName() const;
     void setID(const std::string& ID);
-    const std::vector<std::shared_ptr<MediaFile>>& getSongs() const;
+    virtual const std::vector<std::shared_ptr<MediaFile>>& getSongs() const;
 
-    void addSong(const std::shared_ptr<MediaFile>& song);
+    virtual void addSong(const std::shared_ptr<MediaFile>& song);
 
-    void removeSong(const std::string& ID);
+    virtual void removeSong(const std::string& ID);
 
-    bool isValidMediaFileIDInPlaylist(const std::string& ID);
+    virtual bool isValidMediaFileIDInPlaylist(const std::string& ID);
 
-    std::shared_ptr<MediaFile> getSongByID(const std::string& ID) const;
+    virtual std::shared_ptr<MediaFile> getSongByID(const std::string& ID) const;
 
     ~Playlist();
 };

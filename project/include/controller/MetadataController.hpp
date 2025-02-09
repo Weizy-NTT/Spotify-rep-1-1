@@ -8,7 +8,7 @@
 
 class MetadataController : public BaseController {
 public:
-    void handleInput(const std::string& ID);
+    virtual void handleInput(const std::string& ID);
 
     void getMediaFileMetadata(const std::shared_ptr<MediaFile>& file) const;
 

@@ -11,7 +11,7 @@ private:
     std::vector<std::shared_ptr<MediaFile>> mediaFiles; 
 
 public:
-    const std::vector<std::shared_ptr<MediaFile>>& getAllMediaFiles() const;
+    virtual const std::vector<std::shared_ptr<MediaFile>>& getAllMediaFiles() const;
 
     virtual void addMediaFile(const std::shared_ptr<MediaFile>& files);
 

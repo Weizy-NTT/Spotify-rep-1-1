@@ -15,7 +15,9 @@ public:
 
     std::string getValue(const std::string& key) const;
 
-    void setValue(const std::string& key, const std::string& value);
+    virtual void setValue(const std::string& key, const std::string& value);
+
+    virtual ~Metadata() = default;
 };
 
 #endif // METADATA_H

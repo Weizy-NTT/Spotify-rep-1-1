@@ -11,7 +11,7 @@
 
 class PlaylistController : public BaseController {
 public:
-    void handleInput();
+    virtual void handleInput();
 
     void createPlaylist(const std::string& name);
 

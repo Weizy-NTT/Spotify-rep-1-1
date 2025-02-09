@@ -11,7 +11,7 @@ class MediaFileController : public BaseController {
 private:
     size_t currentPage = 1;
 public:
-    void handleInput();
+    virtual void handleInput();
 
     void back();
 

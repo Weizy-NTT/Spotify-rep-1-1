@@ -19,7 +19,7 @@ public:
 
     void hideMenu() override;
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~MainMenuView() override = default;
 

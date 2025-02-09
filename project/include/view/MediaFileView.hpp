@@ -37,15 +37,15 @@ private:
 public:
     void showMenu() override;
 
-    int getSelectedOption() const;
+    virtual int getSelectedOption() const;
 
     ~MediaFileView() override = default;
 
-    void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong);
-
+    virtual void showMediaFilesPage(const std::vector<std::shared_ptr<MediaFile>>& files, size_t currentPage, size_t firstSong, size_t lastSong);
+    
     void hideMenu() override;
 
-    void displayStatusMessage(MediaFileStatus& status);
+    virtual void displayStatusMessage(MediaFileStatus& status);
 };
 
 #endif // MEDIA_FILE_VIEW_H
